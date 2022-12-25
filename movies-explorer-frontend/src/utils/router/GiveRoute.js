@@ -10,7 +10,7 @@ import Register from "../../components/pages/Register/Register";
 export let publicRoutes = [
     {path : "/signin",           exact: true,          element: <Login/>},
     {path : "/signup",           exact: true,          element: <Register/>},
-    {path : "*",                 exact: true,          element: <Navigate to='/login'/>}
+    {path : "*",                 exact: true,          element: <Navigate to='/signin'/>}
 ]
 
 export const privateRoutes = [
@@ -22,6 +22,19 @@ export const privateRoutes = [
     {path : "/signin",          exact: true,         element: <Login/>},
     {path : "/signup",          exact: true,         element: <Register/>},
     {path : "*",                exact: true,         element: <Navigate to='/about'/>},
+]
+
+export const allRoutes = [
+    {path : "/signin",          exact: true,         element: <Login/>},
+    {path : "/signup",          exact: true,         element: <Register/>},
+    {path : "/about",           exact: true,         element: <AboutProject/>},
+    {path : "/movies",          exact: true,         element: <Movies/>},
+    {path : "/saved-movies",    exact: true,         element: <SavedMovies/>},
+    {path : "/profile",         exact: true,         element: <Profile/>},
+    {path : "/signin",          exact: true,         element: <Login/>},
+    {path : "/signup",          exact: true,         element: <Register/>},
+    {path : "*",                exact: true,         element: <Navigate to='/about'/>},
+    {path : "/",                exact: true,         element: <Navigate to='/about'/>},
 ]
 
 
