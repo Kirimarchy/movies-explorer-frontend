@@ -2,7 +2,7 @@ import './Login.css';
 import { Link } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
 
-const Login = () => {
+const Login = ({handleLogin}) => {
 
     return (
       <main className="login">

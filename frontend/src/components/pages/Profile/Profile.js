@@ -19,7 +19,7 @@ const Profile = () => {
             maxLength="30"
             pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
           />
-          <span className="profile__error-name">{errors.name || ''}</span>
+          <span className="profile__error-name">Ошибка</span>
         </label>
         <label className="profile__label">
           <span className="profile__label-text">E-mail</span>
@@ -30,7 +30,7 @@ const Profile = () => {
             type="email"
             required
           />
-          <span className="profile__error">{errors.email || ''}</span>
+          <span className="profile__error">Ошибка</span>
         </label>
       </div>
       <div className="profile__button-container">
