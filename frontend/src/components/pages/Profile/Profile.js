@@ -1,7 +1,36 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./Profile.css";
+import {AuthContext} from "../../../utils/context/AuthContext";
 
 const Profile = () => {
+
+  const currentUser = useContext(AuthContext);
+
+  function handleEditProfile ({ name, email }) {
+
+    setIsLoader(true);
+    setTimeout(setIsLoader(false), 500);
+
+    currentUser = {name, email};
+    localStorage.setItem('User', currentUser);
+
+    setIsInfoTooltip({
+      isOpen: true,
+      successful: true,
+      text: 'Ваши данные обновлены!',
+    });
+
+  }
+
+  function handleLogout() {
+    setIsLoader(true);
+    setTimeout(setIsLoader(false), 500);
+
+    setLoggedIn(false);
+    localStorage.clear();
+
+  }
+
   return (
     <main className="profile">
     <form className="profile__form" name="profile">

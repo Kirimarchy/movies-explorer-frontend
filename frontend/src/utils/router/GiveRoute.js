@@ -10,6 +10,7 @@ import NotFound from "../../components/pages/NotFound/NotFound";
 import Main from "../../components/pages/Main/Main";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import InfoTooltip from "../../components/InfoTooltip/InfoTooltip";
 
 
 // export const publicRoutes = [
@@ -30,8 +31,8 @@ import Footer from "../../components/Footer/Footer";
 // ]
 
 export const allRoutes = [
-    { path : "/signin",          exact: true,         element: <Login/>                                              },
-    { path : "/signup",          exact: true,         element: <Register/>                                           },
+    { path : "/signin",          exact: true,         element: <Fragment><Login/></Fragment>                         },
+    { path : "/signup",          exact: true,         element: <Fragment><Register/></Fragment>                      },
     { path : "/about",           exact: true,         element: <Fragment><Header/><Main/><Footer/></Fragment>        },
     { path : "/movies",          exact: true,         element: <Fragment><Header/><Movies/><Footer/></Fragment>      },
     { path : "/saved-movies",    exact: true,         element: <Fragment><Header/><SavedMovies/><Footer/></Fragment> },

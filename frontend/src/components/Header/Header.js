@@ -3,7 +3,7 @@ import './Header.css';
 import Navigation from '../Navigation/Navigaton';
 import logo from '../../images/icons/logo.svg';
 
-function Header({ loggedIn = false, onClickBurger, isBurgerOpened }) {
+function Header() {
 
   return (
     <header className="header">
@@ -11,11 +11,7 @@ function Header({ loggedIn = false, onClickBurger, isBurgerOpened }) {
         <Link to='/' className='header__link'>
           <img src={logo} alt="Логотип" />
         </Link>
-        <Navigation
-          loggedIn={loggedIn}
-          onClickBurger={onClickBurger}
-          isBurgerOpened={isBurgerOpened}
-        />
+        <Navigation/>
       </div>
     </header>
   );

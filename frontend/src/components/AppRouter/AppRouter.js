@@ -3,6 +3,10 @@ import {allRoutes} from "../../utils/router/GiveRoute";
 
 const AppRouter = () => {
 
+    function check(){
+      console.log("IT WORKS!!!!!");
+    }
+
     return (
 
                   <Routes>

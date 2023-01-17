@@ -1,5 +1,6 @@
 import React from "react";
 import "./Promo.css";
+import Navtab from "../Navtab/Navtab";
 
 const Promo = () => {
   return (
@@ -10,17 +11,7 @@ const Promo = () => {
             Дипломный проект студента факультета Веб&#8209;разработки
           </h1>
         </div>
-          <div className="promo__navigation">
-            <a href="/#project" className="promo__nav-link">
-              О проекте
-            </a>
-            <a href="/#techs" className="promo__nav-link">
-              Технологии
-            </a>
-            <a href="/#student" className="promo__nav-link">
-              Студент
-            </a>
-          </div>
+        <Navtab/>
       </div>
     </section>
   );

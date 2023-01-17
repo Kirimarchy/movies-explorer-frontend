@@ -1,14 +1,41 @@
 import './Login.css';
 import { Link } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import InfoTooltip from "../../InfoTooltip/InfoTooltip";
 
-const Login = ({handleLogin}) => {
+const Login = () => {
+
+  const navigate = useNavigate();
+
+  const [isInfoTooltip, setIsInfoTooltip] = useState({
+    isOpen: false,
+    successful: true,
+    text: '',
+  });
+
+  function closeInfoTooltip() {
+    setIsInfoTooltip({ ...isInfoTooltip, isOpen: false });
+  }
+
+  function handleLogin({ email, password }) {
+
+          localStorage.setItem('isAuth', true);
+          navigate('/movies');
+          setIsInfoTooltip({
+            isOpen: true,
+            successful: true,
+            text: 'Добро пожаловать!',
+          });
+  }
 
     return (
       <main className="login">
         <form
           className="login__form"
           name="login"
+          onSubmit={handleLogin}
         >
           <Link to='/' className='login__link'>
             <img src={logo} alt="Логотип" className="login__logo" />
@@ -49,6 +76,7 @@ const Login = ({handleLogin}) => {
           </Link>
         </span>
         </form>
+        {/*{isInfoTooltip&&<InfoTooltip/>}*/}
       </main>
     );
 }

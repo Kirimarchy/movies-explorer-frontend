@@ -1,9 +1,15 @@
 import './Navigation.css';
 import { Link, NavLink } from 'react-router-dom';
 import BurgerMenu from '../BurgerMenu/BurgerMenu.js';
+import {useMediaQuery} from "react-responsive";
+import {useContext, useState} from "react";
+import {AuthContext} from "../../utils/context/AuthContext";
 
-const Navigation = ({ loggedIn, isBurgerOpened, onClickBurger }) => {
-  const activeLink = `navigation__link_active_${isBurgerOpened ? 'mobile' : 'desktop'}`;
+const Navigation = () => {
+
+  const isAuth = useContext(AuthContext);
+  const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
+  const activeLink = `navigation__link_active_${isMobile ? 'mobile' : 'desktop'}`;
 
   function handleClickOverlay(e) {
     e.stopPropagation();
@@ -11,7 +17,7 @@ const Navigation = ({ loggedIn, isBurgerOpened, onClickBurger }) => {
 
   return (
     <>
-      {!loggedIn ? (
+      {!isAuth ? (
         <nav className="navigation">
           <ul className="navigation__list">
             <li>
@@ -27,16 +33,21 @@ const Navigation = ({ loggedIn, isBurgerOpened, onClickBurger }) => {
           </ul>
         </nav>
       ) : (
-        <nav className={`navigation navigation_state_${isBurgerOpened ? 'opened' : 'closed'}`} onClick={isBurgerOpened ? onClickBurger : undefined}>
-          <BurgerMenu isBurgerOpened={isBurgerOpened} onClickBurger={onClickBurger} />
-          <ul className={`navigation__list navigation__list_logged navigation__list_state_${isBurgerOpened ? 'opened' : 'closed'}`} onClick={handleClickOverlay}>
-            {isBurgerOpened && (
-              <li className="navigation__item">
-                <NavLink exact to='/' className='navigation__link' activeClassName={activeLink}>
-                  Главная
-                </NavLink>
-              </li>
-            )}
+        <nav className={`navigation navigation_state_${isMobile ? 'opened' : 'closed'}`} >
+          {isMobile&&
+            <BurgerMenu/>
+          }
+          {!isMobile&&
+            <ul
+            className={`navigation__list navigation__list_logged navigation__list_state_${isMobile ? 'opened' : 'closed'}`}
+            onClick={handleClickOverlay}>
+
+            <li className="navigation__item">
+              <NavLink exact to='/' className='navigation__link' activeClassName={activeLink}>
+                Главная
+              </NavLink>
+            </li>
+
             <li className="navigation__item">
               <NavLink to='/movies' className='navigation__link' activeClassName={activeLink}>
                 Фильмы
@@ -48,11 +59,12 @@ const Navigation = ({ loggedIn, isBurgerOpened, onClickBurger }) => {
               </NavLink>
             </li>
             <li className="navigation__item">
-              <NavLink to='/profile' className='navigation__link navigation__link_type_account' activeClassName={activeLink}>
+              <NavLink to='/profile' className='navigation__link navigation__link_type_account'
+                       activeClassName={activeLink}>
                 Аккаунт
               </NavLink>
             </li>
-          </ul>
+          </ul>}
         </nav>
       )}
     </>

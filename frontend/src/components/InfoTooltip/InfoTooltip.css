@@ -37,11 +37,11 @@
 }
 
 .info-tooltip__status_fail {
-  background-image: url(../../images/fail.svg);
+  background-image: (src/images/icons/fail.svg);
 }
 
 .info-tooltip__status_success {
-  background-image: url(../../images/success.svg);
+  background-image: (src/images/icons/success.svg);
 }
 
 .info-tooltip__title {
@@ -61,7 +61,7 @@
   height: 32px;
   border: none;
   background-color: transparent;
-  background-image: url(../../images/close-button.svg);
+  background-image: (src/images/icons/close-button.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

@@ -42,7 +42,6 @@
 .promo__about-project {
   max-height: 116px;
   max-width: 720px;
-  margin: 0 235px;
   align-items: center;
   text-align: center;
 }
@@ -64,6 +63,17 @@
   opacity: .7;
 }
 
+@media screen and (max-width: 1250px) {
+
+  .promo__container {
+    margin: 20px 20px 0 20px;
+    width: 95%;
+    min-width: 728px;
+    font-size: 40px;
+    gap: 50px;
+  }
+
+}
 
 
 @media screen and (max-width: 800px) {
@@ -73,8 +83,7 @@
 
   .promo__container {
     margin: 20px 20px 0 20px;
-    width: 100%;
-    max-width: 728px;
+    min-width: 300px;
     font-size: 40px;
     padding: 350px 0 30px 0;
   }
@@ -90,6 +99,18 @@
 
 
 }
+
+  @media screen and (max-width: 400px) {
+    .promo {
+      height: 674px;
+    }
+
+    .promo__container {
+      font-size: 29px;
+      padding: 220px 0 20px;
+      gap: 50px;
+    }
+  }
 
 
 @media screen and (max-width: 400px) {

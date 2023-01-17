@@ -1,14 +1,16 @@
 import './BurgerMenu.css';
 import { useMediaQuery } from 'react-responsive';
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 
-const BurgerMenu = ({ isBurgerOpened, onClickBurger }) => {
+const BurgerMenu = (props) => {
+
+  let isBurgerOpened = { props };
 
   const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
 
-  function handleOnClickBurger() {
-    onClickBurger();
-  };
+  function onClickBurger() {
+    isBurgerOpened = !isBurgerOpened;
+  }
 
   useEffect(() => {
     if (!isMobile && isBurgerOpened) {
@@ -22,7 +24,7 @@ const BurgerMenu = ({ isBurgerOpened, onClickBurger }) => {
       className={`burgermenu-button burgermenu-button_${
         isBurgerOpened ? 'on' : 'off'
       }`}
-      onClick={handleOnClickBurger}
+      onClick={onClickBurger}
     >
       <span></span>
     </button>
