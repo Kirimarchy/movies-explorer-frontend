@@ -2,7 +2,7 @@ import './Navigation.css';
 import { Link, NavLink } from 'react-router-dom';
 import BurgerMenu from '../BurgerMenu/BurgerMenu.js';
 import {useMediaQuery} from "react-responsive";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../utils/context/AuthContext";
 
 const Navigation = () => {
@@ -10,10 +10,7 @@ const Navigation = () => {
   const isAuth = useContext(AuthContext);
   const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
   const activeLink = `navigation__link_active_${isMobile ? 'mobile' : 'desktop'}`;
-
-  function handleClickOverlay(e) {
-    e.stopPropagation();
-  }
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -33,13 +30,11 @@ const Navigation = () => {
           </ul>
         </nav>
       ) : (
-        <nav className={`navigation navigation_state_${isMobile ? 'opened' : 'closed'}`} >
-          {isMobile&&
-            <BurgerMenu/>
-          }
-          {!isMobile&&
+        <nav className={`navigation navigation_state_${isOpen ? 'opened' : 'closed'}`} >
+          {isMobile ? <BurgerMenu isOpen = {isOpen} onClick = {onClickBurger}/>
+            :
             <ul
-            className={`navigation__list navigation__list_logged navigation__list_state_${isMobile ? 'opened' : 'closed'}`}
+            className={`navigation__list navigation__list_logged navigation__list_state_${isOpen ? 'opened' : 'closed'}`}
             onClick={handleClickOverlay}>
 
             <li className="navigation__item">

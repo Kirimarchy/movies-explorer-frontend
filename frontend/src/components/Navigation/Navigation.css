@@ -35,7 +35,7 @@
 }
 
 .navigation__link_active_desktop {
-  font-weight: 500;
+  border-bottom: 2px solid #2f2f2f;
 }
 
 .navigation__link_active_mobile {
@@ -61,22 +61,22 @@
   font-size: 14px;
   line-height: 1.14;
   margin-left: 24px;
-  padding-left: 15px;
-  padding-right: 34px;
-  min-height: 30px;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, .08);
+  padding-left: 31px;
+  padding-right: 12px;
+  min-height: 32px;
   border-radius: 40px;
+  border: 2px solid #2f2f2f;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.navigation__link_type_account::after {
+.navigation__link_type_account::before {
   position: absolute;
   content: '';
   top: 0;
-  right: 0;
+  left: 3px;
   width: 30px;
   height: 100%;
-  border-radius: 50px;
-  background-color: #313131;
   background-image: url(/src/images/icons/profile.svg);
   background-repeat: no-repeat;
   background-position: center;
