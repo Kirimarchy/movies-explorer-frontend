@@ -35,7 +35,7 @@
 }
 
 .navigation__link_active_desktop {
-  border-bottom: 2px solid #2f2f2f;
+  border-bottom: 2px solid white;
 }
 
 .navigation__link_active_mobile {

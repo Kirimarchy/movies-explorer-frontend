@@ -7,10 +7,25 @@ import {AuthContext} from "../../utils/context/AuthContext";
 
 const Navigation = () => {
 
-  const isAuth = useContext(AuthContext);
+  const { isAuth } = useContext(AuthContext);
   const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
   const activeLink = `navigation__link_active_${isMobile ? 'mobile' : 'desktop'}`;
   const [isOpen, setIsOpen] = useState(false);
+
+  function onClickBurger() {
+    setIsOpen(!isOpen);
+  }
+
+  useEffect(() => {
+    if (!isMobile && isOpen) {
+      setIsOpen(false);
+    }
+  }, [isOpen, isMobile, onClickBurger]);
+
+  function handleClickOverlay(e) {
+    e.stopPropagation();
+    onClickBurger();
+  }
 
   return (
     <>
@@ -30,35 +45,34 @@ const Navigation = () => {
           </ul>
         </nav>
       ) : (
-        <nav className={`navigation navigation_state_${isOpen ? 'opened' : 'closed'}`} >
-          {isMobile ? <BurgerMenu isOpen = {isOpen} onClick = {onClickBurger}/>
-            :
-            <ul
-            className={`navigation__list navigation__list_logged navigation__list_state_${isOpen ? 'opened' : 'closed'}`}
+        <nav className={`navigation navigation_state_${isOpen ? 'opened' : 'closed'}`} onClick={isOpen ? onClickBurger : undefined}>
+          <BurgerMenu isOpen = {isOpen} onClickBurger = {onClickBurger}/>
+
+          <ul className={`navigation__list navigation__list_logged navigation__list_state_${isOpen ? 'opened' : 'closed'}`}
             onClick={handleClickOverlay}>
-
-            <li className="navigation__item">
-              <NavLink exact to='/' className='navigation__link' activeClassName={activeLink}>
-                Главная
-              </NavLink>
-            </li>
-
-            <li className="navigation__item">
-              <NavLink to='/movies' className='navigation__link' activeClassName={activeLink}>
-                Фильмы
-              </NavLink>
-            </li>
-            <li className="navigation__item">
-              <NavLink to='/saved-movies' className='navigation__link' activeClassName={activeLink}>
-                Сохранённые фильмы
-              </NavLink>
-            </li>
-            <li className="navigation__item">
-              <NavLink to='/profile' className='navigation__link navigation__link_type_account'
-                       activeClassName={activeLink}>
-                Аккаунт
-              </NavLink>
-            </li>
+              {isOpen&&(
+                  <li className="navigation__item">
+                    <NavLink exact to='/' className='navigation__link' activeClassName={activeLink}>
+                      Главная
+                    </NavLink>
+                  </li>
+              )}
+                  <li className="navigation__item">
+                    <NavLink to='/movies' className='navigation__link' activeClassName={activeLink}>
+                      Фильмы
+                    </NavLink>
+                  </li>
+                  <li className="navigation__item">
+                    <NavLink to='/saved-movies' className='navigation__link' activeClassName={activeLink}>
+                      Сохранённые фильмы
+                    </NavLink>
+                  </li>
+                  <li className="navigation__item">
+                    <NavLink to='/profile' className='navigation__link navigation__link_type_account'
+                             activeClassName={activeLink}>
+                      Аккаунт
+                    </NavLink>
+                  </li>
           </ul>}
         </nav>
       )}

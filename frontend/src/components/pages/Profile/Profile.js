@@ -1,10 +1,11 @@
 import React, {useContext} from "react";
 import "./Profile.css";
 import {AuthContext} from "../../../utils/context/AuthContext";
+import {useHistory, useNavigate} from "react-router-dom";
 
 const Profile = () => {
-
-  const currentUser = useContext(AuthContext);
+  const navigate = useNavigate();
+  const {isAuth, setIsAuth} = useContext(AuthContext);
 
   function handleEditProfile ({ name, email }) {
 
@@ -22,12 +23,13 @@ const Profile = () => {
 
   }
 
-  function handleLogout() {
-    setIsLoader(true);
-    setTimeout(setIsLoader(false), 500);
+  function handleLogout(e) {
+    e.preventDefault()
 
-    setLoggedIn(false);
+    // setLoggedIn(false);
     localStorage.clear();
+    setIsAuth(false)
+    navigate('/');
 
   }
 
@@ -69,7 +71,7 @@ const Profile = () => {
         >
           Редактировать
         </button>
-        <button type="submit" className="profile__button-exit">
+        <button type="button" className="profile__button-exit" onClick={handleLogout}>
           Выйти из аккаунта
         </button>
       </div>

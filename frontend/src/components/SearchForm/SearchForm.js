@@ -1,5 +1,5 @@
 import './SearchForm.css';
-import FilterCheckbox from '../../../FilterCheckBox/FilterCheckBox.js';
+import FilterCheckbox from '../FilterCheckBox/FilterCheckBox.js';
 
 
 const SearchForm = () => {
@@ -19,7 +19,7 @@ const SearchForm = () => {
         <span className="search__error">Ошибка</span>
         <button className="search__button" type="submit"></button>
       </form>
-      <FilterCheckbox/>
+      <FilterCheckbox />
     </section>
   )
 }

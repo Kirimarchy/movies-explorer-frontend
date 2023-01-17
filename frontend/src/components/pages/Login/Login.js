@@ -1,12 +1,13 @@
 import './Login.css';
 import { Link } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import InfoTooltip from "../../InfoTooltip/InfoTooltip";
+import {AuthContext} from "../../../utils/context/AuthContext";
 
 const Login = () => {
-
+  const { isAuth, setIsAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [isInfoTooltip, setIsInfoTooltip] = useState({
@@ -21,6 +22,7 @@ const Login = () => {
 
   function handleLogin({ email, password }) {
 
+          setIsAuth(true);
           localStorage.setItem('isAuth', true);
           navigate('/movies');
           setIsInfoTooltip({
@@ -48,7 +50,7 @@ const Login = () => {
                 name="email"
                 className="login__input"
                 type="email"
-                required
+                // required
               />
               <span className="login__error">Неверный E-Mail</span>
             </label>
@@ -58,7 +60,7 @@ const Login = () => {
                 name="password"
                 className="login__input"
                 type="password"
-                required
+                // required
               />
               <span className="login__error">Неверный пароль</span>
             </label>

@@ -9,13 +9,16 @@ import {useNavigation} from "react-router-dom";
 function App() {
 
   //DECLARATIONS
-  const [isAuth, setIsAuth] = useState(localStorage.getItem('isAuth'))
-  useEffect(()=>{setIsAuth(!isAuth)}, [localStorage.getItem('isAuth')]);
+  const [isAuth, setIsAuth] = useState(localStorage.getItem('isAuth') === 'true')
+  useEffect(()=>{
+    console.log(localStorage.getItem('isAuth'))
+    // setIsAuth(!isAuth)
+  }, [localStorage.getItem('isAuth')]);
 
   //APP RENDERING
   return (
     <main className="app">
-      <AuthContext.Provider value={isAuth}>
+      <AuthContext.Provider value={{ isAuth, setIsAuth }}>
         <BrowserRouter>
           <AppRouter/>
         </BrowserRouter>

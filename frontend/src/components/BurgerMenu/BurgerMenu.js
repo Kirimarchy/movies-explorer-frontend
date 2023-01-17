@@ -2,12 +2,8 @@ import './BurgerMenu.css';
 import { useMediaQuery } from 'react-responsive';
 import {useEffect, useState} from 'react';
 
-const BurgerMenu = (isOpen, onClickBurger) => {
+const BurgerMenu = ({isOpen, onClickBurger}) => {
   const isMobile = useMediaQuery({query: '(max-width: 800px)'});
-
-  function handleOnClickBurger(){
-    onClickBurger();
-  }
 
   useEffect(()=> { if(!isMobile && isOpen) {
     onClickBurger();
