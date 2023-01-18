@@ -1,7 +1,7 @@
 //IMPORTS
 import './App.css';
 import {useState, useEffect} from "react";
-import {Route, Routes, useNavigation, RouterProvider, createBrowserRouter} from "react-router-dom";
+import {Route, Routes, useNavigation, Router} from "react-router-dom";
 import CurrentUserContext from "../../utils/context/CurrentUserContext";
 import mainApi from "../../utils/api/MainApi";
 
@@ -119,7 +119,7 @@ function App() {
       .addNewMovie(movie)
       .then(newMovie => setSavedMoviesList([newMovie, ...savedMoviesList]))
       .catch(err =>
-        setIsInfoTooltip({
+        setInfoTooltip({
           isOpen: true,
           successful: false,
           text: err,
@@ -144,7 +144,7 @@ function App() {
         setSavedMoviesList(newMoviesList);
       })
       .catch(err =>
-        setIsInfoTooltip({
+        setInfoTooltip({
           isOpen: true,
           successful: false,
           text: err,
@@ -172,7 +172,7 @@ function App() {
           }
         })
         .catch(err =>
-          setIsInfoTooltip({
+          setInfoTooltip({
             isOpen: true,
             successful: false,
             text: err,
@@ -194,7 +194,7 @@ function App() {
         .getUserInfo()
         .then(res => setCurrentUser(res))
         .catch(err =>
-          setIsInfoTooltip({
+          setInfoTooltip({
             isOpen: true,
             successful: false,
             text: err,
@@ -214,7 +214,7 @@ function App() {
           setSavedMoviesList(UserMoviesList);
         })
         .catch(err =>
-          setIsInfoTooltip({
+          setInfoTooltip({
             isOpen: true,
             successful: false,
             text: err,
@@ -223,31 +223,76 @@ function App() {
     }
   }, [currentUser, loggedIn]);
 
-  //ROUTES
-  const allRoutes = createBrowserRouter([
-    {path:  endpointsHeader, element:<Header loggedIn/>},
-    {path: 'about',element: <Main/>}
-  ])
-
-
-
   //RENDERING
   return (
-    <main className="app">
-
-      {/*{!load ? (*/}
-      {/*  <PreLoader isOpen={isLoader} />*/}
-      {/*) : (*/}
+    <div className="app">
+      {!load ? (
+        <PreLoader isOpen={isLoader} />
+      ) : (
         <CurrentUserContext.Provider value={currentUser}>
-          <RouterProvider
-            routes={routes}
-            fallBackElement = {<PreLoader/>}
-          />
-          {/*<PreLoader isOpen={isLoader} />*/}
-          <InfoTooltip status={isInfoTooltip}/>
+
+          <Router>
+            <Header loggedIn={loggedIn}/>
+
+            <Routes>
+              <Route exact path='/'>
+                <Main />
+              </Route>
+              <Route exact path='/signup'>
+                {!loggedIn ? (
+                  <Register handleRegister={handleRegister} />
+                ) : (
+                  <Redirect to='/' />
+                )}
+              </Route>
+              <Route exact path='/signin'>
+                {!loggedIn ? (
+                  <Login handleLogin={handleLogin} />
+                ) : (
+                  <Redirect to='/' />
+                )}
+              </Route>
+              <ProtectedRoute
+                path='/movies'
+                component={Movies}
+                loggedIn={loggedIn}
+                setIsLoader={setIsLoader}
+                setInfoTooltip={setInfoTooltip}
+                savedMoviesList={savedMoviesList}
+                onLikeClick={handleSaveMovie}
+                onDeleteClick={handleDeleteMovie}
+              />
+              <ProtectedRoute
+                path='/saved-movies'
+                component={SavedMovies}
+                loggedIn={loggedIn}
+                savedMoviesList={savedMoviesList}
+                onDeleteClick={handleDeleteMovie}
+                setInfoTooltip={setInfoTooltip}
+              />
+              <ProtectedRoute
+                path='/profile'
+                component={Profile}
+                loggedIn={loggedIn}
+                handleUpdateProfile={handleUpdateProfile}
+                handleSignOut={handleSignOut}
+              />
+              <Route path='*'>
+                <NotFound/>
+              </Route>
+            </Routes>
+            <Route exact path={endpointsFooter}>
+              <Footer />
+            </Route>
+            <PreLoader isOpen={isLoader} />
+            <InfoTooltip
+              status={isInfoTooltip}
+              onClose={closeInfoTooltip}
+            />
+          </Router>
         </CurrentUserContext.Provider>
       )}
-   </main>
+    </div>
   );
 }
 
