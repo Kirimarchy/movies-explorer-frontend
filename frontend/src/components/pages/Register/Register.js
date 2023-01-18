@@ -1,9 +1,26 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+import React, {useContext} from "react";
+import {Link, useNavigate} from 'react-router-dom';
 import "./Register.css";
 import logo from '../../../images/icons/logo.svg';
+import {AuthContext} from "../../../utils/context/AuthContext";
 
 const Register = () => {
+
+  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  function handleRegister({ name, email, password }) {
+
+    setIsAuth(true);
+    localStorage.setItem('isAuth', true);
+    navigate('/movies');
+    setIsInfoTooltip({
+      isOpen: true,
+      successful: true,
+      text: 'Добро пожаловать!',
+    });
+  }
+
   return (
     <main className="register">
       <form className="register__form" name="register">
@@ -17,7 +34,6 @@ const Register = () => {
             <input
               name="name"
               className="register__input"
-              value=""
               type="text"
               required
               minLength="2"
@@ -31,7 +47,6 @@ const Register = () => {
             <input
               name="email"
               className="register__input"
-              value=''
               type="email"
               required
             />
@@ -42,7 +57,6 @@ const Register = () => {
             <input
               name="password"
               className="register__input"
-              value=""
               type="password"
               required
             />
@@ -53,6 +67,7 @@ const Register = () => {
           type="submit"
           className="register__button"
           disabled={false}
+          onClick={handleRegister}
         >
           Зарегистрироваться
         </button>

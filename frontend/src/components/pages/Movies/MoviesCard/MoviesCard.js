@@ -1,8 +1,8 @@
 import React from "react";
 import './MoviesCard.css';
 import {useLocation} from "react-router-dom";
-
-const MoviesCard = () => {
+import picture from '../../../../images/movie_card_img.png';
+const MoviesCard = (movie) => {
 
   const location = useLocation();
   const saved = true;
@@ -10,17 +10,15 @@ const MoviesCard = () => {
     return (
       <li className="movies-card">
         <article className="movies-card__item">
+
           <a target="_blank" rel="noreferrer" href={movie?.trailerLink}>
             <img
-              src={movie?.image}
+              src={picture}
               alt={movie?.nameRU}
-              title={`Описание: ${movie?.description} \n\nСнято: ${movie?.country} ${movie?.year}г.`}
+              title={`Описание: Гуляем на всю зарплату \n\nСнято: Россия, 2022г.`}
               className="movies-card__poster"
             />
-          </a>
-          <div className="movies-card__description">
-            <h2 className="movies-card__title">{movie?.nameRU}</h2>
-
+            {location.pathname === '/movies' && (
               <button
                 type="button"
                 className={`movies-card__button movies-card__button_type_${
@@ -33,6 +31,7 @@ const MoviesCard = () => {
                   saved ? 'Удалить фильм из сохранённых' : 'Сохранить фильм'
                 }`}
               ></button>
+            )}
 
             {location.pathname === '/saved-movies' && (
               <button
@@ -42,10 +41,14 @@ const MoviesCard = () => {
                 title="Удалить фильм из сохранённых"
               ></button>
             )}
+          </a>
+          <div className="movies-card__description">
+            <h2 className="movies-card__title">Дискотека века</h2>
+            <span className="movies-card__duration">
+              {("2ч22м")}
+            </span>
           </div>
-          <span className="movies-card__duration">
-          {(movie?.duration)}
-        </span>
+
         </article>
       </li>
     );

@@ -34,13 +34,10 @@
   opacity: .7;
 }
 
-.navigation__link_active_desktop {
+.navigation__link_active{
   border-bottom: 2px solid white;
 }
 
-.navigation__link_active_mobile {
-  border-bottom: 2px solid #fff;
-}
 
 .navigation__link.navigation__link_landing {
   font-size: 12px;

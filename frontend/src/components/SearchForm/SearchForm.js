@@ -13,13 +13,12 @@ const SearchForm = () => {
           type="text"
           placeholder="Фильм"
           autoComplete="off"
-          value=""
           required
         />
         <span className="search__error">Ошибка</span>
         <button className="search__button" type="submit"></button>
       </form>
-      <FilterCheckbox />
+      <FilterCheckbox/>
     </section>
   )
 }

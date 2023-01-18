@@ -50,30 +50,29 @@ const Navigation = () => {
 
           <ul className={`navigation__list navigation__list_logged navigation__list_state_${isOpen ? 'opened' : 'closed'}`}
             onClick={handleClickOverlay}>
-              {isOpen&&(
+            {isMobile&&(
                   <li className="navigation__item">
-                    <NavLink exact to='/' className='navigation__link' activeClassName={activeLink}>
+                    <NavLink exact to='/' className={'navigation__link'} activeClassName="navigation__link_active">
                       Главная
                     </NavLink>
                   </li>
               )}
                   <li className="navigation__item">
-                    <NavLink to='/movies' className='navigation__link' activeClassName={activeLink}>
+                    <NavLink to='/movies' className='navigation__link' activeClassName="navigation__link_active">
                       Фильмы
                     </NavLink>
                   </li>
                   <li className="navigation__item">
-                    <NavLink to='/saved-movies' className='navigation__link' activeClassName={activeLink}>
+                    <NavLink to='/saved-movies' className='navigation__link' activeClassName="navigation__link_active">
                       Сохранённые фильмы
                     </NavLink>
                   </li>
                   <li className="navigation__item">
-                    <NavLink to='/profile' className='navigation__link navigation__link_type_account'
-                             activeClassName={activeLink}>
+                    <NavLink to='/profile' className='navigation__link navigation__link_type_account'>
                       Аккаунт
                     </NavLink>
                   </li>
-          </ul>}
+          </ul>
         </nav>
       )}
     </>

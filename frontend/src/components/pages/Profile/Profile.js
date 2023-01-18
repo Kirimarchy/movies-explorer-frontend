@@ -43,7 +43,6 @@ const Profile = () => {
           <input
             name="name"
             className="profile__input"
-            value=''
             type="text"
             required
             minLength="2"
@@ -57,7 +56,6 @@ const Profile = () => {
           <input
             name="email"
             className={"profile__input"}
-            value={''}
             type="email"
             required
           />

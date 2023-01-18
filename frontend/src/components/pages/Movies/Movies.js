@@ -7,6 +7,7 @@ const Movies = () => {
   return (
     <main className="movies">
       <SearchForm/>
+      <hr className="movies__separator"/>
       <MoviesCardList/>
     </main>
   );

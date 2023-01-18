@@ -2,9 +2,11 @@ import React from "react";
 import "./MoviesCardList.css";
 import { useLocation } from 'react-router-dom';
 import MoviesCard from "../MoviesCard/MoviesCard";
+import cards from "./examplecards";
+
 
 const MoviesCardList = () => {
-  const moviesList = [];
+  const moviesList = cards;
   const location = useLocation();
 
   return (
