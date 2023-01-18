@@ -40,7 +40,7 @@ const Register = () => {
               maxLength="30"
               pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
             />
-            <span className="register__error">Ошибка</span>
+            <span className="register__error"></span>
           </label>
           <label className="register__label">
             <span className="register__label-text">E-mail</span>
@@ -50,7 +50,7 @@ const Register = () => {
               type="email"
               required
             />
-            <span className="register__error">Неправильный E-mail</span>
+            <span className="register__error"></span>
           </label>
           <label className="register__label">
             <span className="register__label-text">Пароль</span>
@@ -60,7 +60,7 @@ const Register = () => {
               type="password"
               required
             />
-            <span className="register__error">Недопустимый пароль</span>
+            <span className="register__error"></span>
           </label>
         </div>
         <button

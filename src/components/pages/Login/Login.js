@@ -50,9 +50,9 @@ const Login = () => {
                 name="email"
                 className="login__input"
                 type="email"
-                // required
+                required
               />
-              <span className="login__error">Неверный E-Mail</span>
+              <span className="login__error"></span>
             </label>
             <label className="login__label">
               <span className="login__label-text">Пароль</span>
@@ -60,9 +60,9 @@ const Login = () => {
                 name="password"
                 className="login__input"
                 type="password"
-                // required
+                required
               />
-              <span className="login__error">Неверный пароль</span>
+              <span className="login__error"></span>
             </label>
           </div>
           <button

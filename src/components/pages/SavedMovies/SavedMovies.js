@@ -7,7 +7,7 @@ const SavedMovies = () => {
   return (
     <main className="saved-movies">
       <SearchForm/>
-      <hr className="movies__separator"/>
+      <hr className="movies-separator"/>
       <MoviesCardList/>
     </main>
   );

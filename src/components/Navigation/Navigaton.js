@@ -9,7 +9,6 @@ const Navigation = () => {
 
   const { isAuth } = useContext(AuthContext);
   const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
-  const activeLink = `navigation__link_active_${isMobile ? 'mobile' : 'desktop'}`;
   const [isOpen, setIsOpen] = useState(false);
 
   function onClickBurger() {
