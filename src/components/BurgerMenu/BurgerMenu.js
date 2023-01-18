@@ -1,7 +1,7 @@
 import './BurgerMenu.css';
 import { useMediaQuery } from 'react-responsive';
 import {useEffect, useState} from 'react';
-import useEscButton from "../../hooks/useEscButton";
+
 
 const BurgerMenu = ({isOpenBurger, onClickBurger}) => {
 
@@ -10,8 +10,6 @@ const BurgerMenu = ({isOpenBurger, onClickBurger}) => {
   useEffect(()=> { if(!isMobile && isOpenBurger) {
     onClickBurger();
   }}, [isOpenBurger, isMobile, onClickBurger]);
-
-  useEscButton(()=> onClickBurger());
 
   return (
     <button

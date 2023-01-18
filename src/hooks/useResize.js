@@ -1,24 +1,30 @@
-import { useState, useEffect } from 'react';
-import {desktop, talet, mobile } from '../utils/constants'
+import { useEffect, useCallback, useState } from 'react';
 
-export const useResize = () => {
-
-  const [width, setWidth] = useState(window.innerWidth);
+export default function useResize() {
+  const getScreenWidth = useCallback(() => window.innerWidth, []);
+  const [screenWidth, setScreenWidth] = useState(getScreenWidth());
 
   useEffect(() => {
-    const handleResize = (event) => {
-      setWidth(event.target.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [width]);
 
-  return {
-    width,
-    isMobile: width <= SCREEN_MD,
-    isTablet: width >= SCREEN_MD && width < SCREEN_LG,
-    isDesktop: width >= SCREEN_LG
-  };
-};
+    function handleScreenResize() {
+      setScreenWidth(getScreenWidth());
+    };
+
+    window.addEventListener('resize', resizeController, false); // при монтировании ставим обработчик
+
+    let resizeTimer;
+
+    function resizeController() {
+      if (!resizeTimer) {
+        resizeTimer = setTimeout(() => {
+          resizeTimer = null;
+          handleScreenResize();
+        }, 555);
+      }
+    };
+
+    return () => window.removeEventListener('resize', handleScreenResize);  // убираем при размонтировании
+  }, [getScreenWidth]);
+
+  return screenWidth;
+}

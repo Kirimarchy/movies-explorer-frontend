@@ -13,32 +13,32 @@ import Footer from "../../components/Footer/Footer";
 import InfoTooltip from "../../components/InfoTooltip/InfoTooltip";
 
 
-// export const publicRoutes = [
-//     {path : "/signin",           exact: true,          element: <Login/>},
-//     {path : "/signup",           exact: true,          element: <Register/>},
-//     {path : "*",                 exact: true,          element: <Navigate to='/signin'/>}
-// ]
-//
-// export const privateRoutes = [
-//     {path : "/",                exact: true,         element: <AboutProject/>},
-//     { path : "/about",           exact: true,         element: <Fragment><Header/><Main/><Footer/></Fragment>        },
-//     { path : "/movies",          exact: true,         element: <Fragment><Header/><Movies/><Footer/></Fragment>      },
-//     { path : "/saved-movies",    exact: true,         element: <Fragment><Header/><SavedMovies/><Footer/></Fragment> },
-//     { path : "/profile",         exact: true,         element: <Fragment><Header/><Profile/></Fragment>              },
-//     {path : "/signin",          exact: true,         element: <Login/>},
-//     {path : "/signup",          exact: true,         element: <Register/>},
-//     {path : "*",                exact: true,         element: <Navigate to='/about'/>},
-// ]
+export const publicRoutes = [
+    {path : "/signin",           exact: true,          element: <Login/>},
+    {path : "/signup",           exact: true,          element: <Register/>},
+    {path : "*",                 exact: true,          element: <Navigate to='/signin'/>}
+]
 
-export const allRoutes = [
-    { path : "/signin",          exact: true,         element: <Fragment><Login/></Fragment>                         },
-    { path : "/signup",          exact: true,         element: <Fragment><Register/></Fragment>                      },
+export const privateRoutes = [
+    {path : "/",                exact: true,          element: <AboutProject/>},
     { path : "/about",           exact: true,         element: <Fragment><Header/><Main/><Footer/></Fragment>        },
     { path : "/movies",          exact: true,         element: <Fragment><Header/><Movies/><Footer/></Fragment>      },
     { path : "/saved-movies",    exact: true,         element: <Fragment><Header/><SavedMovies/><Footer/></Fragment> },
     { path : "/profile",         exact: true,         element: <Fragment><Header/><Profile/></Fragment>              },
-    { path : "*",                exact: true,         element: <NotFound/>                                           },
-    { path : "/",                exact: true,         element: <Navigate to='/about'/>                               },
+    {path : "/signin",          exact: true,          element: <Login/>},
+    {path : "/signup",          exact: true,          element: <Register/>},
+    {path : "*",                exact: true,          element: <Navigate to='/about'/>},
 ]
+
+// export const allRoutes = [
+//     { path : "/signin",          exact: true,         element: <Fragment><Login/></Fragment>                         },
+//     { path : "/signup",          exact: true,         element: <Fragment><Register/></Fragment>                      },
+//     { path : "/about",           exact: true,         element: <Fragment><Header/><Main/><Footer/></Fragment>        },
+//     { path : "/movies",          exact: true,         element: <Fragment><Header/><Movies/><Footer/></Fragment>      },
+//     { path : "/saved-movies",    exact: true,         element: <Fragment><Header/><SavedMovies/><Footer/></Fragment> },
+//     { path : "/profile",         exact: true,         element: <Fragment><Header/><Profile/></Fragment>              },
+//     { path : "*",                exact: true,         element: <NotFound/>                                           },
+//     { path : "/",                exact: true,         element: <Navigate to='/about'/>                               },
+// ]
 
 
