@@ -1,15 +1,26 @@
+//IMPORTS
 import './App.css';
 import {useState, useEffect} from "react";
-import AppRouter from "../AppRouter/AppRouter";
 import {BrowserRouter, useNavigate} from "react-router-dom";
 import CurrentUserContext from "../../utils/context/CurrentUserContext";
 import {useNavigation} from "react-router-dom";
 
+//COMPONENTS
+import PreLoader from "../PreLoader/PreLoader";
+
 
 function App() {
 
-  //DECLARATIONS
+  //STATE
   const [isAuth, setIsAuth] = useState(localStorage.getItem('isAuth') === 'true')
+  const [load, setLoad] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
+
+
+
+
+  //HOOKS
+
   useEffect(()=>{
     console.log(localStorage.getItem('isAuth'))
     // setIsAuth(!isAuth)
@@ -93,13 +104,74 @@ function App() {
 
   //APP RENDERING
   return (
-    <main className="app">
-      <CurrentUserContext.Provider value={{ isAuth, setIsAuth }}>
-        <BrowserRouter>
-          <AppRouter/>
-        </BrowserRouter>
-      </CurrentUserContext.Provider>
-    </main>
+    <div className="app">
+      {!load ? (
+        <PreLoader isOpen={isLoader} />
+      ) : (
+        <CurrentUserContext.Provider value={currentUser}>
+          <Route exact path={headerEndpoints}>
+            <Header
+              loggedIn={loggedIn}
+            />
+          </Route>
+          <Switch>
+            <Route exact path='/'>
+              <Main />
+            </Route>
+            <Route exact path='/signup'>
+              {!loggedIn ? (
+                <Register handleRegister={handleRegister} />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route exact path='/signin'>
+              {!loggedIn ? (
+                <Login handleLogin={handleLogin} />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <ProtectedRoute
+              path='/movies'
+              component={Movies}
+              loggedIn={loggedIn}
+              setIsLoader={setIsLoader}
+              setIsInfoTooltip={setIsInfoTooltip}
+              savedMoviesList={savedMoviesList}
+              onLikeClick={handleSaveMovie}
+              onDeleteClick={handleDeleteMovie}
+            />
+            <ProtectedRoute
+              path='/saved-movies'
+              component={SavedMovies}
+              loggedIn={loggedIn}
+              savedMoviesList={savedMoviesList}
+              onDeleteClick={handleDeleteMovie}
+              setIsInfoTooltip={setIsInfoTooltip}
+            />
+            <ProtectedRoute
+              path='/profile'
+              component={Profile}
+              loggedIn={loggedIn}
+              handleProfile={handleProfile}
+              handleSignOut={handleSignOut}
+            />
+            <Route path='*'>
+              <NotFound goBack={goBack} />
+            </Route>
+          </Switch>
+          <Route exact path={footerEndpoints}>
+            <Footer />
+          </Route>
+          <Preloader isOpen={isLoader} />
+          <InfoTooltip
+            status={isInfoTooltip}
+            onClose={closeInfoTooltip}
+          />
+        </CurrentUserContext.Provider>
+      )}
+    </div>
   );
 }
 
