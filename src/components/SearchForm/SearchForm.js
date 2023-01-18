@@ -15,7 +15,7 @@ const SearchForm = () => {
           autoComplete="off"
           required
         />
-        <span className="search__error">Ошибка</span>
+        <span className="search__error"></span>
         <button className="search__button" type="submit"></button>
       </form>
       <FilterCheckbox/>

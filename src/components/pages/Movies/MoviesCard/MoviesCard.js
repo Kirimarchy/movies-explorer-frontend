@@ -14,7 +14,7 @@ const MoviesCard = (movie) => {
           <a target="_blank" rel="noreferrer" href={movie?.trailerLink}>
             <img
               src={picture}
-              alt={movie?.nameRU}
+              alt={'Изображение заставки фильма'}
               title={`Описание: Гуляем на всю зарплату \n\nСнято: Россия, 2022г.`}
               className="movies-card__poster"
             />
