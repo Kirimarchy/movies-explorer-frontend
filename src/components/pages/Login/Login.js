@@ -55,7 +55,7 @@ const Login = () => {
               <span className="login__error"></span>
             </label>
             <label className="login__label">
-              <span className="login__label-text"></span>
+              <span className="login__label-text">Пароль</span>
               <input
                 name="password"
                 className="login__input"
