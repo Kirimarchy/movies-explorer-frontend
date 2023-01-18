@@ -3,17 +3,19 @@ import { Link, NavLink } from 'react-router-dom';
 import BurgerMenu from '../BurgerMenu/BurgerMenu.js';
 import {useMediaQuery} from "react-responsive";
 import {useContext, useEffect, useState} from "react";
-import {AuthContext} from "../../utils/context/AuthContext";
+import useEscButton from "../../hooks/useEscButton";
+import CurrentUserContext from "../../utils/context/CurrentUserContext";
 
 const Navigation = () => {
 
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth } = useContext(CurrentUserContext);
   const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
   const [isOpen, setIsOpen] = useState(false);
 
   function onClickBurger() {
     setIsOpen(!isOpen);
   }
+  useEscButton(onClickBurger, isOpen);
 
   useEffect(() => {
     if (!isMobile && isOpen) {

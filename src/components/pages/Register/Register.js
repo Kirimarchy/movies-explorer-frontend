@@ -2,28 +2,26 @@ import React, {useContext} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import "./Register.css";
 import logo from '../../../images/icons/logo.svg';
-import {AuthContext} from "../../../utils/context/AuthContext";
+import useValidatedForm from "../../../hooks/useValidatedForm";
+import {useEffect} from "react";
 
 const Register = () => {
 
-  const { isAuth, setIsAuth } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { values, handleChange, resetForm, errors, isValid } = useValidatedForm();
 
-  function handleRegister({ name, email, password }) {
 
-    setIsAuth(true);
-    localStorage.setItem('isAuth', true);
-    navigate('/movies');
-    setIsInfoTooltip({
-      isOpen: true,
-      successful: true,
-      text: 'Добро пожаловать!',
-    });
+  function handleSubmit(e) {
+    e.preventDefault();
+    handleRegister(values);
   }
+
+  useEffect(() => {
+    resetForm();
+  }, [resetForm]);
 
   return (
     <main className="register">
-      <form className="register__form" name="register">
+      <form className="register__form" name="register" noValidate onSubmit={handleSubmit}>
         <Link to="/" className="register__link">
           <img src={logo} alt="Логотип" className="register__logo" />
         </Link>
@@ -33,41 +31,46 @@ const Register = () => {
             <span className="register__label-text">Имя</span>
             <input
               name="name"
-              className="register__input"
+              className={`register__input ${errors.name && 'register__input_error'}`}
+              onChange={handleChange}
+              value={values.name || ''}
               type="text"
               required
               minLength="2"
               maxLength="30"
               pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
             />
-            <span className="register__error"></span>
+            <span className="register__error">{errors.name || ''}</span>
           </label>
           <label className="register__label">
             <span className="register__label-text">E-mail</span>
             <input
               name="email"
-              className="register__input"
+              className={`register__input ${errors.email && 'register__input_error'}`}
+              onChange={handleChange}
+              value={values.email || ''}
               type="email"
               required
             />
-            <span className="register__error"></span>
+            <span className="register__error">{errors.email || ''}</span>
           </label>
           <label className="register__label">
             <span className="register__label-text">Пароль</span>
             <input
               name="password"
-              className="register__input"
+              className={`register__input ${errors.password && 'register__input_error'}`}
+              onChange={handleChange}
+              value={values.password || ''}
               type="password"
               required
             />
-            <span className="register__error"></span>
+            <span className="register__error">{errors.password || ''}</span>
           </label>
         </div>
         <button
           type="submit"
-          className="register__button"
-          disabled={false}
-          onClick={handleRegister}
+          className={`register__button ${!isValid && 'register__button_disabled'}`}
+          disabled={!isValid}
         >
           Зарегистрироваться
         </button>
