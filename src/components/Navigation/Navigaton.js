@@ -10,18 +10,18 @@ const Navigation = () => {
 
   const { isAuth } = useContext(CurrentUserContext);
   const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenBurger, setisOpenBurger] = useState(false);
 
   function onClickBurger() {
-    setIsOpen(!isOpen);
+    setisOpenBurger(!isOpenBurger);
   }
-  useEscButton(onClickBurger, isOpen);
+  useEscButton(onClickBurger, isOpenBurger);
 
   useEffect(() => {
-    if (!isMobile && isOpen) {
-      setIsOpen(false);
+    if (!isMobile && isOpenBurger) {
+      setisOpenBurger(false);
     }
-  }, [isOpen, isMobile, onClickBurger]);
+  }, [isOpenBurger, isMobile, onClickBurger]);
 
   function handleClickOverlay(e) {
     e.stopPropagation();
@@ -46,10 +46,10 @@ const Navigation = () => {
           </ul>
         </nav>
       ) : (
-        <nav className={`navigation navigation_state_${isOpen ? 'opened' : 'closed'}`} onClick={isOpen ? onClickBurger : undefined}>
-          <BurgerMenu isOpen = {isOpen} onClickBurger = {onClickBurger}/>
+        <nav className={`navigation navigation_state_${isOpenBurger ? 'opened' : 'closed'}`} onClick={isOpenBurger ? onClickBurger : undefined}>
+          <BurgerMenu isOpenBurger = {isOpenBurger} onClickBurger = {onClickBurger}/>
 
-          <ul className={`navigation__list navigation__list_logged navigation__list_state_${isOpen ? 'opened' : 'closed'}`}
+          <ul className={`navigation__list navigation__list_logged navigation__list_state_${isOpenBurger ? 'opened' : 'closed'}`}
             onClick={handleClickOverlay}>
             {isMobile&&(
                   <li className="navigation__item">

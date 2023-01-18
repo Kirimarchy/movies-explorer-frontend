@@ -6,6 +6,8 @@ import Techs from './Techs/Techs.js';
 import AboutMe from './AboutMe/AboutMe.js';
 import Portfolio from './Portfolio/Portfolio.js';
 import "./Main.css";
+
+
 const Main = () => {
 
     return (

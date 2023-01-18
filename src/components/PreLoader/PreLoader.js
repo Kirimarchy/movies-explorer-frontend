@@ -1,7 +1,7 @@
 import React from "react";
 import "./PreLoader.css";
 
-const PreLoader= () => {
+const PreLoader= (isOpen = false) => {
   return (
     <>
       {isOpen && (

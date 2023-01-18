@@ -1,4 +1,3 @@
-@ -1,103 +0,0 @@
 import { BASE_URL } from '../constants.js';
 
 class Api {
