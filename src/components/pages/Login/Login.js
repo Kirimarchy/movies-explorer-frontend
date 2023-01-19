@@ -6,7 +6,6 @@ import useValidatedForm from "../../../hooks/useValidatedForm";
 
 const Login = ({handleLogin}) => {
   const { values, handleChange, resetForm, errors, isValid } = useValidatedForm();
-
   function handleSubmit(e) {
     e.preventDefault();
     handleLogin(values);

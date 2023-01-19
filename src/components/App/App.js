@@ -233,74 +233,60 @@ function App() {
       {/*) : (*/}
 
         <CurrentUserContext.Provider value={currentUser}>
-          <Header loggedIn={loggedIn}/>
+            <Header loggedIn={loggedIn}/>
                     <Routes>
+                          <Route exact path='/'
+                                 element = {<Main/>}
+                          />
+                          <Route exact path='/signup'
+                                 element= {<Register handleRegister={handleRegister}/>}
+                          />
+                          <Route exact path='/signin'
+                                 element={ <Login handleLogin={handleLogin} />}
+                          />
+                          <Route exact path='/movies' element={
+                            <ProtectedRoute loggedIn = {loggedIn}>
+                                     <Movies
+                                       loggedIn={loggedIn}
+                                       setIsLoader={setIsLoader}
+                                       setInfoTooltip={setInfoTooltip}
+                                       savedMoviesList={savedMoviesList}
+                                       onLikeClick={handleSaveMovie}
+                                       onDeleteClick={handleDeleteMovie}
+                                     />
+                            </ProtectedRoute>
+                          }/>
 
-                    {/*<Route exact path={endpointsHeader}*/}
-                    {/*       element={<Header loggedIn={loggedIn}/>}*/}
-                    {/*/>*/}
-                    <Route exact path='/'
-                           element = {<Main/>}
-                    />
-                    <Route exact path='/signup'
-                           element={!loggedIn ? (
-                             <Register handleRegister={handleRegister} />
-                           ) : (
-                             <Main/>
-                           )}
-                    />
-                    <Route exact path='/signin'
-                           element={!loggedIn ? (
-                             <Login handleLogin={handleLogin} />
-                           ) : (
-                             <Main/>
-                           )}
-                    />
-                    <Route exact path='/movies'
-                           element={<ProtectedRoute
-                             path='/movies'
-                             component={Movies}
-                             loggedIn={loggedIn}
-                             setIsLoader={setIsLoader}
-                             setInfoTooltip={setInfoTooltip}
-                             savedMoviesList={savedMoviesList}
-                             onLikeClick={handleSaveMovie}
-                             onDeleteClick={handleDeleteMovie}
-                           />
-                           }
-                    />
-                    <Route exact path='/movies'
-                           element={<ProtectedRoute
-                             path='/saved-movies'
-                             component={SavedMovies}
-                             loggedIn={loggedIn}
-                             savedMoviesList={savedMoviesList}
-                             onDeleteClick={handleDeleteMovie}
-                             setInfoTooltip={setInfoTooltip}
-                           />
-                           }
-                    />
-                    <Route exact path='/profile'
-                           element={<ProtectedRoute
-                             path='/profile'
-                             component={Profile}
-                             loggedIn={loggedIn}
-                             handleUpdateProfile={handleUpdateProfile}
-                             handleSignOut={handleSignOut}
-                           />
-                           }
-                    />
-                    <Route path='*'
-                           element={<NotFound/>}
-                    />
+                          <Route exact path='/saved-movies' element={
+                            <ProtectedRoute loggedIn={loggedIn}>
+                                      <SavedMovies
+                                        loggedIn={loggedIn}
+                                        setIsLoader={setIsLoader}
+                                        setInfoTooltip={setInfoTooltip}
+                                        savedMoviesList={savedMoviesList}
+                                        onLikeClick={handleSaveMovie}
+                                        onDeleteClick={handleDeleteMovie}
+                                      />
+                            </ProtectedRoute>
+                          }/>
 
+                          <Route exact path='/profile' element={
+                            <ProtectedRoute loggedIn={loggedIn}>
+                                      <Profile
+                                        loggedIn={loggedIn}
+                                        setIsLoader={setIsLoader}
+                                        setInfoTooltip={setInfoTooltip}
+                                        handleUpdateProfile={handleUpdateProfile}
+                                        handleSignOut={handleSignOut}
+                                      />
+                            </ProtectedRoute>
+                          }/>
 
-
-                  </Routes>
+                          <Route path='*' element={<NotFound/>}/>
+                    </Routes>
 
                   {/*<PreLoader isOpen={isLoader} />*/}
-                  <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
-
+                  {/*<InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />*/}
                 </CurrentUserContext.Provider>
     </main>
   );
