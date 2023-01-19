@@ -1,16 +1,15 @@
 import React, {useContext} from "react";
 import "./Profile.css";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import {useHistory, useNavigate} from "react-router-dom";
 import useValidatedForm from "../../../hooks/useValidatedForm";
 
-const Profile = () => {
+const Profile = ({handleUpdateProfile}) => {
   const { values, handleChange, resetForm, errors, isValid } = useValidatedForm();
   const currentUser = useContext(CurrentUserContext); // подписка на контекст
 
   function handleSubmit(e) {
     e.preventDefault();
-    handleProfile(values);
+    handleUpdateProfile(values);
   }
 
   // после загрузки текущего пользователя из API

@@ -1,4 +1,4 @@
-const BASE_URL = 'https://api.domainname.kmariasha.nomoredomains.sbs/';
+const BASE_URL = 'https://api.domainname.kmariasha.nomoredomains.sbs';
 const MOVIES_URL = 'https://api.nomoreparties.co/beatfilm-movies';
 const SHORTMOVIES_DURATION = 40;
 const DEVICE_PARAMS = {

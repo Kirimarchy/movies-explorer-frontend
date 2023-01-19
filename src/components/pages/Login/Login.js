@@ -1,13 +1,10 @@
 import './Login.css';
 import { Link } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
-import {useContext, useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import InfoTooltip from "../../InfoTooltip/InfoTooltip";
-import CurrentUserContext from "../../../utils/context/CurrentUserContext";
+import {useEffect} from "react";
 import useValidatedForm from "../../../hooks/useValidatedForm";
 
-const Login = () => {
+const Login = ({handleLogin}) => {
   const { values, handleChange, resetForm, errors, isValid } = useValidatedForm();
 
   function handleSubmit(e) {

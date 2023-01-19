@@ -1,11 +1,11 @@
-import React, {useContext} from "react";
-import {Link, useNavigate} from 'react-router-dom';
+import React from "react";
+import {Link} from 'react-router-dom';
 import "./Register.css";
 import logo from '../../../images/icons/logo.svg';
 import useValidatedForm from "../../../hooks/useValidatedForm";
 import {useEffect} from "react";
 
-const Register = () => {
+const Register = ({handleRegister}) => {
 
   const { values, handleChange, resetForm, errors, isValid } = useValidatedForm();
 

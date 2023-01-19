@@ -38,8 +38,6 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [savedMoviesList, setSavedMoviesList] = useState([]);
 
-  const endpointsHeader = ['/movies', '/saved-movies', '/profile', '/'];
-  const endpointsFooter = ['/movies', '/saved-movies', '/'];
 
   //HANDLERS
 
@@ -233,7 +231,7 @@ function App() {
       {/*{loadingPage ? (*/}
       {/*  <PreLoader isOpen={isLoader} />*/}
       {/*) : (*/}
-      {/*  <>*/}
+
         <CurrentUserContext.Provider value={currentUser}>
           <Header loggedIn={loggedIn}/>
                     <Routes>
