@@ -1,9 +1,10 @@
 //IMPORTS
 import './App.css';
-import {useState, useEffect} from "react";
-import {Route, Routes, useNavigation, Router} from "react-router-dom";
+import {useState, useEffect, Fragment} from "react";
+import {Route, Routes, useNavigate, useLocation, Router} from "react-router-dom";
 import CurrentUserContext from "../../utils/context/CurrentUserContext";
 import mainApi from "../../utils/api/MainApi";
+
 
 
 //COMPONENTS
@@ -24,6 +25,8 @@ import SavedMovies from "../pages/SavedMovies/SavedMovies";
 function App() {
 
   //STATE
+  const navigate = useNavigate();
+  const location = useLocation();
   const [load, setLoad] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [isInfoTooltip, setInfoTooltip] = useState({
@@ -67,7 +70,7 @@ function App() {
         if (jwt.token) {
           localStorage.setItem('jwt', jwt.token);
           setLoggedIn(true);
-          history.push('/movies');
+          navigate('/movies');
           setInfoTooltip({
             isOpen: true,
             successful: true,
@@ -89,7 +92,7 @@ function App() {
     setCurrentUser({});
     setLoggedIn(false);
     localStorage.clear();
-    history.push('/');
+    navigate('/');
   }
 
   function handleUpdateProfile({ name, email }) {
@@ -231,12 +234,11 @@ function App() {
       ) : (
         <CurrentUserContext.Provider value={currentUser}>
 
-          <Router>
             <Header loggedIn={loggedIn}/>
 
             <Routes>
               <Route exact path='/'>
-                <Main />
+                <Redirect to='/about' />
               </Route>
               <Route exact path='/signup'>
                 {!loggedIn ? (
@@ -289,7 +291,7 @@ function App() {
               status={isInfoTooltip}
               onClose={closeInfoTooltip}
             />
-          </Router>
+
         </CurrentUserContext.Provider>
       )}
     </div>
