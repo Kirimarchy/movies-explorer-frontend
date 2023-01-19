@@ -1,10 +1,10 @@
 //IMPORTS
 import './App.css';
-import {useState, useEffect, Fragment} from "react";
-import {Route, Routes, useNavigate, useLocation, Router} from "react-router-dom";
+import {useState, useEffect} from "react";
+import {Route, Routes, useNavigate, useLocation} from "react-router-dom";
 import CurrentUserContext from "../../utils/context/CurrentUserContext";
+import {useNavigation} from "react-router-dom";
 import mainApi from "../../utils/api/MainApi";
-
 
 
 //COMPONENTS
@@ -228,73 +228,83 @@ function App() {
 
   //RENDERING
   return (
-    <div className="app">
-      {!load ? (
-        <PreLoader isOpen={isLoader} />
-      ) : (
+    <main className="app">
+
+      {/*{loadingPage ? (*/}
+      {/*  <PreLoader isOpen={isLoader} />*/}
+      {/*) : (*/}
+      {/*  <>*/}
         <CurrentUserContext.Provider value={currentUser}>
+          <Header loggedIn={loggedIn}/>
+                    <Routes>
 
-            <Header loggedIn={loggedIn}/>
+                    {/*<Route exact path={endpointsHeader}*/}
+                    {/*       element={<Header loggedIn={loggedIn}/>}*/}
+                    {/*/>*/}
+                    <Route exact path='/'
+                           element = {<Main/>}
+                    />
+                    <Route exact path='/signup'
+                           element={!loggedIn ? (
+                             <Register handleRegister={handleRegister} />
+                           ) : (
+                             <Main/>
+                           )}
+                    />
+                    <Route exact path='/signin'
+                           element={!loggedIn ? (
+                             <Login handleLogin={handleLogin} />
+                           ) : (
+                             <Main/>
+                           )}
+                    />
+                    <Route exact path='/movies'
+                           element={<ProtectedRoute
+                             path='/movies'
+                             component={Movies}
+                             loggedIn={loggedIn}
+                             setIsLoader={setIsLoader}
+                             setInfoTooltip={setInfoTooltip}
+                             savedMoviesList={savedMoviesList}
+                             onLikeClick={handleSaveMovie}
+                             onDeleteClick={handleDeleteMovie}
+                           />
+                           }
+                    />
+                    <Route exact path='/movies'
+                           element={<ProtectedRoute
+                             path='/saved-movies'
+                             component={SavedMovies}
+                             loggedIn={loggedIn}
+                             savedMoviesList={savedMoviesList}
+                             onDeleteClick={handleDeleteMovie}
+                             setInfoTooltip={setInfoTooltip}
+                           />
+                           }
+                    />
+                    <Route exact path='/profile'
+                           element={<ProtectedRoute
+                             path='/profile'
+                             component={Profile}
+                             loggedIn={loggedIn}
+                             handleUpdateProfile={handleUpdateProfile}
+                             handleSignOut={handleSignOut}
+                           />
+                           }
+                    />
+                    <Route path='*'
+                           element={<NotFound/>}
+                    />
 
-            <Routes>
-              <Route exact path='/'>
-                <Redirect to='/about' />
-              </Route>
-              <Route exact path='/signup'>
-                {!loggedIn ? (
-                  <Register handleRegister={handleRegister} />
-                ) : (
-                  <Redirect to='/' />
-                )}
-              </Route>
-              <Route exact path='/signin'>
-                {!loggedIn ? (
-                  <Login handleLogin={handleLogin} />
-                ) : (
-                  <Redirect to='/' />
-                )}
-              </Route>
-              <ProtectedRoute
-                path='/movies'
-                component={Movies}
-                loggedIn={loggedIn}
-                setIsLoader={setIsLoader}
-                setInfoTooltip={setInfoTooltip}
-                savedMoviesList={savedMoviesList}
-                onLikeClick={handleSaveMovie}
-                onDeleteClick={handleDeleteMovie}
-              />
-              <ProtectedRoute
-                path='/saved-movies'
-                component={SavedMovies}
-                loggedIn={loggedIn}
-                savedMoviesList={savedMoviesList}
-                onDeleteClick={handleDeleteMovie}
-                setInfoTooltip={setInfoTooltip}
-              />
-              <ProtectedRoute
-                path='/profile'
-                component={Profile}
-                loggedIn={loggedIn}
-                handleUpdateProfile={handleUpdateProfile}
-                handleSignOut={handleSignOut}
-              />
-              <Route path='*'>
-                <NotFound/>
-              </Route>
-            </Routes>
-            <Route exact path={endpointsFooter}>
-              <Footer />
-            </Route>
-            <PreLoader isOpen={isLoader} />
-            <InfoTooltip
-              status={isInfoTooltip}
-              onClose={closeInfoTooltip}
-            />
 
-        </CurrentUserContext.Provider>
-      )}
-    </div>
+
+                  </Routes>
+
+                  {/*<PreLoader isOpen={isLoader} />*/}
+                  <InfoTooltip status={isInfoTooltip} onClose={closeInfoTooltip} />
+
+                </CurrentUserContext.Provider>
+    </main>
   );
 }
 

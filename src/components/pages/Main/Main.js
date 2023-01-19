@@ -6,6 +6,7 @@ import Techs from './Techs/Techs.js';
 import AboutMe from './AboutMe/AboutMe.js';
 import Portfolio from './Portfolio/Portfolio.js';
 import "./Main.css";
+import Footer from "../../Footer/Footer";
 
 
 const Main = () => {
@@ -17,6 +18,7 @@ const Main = () => {
         <Techs />
         <AboutMe />
         <Portfolio />
+        <Footer/>
       </main>
     );
 }

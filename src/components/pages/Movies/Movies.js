@@ -2,6 +2,7 @@ import React from "react";
 import "./Movies.css";
 import SearchForm from "../../SearchForm/SearchForm";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
+import Footer from "../../Footer/Footer";
 
 const Movies = () => {
   return (
@@ -9,6 +10,7 @@ const Movies = () => {
       <SearchForm/>
       <hr className="movies__separator"/>
       <MoviesCardList/>
+      <Footer/>
     </main>
   );
 }
