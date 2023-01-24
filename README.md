@@ -1,3 +1,5 @@
+# movies-explorer-frontend
+
 Репозиторий для приложения дипломного проекта.
 
 ИНДИВИДУАЛЬНЫЙ МАКЕТ САЙТА: https://disk.yandex.ru/d/267w829ahOHNGw
