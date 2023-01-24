@@ -1,0 +1,83 @@
+.burgermenu-button {
+  display: none;
+  align-items: center;
+  position: absolute;
+  top: 27px;
+  right: 38px;
+  width: 28px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 5;
+  transition: all .3s ease;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.burgermenu-button:hover {
+  opacity: .8;
+}
+
+.burgermenu-button:focus-visible {
+  outline: 1px solid #fff;
+  outline-offset: 4px;
+  border-radius: 5px;
+}
+
+.burgermenu-button_off > span,
+.burgermenu-button_off > span::before,
+.burgermenu-button_off > span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+  transition: all .3s ease;
+}
+
+.burgermenu-button_off > span::before {
+  content: '';
+  top: -10px;
+}
+
+.burgermenu-button_off > span::after {
+  content: '';
+  top: 10px;
+}
+
+.burgermenu-button_on > span,
+.burgermenu-button_on > span::before,
+.burgermenu-button_on > span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+  transform: rotate(45deg);
+  transition: all .3s ease;
+}
+
+.burgermenu-button_on > span::before {
+  content: '';
+  top: 0;
+  transform: rotate(0);
+}
+
+.burgermenu-button_on > span::after {
+  content: '';
+  top: 0;
+  transform: rotate(90deg);
+}
+
+@media screen and (max-width: 800px) {
+  .burgermenu-button {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .burgermenu-button {
+    right: 23px;
+    width: 22px;
+  }
+}

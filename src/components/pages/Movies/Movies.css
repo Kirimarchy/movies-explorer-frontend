@@ -1,0 +1,12 @@
+.movies {
+  background-color: #202020;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.movies-separator {
+  background-color: white;
+  width: 88%;
+}
