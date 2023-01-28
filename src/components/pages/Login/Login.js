@@ -3,21 +3,21 @@ import { Link } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
 import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import InfoTooltip from "../../InfoTooltip/InfoTooltip";
-import {AuthContext} from "../../../utils/context/AuthContext";
+import PopUp from "../../PopUp/PopUp";
+import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 
 const Login = () => {
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { isAuth, setIsAuth } = useContext(CurrentUserContext);
   const navigate = useNavigate();
 
-  const [isInfoTooltip, setIsInfoTooltip] = useState({
+  const [isPopUp, setIsPopUp] = useState({
     isOpen: false,
     successful: true,
     text: '',
   });
 
-  function closeInfoTooltip() {
-    setIsInfoTooltip({ ...isInfoTooltip, isOpen: false });
+  function closePopUp() {
+    setIsPopUp({ ...isPopUp, isOpen: false });
   }
 
   function handleLogin({ email, password }) {
@@ -25,7 +25,7 @@ const Login = () => {
           setIsAuth(true);
           localStorage.setItem('isAuth', true);
           navigate('/movies');
-          setIsInfoTooltip({
+          setIsPopUp({
             isOpen: true,
             successful: true,
             text: 'Добро пожаловать!',
@@ -78,7 +78,7 @@ const Login = () => {
           </Link>
         </span>
         </form>
-        {/*{isInfoTooltip&&<InfoTooltip/>}*/}
+        {/*{isPopUp&&<PopUp/>}*/}
       </main>
     );
 }

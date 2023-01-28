@@ -2,11 +2,11 @@ import React, {useContext} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import "./Register.css";
 import logo from '../../../images/icons/logo.svg';
-import {AuthContext} from "../../../utils/context/AuthContext";
+import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 
 const Register = () => {
 
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { isAuth, setIsAuth } = useContext(CurrentUserContext);
   const navigate = useNavigate();
 
   function handleRegister({ name, email, password }) {
@@ -14,7 +14,7 @@ const Register = () => {
     setIsAuth(true);
     localStorage.setItem('isAuth', true);
     navigate('/movies');
-    setIsInfoTooltip({
+    setIsPopUp({
       isOpen: true,
       successful: true,
       text: 'Добро пожаловать!',

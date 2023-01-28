@@ -1,11 +1,11 @@
 import React, {useContext} from "react";
 import "./Profile.css";
-import {AuthContext} from "../../../utils/context/AuthContext";
+import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import {useHistory, useNavigate} from "react-router-dom";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const {isAuth, setIsAuth} = useContext(AuthContext);
+  const {isAuth, setIsAuth} = useContext(CurrentUserContext);
 
   function handleEditProfile ({ name, email }) {
 
@@ -15,7 +15,7 @@ const Profile = () => {
     currentUser = {name, email};
     localStorage.setItem('User', currentUser);
 
-    setIsInfoTooltip({
+    setIsPopUp({
       isOpen: true,
       successful: true,
       text: 'Ваши данные обновлены!',

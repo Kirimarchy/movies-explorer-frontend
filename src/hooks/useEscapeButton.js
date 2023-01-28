@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const useEscButton = (callback, dependency) => {
+const useEscapeButton = (callback, dependency) => {
   useEffect(() => {
     if (dependency) {
       const onEscClose = e => {
@@ -16,4 +16,4 @@ const useEscButton = (callback, dependency) => {
   }, [dependency]);
 }
 
-export default useEscButton;
+export default useEscapeButton;

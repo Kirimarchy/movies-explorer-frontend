@@ -1,4 +1,4 @@
-.info-tooltip {
+.pop-up {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -13,12 +13,12 @@
   z-index: 100;
 }
 
-.info-tooltip_opened {
+.pop-up_opened {
   visibility: visible;
   opacity: 1;
 }
 
-.info-tooltip__container {
+.pop-up__container {
   width: 100%;
   max-width: 430px;
   background-color: #4285f4;
@@ -30,21 +30,21 @@
   cursor: default;
 }
 
-.info-tooltip__status {
+.pop-up__status {
   width: 120px;
   height: 120px;
   margin: 26px auto 32px;
 }
 
-.info-tooltip__status_fail {
+.pop-up__status_fail {
   background-image: (src/images/icons/fail.svg);
 }
 
-.info-tooltip__status_success {
+.pop-up__status_success {
   background-image: (src/images/icons/success.svg);
 }
 
-.info-tooltip__title {
+.pop-up__title {
   margin: 0 0 24px;
   font-size: 24px;
   font-weight: 900;
@@ -53,7 +53,7 @@
   text-align: center;
 }
 
-.info-tooltip__close-button {
+.pop-up__close-button {
   position: absolute;
   top: -40px;
   right: -40px;
@@ -70,28 +70,28 @@
   transition: all .3s ease;
 }
 
-.info-tooltip__close-button:hover {
+.pop-up__close-button:hover {
   opacity: .8;
   cursor: pointer;
 }
 
 @media screen and (max-width: 500px) {
-  .info-tooltip__container {
+  .pop-up__container {
     max-width: 282px;
     padding: 25px 22px;
   }
 
-  .info-tooltip__status {
+  .pop-up__status {
     margin: 25px auto 40px;
   }
 
-  .info-tooltip__title {
+  .pop-up__title {
     font-size: 20px;
     line-height: 1.2;
     margin-bottom: 25px;
   }
 
-  .info-tooltip__close-button {
+  .pop-up__close-button {
     width: 20px;
     height: 20px;
     top: -38px;

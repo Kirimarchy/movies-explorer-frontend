@@ -10,7 +10,7 @@ import NotFound from "../../components/pages/NotFound/NotFound";
 import Main from "../../components/pages/Main/Main";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import InfoTooltip from "../../components/InfoTooltip/InfoTooltip";
+import PopUp from "../../components/PopUp/PopUp";
 
 
 // export const publicRoutes = [
