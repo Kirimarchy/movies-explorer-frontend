@@ -1,6 +1,6 @@
 import "./Loader.css";
 
-const Loader= () => {
+const Loader= (isOpen) => {
   return (
           <>
           {isOpen && (
@@ -14,4 +14,4 @@ const Loader= () => {
           );
 }
 
-export default PreLoader;
+export default Loader;

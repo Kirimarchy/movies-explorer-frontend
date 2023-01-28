@@ -73,7 +73,7 @@ const Register = () => {
         </button>
         <span className="register__support">
           Уже зарегистрированы?&nbsp;
-          <Link to="signin" className="register__link">
+          <Link to="/signin" className="register__link">
             Войти
           </Link>
         </span>
