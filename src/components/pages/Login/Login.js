@@ -5,8 +5,11 @@ import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import PopUp from "../../PopUp/PopUp";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
+import useValidatedForm from '../../../hooks/useValidatedForm';
 
 const Login = () => {
+
+  const { errors, handleChange, isValid } = useValidatedForm();
   const { isAuth, setIsAuth } = useContext(CurrentUserContext);
   const navigate = useNavigate();
 
@@ -50,9 +53,11 @@ const Login = () => {
                 name="email"
                 className="login__input"
                 type="email"
+                placeholder="E-mail"
+                onChange={handleChange}
                 required
               />
-              <span className="login__error"></span>
+              <span className="login__error">{errors.email}</span>
             </label>
             <label className="login__label">
               <span className="login__label-text">Пароль</span>
@@ -60,14 +65,19 @@ const Login = () => {
                 name="password"
                 className="login__input"
                 type="password"
+                placeholder="Пароль"
+                onChange={handleChange}
+                minLength="2"
+                maxLength="40"
                 required
               />
-              <span className="login__error"></span>
+              <span className="login__error">{errors.password}</span>
             </label>
           </div>
           <button
             type="submit"
-            className="login__button"
+            className={`login__button ${!isValid && 'login__button_disabled'}`}
+            disabled = {!isValid}      
           >
             Войти
           </button>

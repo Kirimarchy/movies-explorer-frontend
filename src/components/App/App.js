@@ -23,6 +23,9 @@ function App() {
 
   }, [localStorage.getItem('isAuth'), location]);
 
+
+  //ROUTING
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path = '/' element = {<Header/>}>
@@ -38,6 +41,7 @@ function App() {
     )
   );
 
+  //RENDERING
 
   return (
     <main className="app">

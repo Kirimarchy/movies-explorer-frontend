@@ -35,7 +35,7 @@ const useValidatedForm = () => {
     [setValues, setErrors, setIsValid]
   );
 
-  return { values, errors, handleChange, resetFields, isValid, setIsValid };
+  return { errors, handleChange, isValid };
 }
 
 export default useValidatedForm;
