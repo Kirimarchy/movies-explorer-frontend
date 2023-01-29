@@ -6,33 +6,44 @@ import {useNavigate} from "react-router-dom";
 import PopUp from "../../PopUp/PopUp";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import useValidatedForm from '../../../hooks/useValidatedForm';
+import { mainApi } from '../../../utils/api/MainApi';
 
 const Login = () => {
-
-  const { errors, handleChange, isValid } = useValidatedForm();
-  const { isAuth, setIsAuth } = useContext(CurrentUserContext);
   const navigate = useNavigate();
-
-  const [isPopUp, setIsPopUp] = useState({
+  const { isAuth, setIsAuth } = useContext(CurrentUserContext);
+  const { errors, handleChange, isValid } = useValidatedForm();
+  const [isPopUp, setPopUp] = useState({
     isOpen: false,
     successful: true,
     text: '',
   });
 
   function closePopUp() {
-    setIsPopUp({ ...isPopUp, isOpen: false });
+    setPopUp({ ...isPopUp, isOpen: false });
   }
 
   function handleLogin({ email, password }) {
 
-          setIsAuth(true);
-          localStorage.setItem('isAuth', true);
-          navigate('/movies');
-          setIsPopUp({
-            isOpen: true,
-            successful: true,
-            text: 'Добро пожаловать!',
-          });
+          MainApi.loginUser(email,password)
+          .then(jwt => {
+            if (jwt.token) {
+              localStorage.setItem('jwt', jwt.token);
+              setIsAuth(true);
+              navigate('/movies');
+              setPopUp({
+                isOpen: true,
+                successful: true,
+                text: 'Добро пожаловать!',
+              });
+            }
+          })
+          .catch(err =>
+            setPopUp({
+              isOpen: true,
+              successful: false,
+              text: err,
+            })
+          )
   }
 
     return (
@@ -53,7 +64,6 @@ const Login = () => {
                 name="email"
                 className="login__input"
                 type="email"
-                placeholder="E-mail"
                 onChange={handleChange}
                 required
               />
@@ -65,7 +75,6 @@ const Login = () => {
                 name="password"
                 className="login__input"
                 type="password"
-                placeholder="Пароль"
                 onChange={handleChange}
                 minLength="2"
                 maxLength="40"
@@ -88,7 +97,7 @@ const Login = () => {
           </Link>
         </span>
         </form>
-        {/*{isPopUp&&<PopUp/>}*/}
+        {isPopUp&&<PopUp/>}
       </main>
     );
 }

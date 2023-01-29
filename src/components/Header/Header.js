@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import './Header.css';
 import Navigation from '../Navigation/Navigaton';
 import logo from '../../images/icons/logo.svg';
-import endpoints from '../../utils/constants';
+import {endpoints} from '../../utils/constants';
 
 function Header() {
 

@@ -16,12 +16,13 @@ import ProtectedRoute from '../HOCs/ProtectedRoute';
 
 
 function App() {
-
-  const [isAuth, setIsAuth] = useState(localStorage.getItem('isAuth') === 'true')
+  const [currentUser, setCurrentUser] = useState({});
+  const [isAuth, setIsAuth] = useState( currentUser ? true : false );
   useEffect(()=>{
     console.log(localStorage.getItem('isAuth'))
 
   }, [localStorage.getItem('isAuth'), location]);
+  
 
 
   //ROUTING
@@ -45,7 +46,7 @@ function App() {
 
   return (
     <main className="app">
-      <CurrentUserContext.Provider value={{ isAuth, setIsAuth }}>
+      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
         <RouterProvider router = {router} fallbackElement = {<Loader/>}/>
       </CurrentUserContext.Provider>
     </main>
