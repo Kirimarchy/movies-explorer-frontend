@@ -1,6 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import './NotFound.css';
 
-const NotFound = ({ goBack }) => {
+const NotFound = () => {
+  const navigate = useNavigate();
+  const goBack = () => navigate(-1);
+ 
   return (
     <main className="not-found">
       <p className="not-found__text-container">

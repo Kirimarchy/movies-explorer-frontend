@@ -1,31 +1,30 @@
-import React, {useContext} from "react";
-import {Link, useNavigate} from 'react-router-dom';
 import "./Register.css";
 import logo from '../../../images/icons/logo.svg';
-import CurrentUserContext from "../../../utils/context/CurrentUserContext";
+import { useEffect } from "react";
+import {Link} from 'react-router-dom';
 import useValidatedForm from "../../../hooks/useValidatedForm";
 
-const Register = () => {
+const Register = ({ handleSubmit }) => {
 
-  const { errors, handleChange, isValid } = useValidatedForm();  
-  const { isAuth, setIsAuth } = useContext(CurrentUserContext);
-  const navigate = useNavigate();
+  const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
 
-  function handleRegister({ name, email, password }) {
-
-    setIsAuth(true);
-    localStorage.setItem('isAuth', true);
-    navigate('/movies');
-    setIsPopUp({
-      isOpen: true,
-      successful: true,
-      text: 'Добро пожаловать!',
-    });
+  useEffect(() => resetFields(), [resetFields]);
+  
+  function submitForm(e){
+    e.preventDefault();
+    const {name, email, password} = values;
+    handleSubmit(name, email, password);
   }
+
 
   return (
     <main className="register">
-      <form className="register__form" name="register">
+      <form 
+        className="register__form" 
+        name="register"
+        onSubmit={submitForm}
+        noValidate
+      >
         <Link to="/" className="register__link">
           <img src={logo} alt="Логотип" className="register__logo" />
         </Link>
@@ -37,6 +36,7 @@ const Register = () => {
               name="name"
               className="register__input"
               type="text"
+              value={values.name || ''}
               onChange={handleChange}
               required
               minLength="2"
@@ -51,6 +51,7 @@ const Register = () => {
               name="email"
               className="register__input"
               type="email"
+              value={values.email || ''}
               onChange={handleChange}
               required
             />
@@ -62,6 +63,7 @@ const Register = () => {
               name="password"
               className="register__input"
               type="password"
+              value={values.password || ''}
               onChange={handleChange}
               required
             />
@@ -72,7 +74,7 @@ const Register = () => {
           type="submit"
           className={`register__button ${!isValid && 'register__button_disabled'}`}
           disabled={!isValid}
-          onClick={handleRegister}
+          onClick={submitForm}
         >
           Зарегистрироваться
         </button>

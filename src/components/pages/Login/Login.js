@@ -1,57 +1,30 @@
 import './Login.css';
 import { Link } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
-import {useContext, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import PopUp from "../../PopUp/PopUp";
-import CurrentUserContext from "../../../utils/context/CurrentUserContext";
+import {useEffect} from "react";
 import useValidatedForm from '../../../hooks/useValidatedForm';
-import { mainApi } from '../../../utils/api/MainApi';
 
-const Login = () => {
-  const navigate = useNavigate();
-  const { isAuth, setIsAuth } = useContext(CurrentUserContext);
-  const { errors, handleChange, isValid } = useValidatedForm();
-  const [isPopUp, setPopUp] = useState({
-    isOpen: false,
-    successful: true,
-    text: '',
-  });
 
-  function closePopUp() {
-    setPopUp({ ...isPopUp, isOpen: false });
+const Login = ({ handleSubmit }) => {
+  
+  const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
+
+  useEffect(() => resetFields(), [resetFields]);
+  
+  function submitForm(e){
+    e.preventDefault();
+    const {email, password} = values;
+    handleSubmit(email, password);
   }
-
-  function handleLogin({ email, password }) {
-
-          MainApi.loginUser(email,password)
-          .then(jwt => {
-            if (jwt.token) {
-              localStorage.setItem('jwt', jwt.token);
-              setIsAuth(true);
-              navigate('/movies');
-              setPopUp({
-                isOpen: true,
-                successful: true,
-                text: 'Добро пожаловать!',
-              });
-            }
-          })
-          .catch(err =>
-            setPopUp({
-              isOpen: true,
-              successful: false,
-              text: err,
-            })
-          )
-  }
+  
 
     return (
       <main className="login">
         <form
           className="login__form"
           name="login"
-          onSubmit={handleLogin}
+          noValidate
+          onSubmit={submitForm}
         >
           <Link to='/' className='login__link'>
             <img src={logo} alt="Логотип" className="login__logo" />
@@ -64,6 +37,7 @@ const Login = () => {
                 name="email"
                 className="login__input"
                 type="email"
+                value={values.email || ''}
                 onChange={handleChange}
                 required
               />
@@ -75,6 +49,7 @@ const Login = () => {
                 name="password"
                 className="login__input"
                 type="password"
+                value={values.password || ''}
                 onChange={handleChange}
                 minLength="2"
                 maxLength="40"
@@ -91,13 +66,13 @@ const Login = () => {
             Войти
           </button>
           <span className="login__support">
-          Ещё не зарегистрированы?&nbsp;
+            Ещё не зарегистрированы?&nbsp;
             <Link to='/signup' className="login__link">
             Регистрация
-          </Link>
-        </span>
+            </Link>
+          </span>
         </form>
-        {isPopUp&&<PopUp/>}
+
       </main>
     );
 }
