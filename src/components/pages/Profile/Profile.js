@@ -1,12 +1,12 @@
 import "./Profile.css";
 import useValidatedForm from "../../../hooks/useValidatedForm";
-import { useContext } from "react";
+import { useContext , useEffect } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 
 const Profile = ({handleSubmit}) => {
 
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser, setIsAuth } = useContext(CurrentUserContext);
 
   useEffect(() => resetFields(), [resetFields]);
   

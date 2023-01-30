@@ -24,7 +24,7 @@ function App() {
   const [isAuth, setIsAuth] = useState( currentUser ? true : false );
 
   useEffect(()=>{
-    MainApi.getUser().then(({data}) => setCurrentUser(data));
+    MainApi.getUser().then(({data}) => setCurrentUser(data)).then(console.log(currentUser));
   }, [isAuth])
   
   //API CALLS
@@ -74,28 +74,11 @@ function App() {
   }
 
 
-  //ROUTING
-
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path = '/' element = {<Header isAuth = {isAuth}/>}>
-        <Route index element = {<Navigate to = '/about'/>}/>
-        <Route path = '/about' exact element = {<Main/>}/>
-        <Route path = '/signin' exact element = {<Login handleSubmit = {handleLogin}/>}/>
-        <Route path = '/signup' exact element = {<Register handleSubmit = {handleRegister}/>}/>
-        <Route path = '/profile' exact element ={<ProtectedRoute isAuth={isAuth} child={<Profile handleSubmit={handleEditProfile}/>}/>}/>      
-        <Route path = '/movies' exact element = {<ProtectedRoute isAuth={isAuth} child={<Movies/>}/>}/>
-        <Route path = '/saved-movies' exact element = {<ProtectedRoute isAuth={isAuth} child={<SavedMovies/>}/>}/>
-        <Route path = '*' exact element = {<NotFound/>}/>          
-      </Route>
-    )
-  );
-
   //RENDERING
 
   return (
     <main className="app">
-      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+      <CurrentUserContext.Provider value={{ currentUser, isAuth, setIsAuth }}>
       <Header/>  
         <Routes>
           <Route path = '/' exact element = {<Navigate to = '/about'/>}/>
