@@ -128,6 +128,7 @@ function App() {
     <main className="app">
       <CurrentUserContext.Provider value={{ currentUser, isAuth, setIsAuth }}>
       <Header/>  
+        {!isLoading?
         <Routes>
           <Route path = '/' exact element = {<Navigate to = '/about'/>}/>
           <Route path = '/about' exact element = {<Main/>}/>
@@ -138,6 +139,7 @@ function App() {
           <Route path = '/saved-movies' exact element = {<ProtectedRoute isAuth={isAuth} child={<SavedMovies/>}/>}/>
           <Route path = '*' exact element = {<NotFound/>}/>          
         </Routes>
+        : <Loader/>}
       <Footer/>  
       </CurrentUserContext.Provider>
     </main>
