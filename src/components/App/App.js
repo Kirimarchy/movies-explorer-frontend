@@ -21,24 +21,27 @@ import { MainApi } from '../../utils/api/MainApi';
 function App() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({});
-  const [isAuth, setIsAuth] = useState( currentUser ? true : false );
+  const [isAuth, setIsAuth] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isPopUp, setPopUp] = useState({isOpen: false});
 
-  useEffect(()=>{
-    MainApi.getUser().then(({data}) => setCurrentUser(data)).then(console.log(currentUser));
-  }, [isAuth])
+  useEffect(() => checkAuthToken(), []);
+  useEffect(() => getCurrentUser(), [isAuth]);
   
   //API CALLS
   function handleRegister(name, email, password) {
-    MainApi.registerUser(name, email, password)
+    MainApi
+    .registerUser(name, email, password)
     .then(handleLogin(email, password));
   }
 
   function handleLogin(email, password) {
-
-    MainApi.loginUser(email,password)
+    setLoading(true);
+    MainApi
+    .loginUser(email,password)
     .then(jwt => {
-      if (jwt.token) {
-        localStorage.setItem('jwt', {jwt});
+      if ({jwt}) {
+        localStorage.setItem('jwt', jwt.token);
         setIsAuth(true);
         navigate('/movies');
         setPopUp({
@@ -51,26 +54,71 @@ function App() {
     .catch(err =>
         console.log(err)
     )
+    .finally(() => setLoading(true));
   }
 
   function handleEditProfile (name, email) {
-
-    setIsLoader(true);
-    setTimeout(setIsLoader(false), 500);
-
-    currentUser = {name, email};
-    localStorage.setItem('User', currentUser);
-
-    setIsPopUp({
-      isOpen: true,
-      successful: true,
-      text: 'Ваши данные обновлены!',
-    });
-
+    setLoading(true);
+    MainApi.
+      updateUserProfile(name, email)
+      .then(data => {
+        setCurrentUser(data);
+        setPopUp({
+          isOpen: true,
+          successful: true,
+          text: 'Ваши данные обновлены!',
+        });
+      })
+      .catch(err =>
+        setPopUp({
+          isOpen: true,
+          successful: false,
+          text: err,
+        })
+        )
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
-  function closePopUp() {
-    setPopUp({ ...isPopUp, isOpen: false });
+  function checkAuthToken () {
+    const jwt = localStorage.getItem('jwt');
+    setLoading(true);
+    if (jwt) {
+      MainApi
+        .getUser()
+        .then(user => {
+          if (user) {
+            setIsAuth(true);
+            setCurrentUser(user);
+          }
+        })
+        .catch(err => setPopUp({ isOpen: true, successful: false, text: err }))
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setIsAuth(false);
+      setLoading(false);
+    }
+  };
+
+  function getCurrentUser () {
+    if (isAuth) {
+      setLoading(true);
+      MainApi
+        .getUser()
+        .then(user => setCurrentUser(user))
+        .catch(err =>
+          setPopUp({
+            isOpen: true,
+            successful: false,
+            text: err,
+          })
+          )
+        .finally(() => setLoading(false));
+    }
+
   }
 
 

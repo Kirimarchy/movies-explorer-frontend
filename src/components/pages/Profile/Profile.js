@@ -2,11 +2,13 @@ import "./Profile.css";
 import useValidatedForm from "../../../hooks/useValidatedForm";
 import { useContext , useEffect } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
+import { useNavigate } from "react-router-dom";
 
 const Profile = ({handleSubmit}) => {
 
+  const navigate = useNavigate();
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
-  const { currentUser, setIsAuth } = useContext(CurrentUserContext);
+  const { currentUser, setIsAuth } = useContext(CurrentUserContext)||{};
 
   useEffect(() => resetFields(), [resetFields]);
   
@@ -30,7 +32,7 @@ const Profile = ({handleSubmit}) => {
         name="profile"
         onSubmit={submitForm}
       >
-        <h1 className="profile__title">Привет {currentUser.name}!</h1>
+        <h1 className="profile__title">Привет {currentUser?.name}!</h1>
         <div className="profile__labels-container">
           <label className="profile__label">
             <span className="profile__label-text">Имя</span>

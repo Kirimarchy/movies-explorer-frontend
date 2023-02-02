@@ -1,18 +1,24 @@
 import './PopUp.css';
 import useEscapeButton from "../../hooks/useEscapeButton";
 
-export default function PopUp({ onClose, status: { isOpen, successful, text } }) {
-
+export default function PopUp({ isOpen, successful, text }) {
+  
   function handleClickOverlay(e) {
     e.stopPropagation();
+    closePopUp();
   }
 
-  useEscapeButton(onClose, isOpen);
+  useEscapeButton(closePopUp, isOpen);
+
+
+  function closePopUp() {
+    setPopUp({ ...isPopUp, isOpen: false });
+  }
 
   return (
           <div
             className={`pop-up ${isOpen && 'pop-up_opened'}`}
-            onClick={onClose}
+            onClick={closePopUp}
             >
             <div className="pop-up__container" onClick={handleClickOverlay}>
               <div
@@ -26,7 +32,7 @@ export default function PopUp({ onClose, status: { isOpen, successful, text } })
               <button
                 type="button"
                 className="pop-up__close-button"
-                onClick={onClose}
+                onClick={closePopUp}
                 ></button>
             </div>
           </div>
