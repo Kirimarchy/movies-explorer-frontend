@@ -1,6 +1,6 @@
 import './App.css';
 import {useState, useEffect} from "react";
-import {Navigate, createBrowserRouter, createRoutesFromElements, Route, RouterProvider, useLocation, useNavigate, Routes} from "react-router-dom";
+import {Navigate, Route, useNavigate, Routes} from "react-router-dom";
 import CurrentUserContext from '../../utils/context/CurrentUserContext';
 import {useNavigation} from "react-router-dom";
 import Header from '../Header/Header';
@@ -21,7 +21,7 @@ import { MainApi } from '../../utils/api/MainApi';
 function App() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({});
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('jwt')));
   const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false});
 
