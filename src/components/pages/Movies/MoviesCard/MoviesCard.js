@@ -6,7 +6,7 @@ import { MOVIES_URL } from '../../../../utils/constants';
 const MoviesCard = ({movie}) => {
 
   const location = useLocation();
-  const saved = false;
+  const saved = true;
 
   function saveMovie() {
   
@@ -22,7 +22,7 @@ const MoviesCard = ({movie}) => {
 
           <a target="_blank" rel="noreferrer" href={movie?.trailerLink}>
             <img
-              src={`${MOVIES_URL}${movie?.image.formats.thumbnail.url}`}
+              src={movie?.image}
               alt={movie?.nameRU}
               title={`Описание: ${movie?.description} \n\nСнято: ${movie?.country}, ${movie?.year}г.`}
               className="movies-card__poster"
@@ -53,7 +53,7 @@ const MoviesCard = ({movie}) => {
             )}
           </a>
           <div className="movies-card__description">
-            <h2 className="movies-card__title">{movie?.title}</h2>
+            <h2 className="movies-card__title">{movie?.nameRU}</h2>
             <span className="movies-card__duration">
               {movie?.duration}
             </span>

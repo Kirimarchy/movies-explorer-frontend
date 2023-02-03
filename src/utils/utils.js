@@ -6,8 +6,8 @@ const correctApiData = (data) => {
         item.image = completeMissingField.image;
         item.thumbnail = completeMissingField.thumbnail;
       } else {
-        item.image = `${PRE_LINK}${movie.image.url}`
-        item.thumbnail = `${PRE_LINK}${movie.image.formats.thumbnail.url}`
+        item.image = `${PRE_LINK}${item.image.url}`;
+        item.thumbnail = `${PRE_LINK}${item?.image?.formats?.thumbnail.url}` || '';
       }
       if(!item.country) {
         item.country = 'Russia';
