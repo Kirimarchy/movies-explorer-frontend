@@ -1,11 +1,20 @@
-import React from "react";
 import './MoviesCard.css';
 import {useLocation} from "react-router-dom";
-import picture from '../../../../images/movie_card_img.png';
-const MoviesCard = (movie) => {
+import { MOVIES_URL } from '../../../../utils/constants';
+
+
+const MoviesCard = ({movie}) => {
 
   const location = useLocation();
-  const saved = true;
+  const saved = false;
+
+  function saveMovie() {
+  
+  }
+
+  function deleteMovie() {
+ 
+  }
 
     return (
       <li className="movies-card">
@@ -13,39 +22,40 @@ const MoviesCard = (movie) => {
 
           <a target="_blank" rel="noreferrer" href={movie?.trailerLink}>
             <img
-              src={picture}
-              alt={'Изображение заставки фильма'}
-              title={`Описание: Гуляем на всю зарплату \n\nСнято: Россия, 2022г.`}
+              src={`${MOVIES_URL}${movie?.image.formats.thumbnail.url}`}
+              alt={movie?.nameRU}
+              title={`Описание: ${movie?.description} \n\nСнято: ${movie?.country}, ${movie?.year}г.`}
               className="movies-card__poster"
             />
             {location.pathname === '/movies' && (
               <button
                 type="button"
-                className={`movies-card__button movies-card__button_type_${
-                  saved ? 'saved' : 'save'
+                className={`movies-card__button movies-card__button_type_${ saved ? 'saved' : 'unsaved'
                 }`}
                 aria-label={`${
-                  saved ? 'Удалить фильм из сохранённых' : 'Сохранить фильм'
+                  saved ? 'Удалить фильм' : 'Добавить в коллекцию'
                 }`}
                 title={`${
-                  saved ? 'Удалить фильм из сохранённых' : 'Сохранить фильм'
+                  saved ? 'Удалить фильм' : 'Добавить в коллекцию'
                 }`}
+                onClick={saved? deleteMovie : saveMovie}
               ></button>
             )}
 
             {location.pathname === '/saved-movies' && (
               <button
                 type="button"
-                className="movies-card__button movies-card__button_type_unsave"
-                aria-label="Удалить фильм из сохранённых"
-                title="Удалить фильм из сохранённых"
+                className="movies-card__button movies-card__button_type_delete"
+                aria-label="Удалить фильм"
+                title="Удалить фильм"
+                onClick={deleteMovie}
               ></button>
             )}
           </a>
           <div className="movies-card__description">
-            <h2 className="movies-card__title">Дискотека века</h2>
+            <h2 className="movies-card__title">{movie?.title}</h2>
             <span className="movies-card__duration">
-              {("2ч22м")}
+              {movie?.duration}
             </span>
           </div>
 

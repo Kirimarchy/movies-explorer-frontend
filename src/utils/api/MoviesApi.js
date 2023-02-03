@@ -1,4 +1,4 @@
-import { MOVIES_URL } from './constants';
+import { MOVIES_URL } from '../constants.js';
 
 class Api {
   constructor({ baseUrl }) {
@@ -7,6 +7,7 @@ class Api {
 
   async _getResponse(res) {
     const response = await res.json();
+    console.log('%response',response);
     return res.ok ? response : Promise.reject(res);
   }
 
