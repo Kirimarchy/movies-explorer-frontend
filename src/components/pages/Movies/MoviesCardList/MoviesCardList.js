@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from "react";
 import "./MoviesCardList.css";
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import cards from "./examplecards";
-import { MoviesApi } from "../../../../utils/api/MoviesApi";
-import correctApiData from "../../../../utils/utils";
+import useResize from "../../../../hooks/useResize"
 
+const MoviesCardList = ({movies =[], filter}) => {
+  // const [cardsVisible, setCardsVisible] = useState({ total: 12, more: 3 });
+  // const {width, isMobile, isTablet, isDesktop} = useResize();
+  useEffect(() => {}, [filter]);
 
-const MoviesCardList = () => {
-
-  const [moviesList, setMoviesList] = useState([]);
-
-  useEffect(()=>{
-      MoviesApi.getAllMovies().
-        then((res) => {
-          setMoviesList(correctApiData(res));
-          console.log('!!!!!!!', moviesList);
-        }).
-        catch(err => console.log('Error', err));
-  },[]);
-
-  const location = useLocation();
 
   return (
     <section className="movies-card-list">
       <ul className="movies-card-list__list">
-        {moviesList.map(movie => (
+        {movies.map(movie => (
           <MoviesCard movie={movie} key={`_${movie.id}`}/>
         ))}
       </ul>

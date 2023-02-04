@@ -1,19 +1,23 @@
 import './MoviesCard.css';
 import {useLocation} from "react-router-dom";
-import { MOVIES_URL } from '../../../../utils/constants';
+import { recountDuration } from '../../../../utils/utils';
+import { MainApi } from '../../../../utils/api/MainApi';
 
 
 const MoviesCard = ({movie}) => {
 
   const location = useLocation();
-  const saved = true;
+  const saved = false;
 
-  function saveMovie() {
-  
+  function saveMovie(e) {
+    MainApi.saveMovie(movie);
+    console.log('click');
+ 
   }
 
-  function deleteMovie() {
- 
+  function deleteMovie(e) {
+    e.stopPropagation();
+    MainApi.deleteMovie(movie);
   }
 
     return (
@@ -25,8 +29,10 @@ const MoviesCard = ({movie}) => {
               src={movie?.image}
               alt={movie?.nameRU}
               title={`Описание: ${movie?.description} \n\nСнято: ${movie?.country}, ${movie?.year}г.`}
+              onClick = {e => e.stopPropagation()}
               className="movies-card__poster"
             />
+          </a>
             {location.pathname === '/movies' && (
               <button
                 type="button"
@@ -51,11 +57,11 @@ const MoviesCard = ({movie}) => {
                 onClick={deleteMovie}
               ></button>
             )}
-          </a>
+          
           <div className="movies-card__description">
             <h2 className="movies-card__title">{movie?.nameRU}</h2>
             <span className="movies-card__duration">
-              {movie?.duration}
+              {recountDuration(movie?.duration)}
             </span>
           </div>
 

@@ -134,9 +134,9 @@ function App() {
           <Route path = '/about' exact element = {<Main/>}/>
           <Route path = '/signin' exact element = {<Login handleSubmit = {handleLogin}/>}/>
           <Route path = '/signup' exact element = {<Register handleSubmit = {handleRegister}/>}/>
-          <Route path = '/profile' exact element ={<ProtectedRoute isAuth={isAuth} child={<Profile handleSubmit={handleEditProfile}/>}/>}/>      
-          <Route path = '/movies' exact element = {<ProtectedRoute isAuth={isAuth} child={<Movies/>}/>}/>
-          <Route path = '/saved-movies' exact element = {<ProtectedRoute isAuth={isAuth} child={<SavedMovies/>}/>}/>
+          <Route path = '/profile' exact element ={<ProtectedRoute child={<Profile handleSubmit={handleEditProfile}/>}/>}/>      
+          <Route path = '/movies' exact element = {<ProtectedRoute child={<Movies/>}/>}/>
+          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies/>}/>}/>
           <Route path = '*' exact element = {<NotFound/>}/>          
         </Routes>
         : <Loader/>}

@@ -1,8 +1,22 @@
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckBox/FilterCheckBox.js';
+import { useState } from 'react';
 
 
-const SearchForm = () => {
+const SearchForm = ({ handleSearch }) => {
+  const [searchQuery, setSearchQuery] = useState(''); 
+  const [isShortMoviesFilter, setShortMoviesFilter] = useState(false);
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+    handleSearch(searchQuery, isShortMoviesFilter);
+  }
+
+  const handleCheckBox = (e) => {
+    setShortMoviesFilter(!isShortMoviesFilter);
+    handleSearch(searchQuery, isShortMoviesFilter);
+  }
+
 
   return (
     <section className="search">
@@ -13,12 +27,14 @@ const SearchForm = () => {
           type="text"
           placeholder="Фильм"
           autoComplete="off"
+          onInput={handleInputChange}
+          value={searchQuery||''}
           required
         />
         <span className="search__error"></span>
         <button className="search__button" type="submit"></button>
       </form>
-      <FilterCheckbox/>
+      <FilterCheckbox handleCheckBox={handleCheckBox}/>
     </section>
   )
 }

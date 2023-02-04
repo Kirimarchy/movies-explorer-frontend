@@ -1,9 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
+import { devicesWidth } from '../utils/constants';
 
 export default function useResize() {
-
   const getWidth = useCallback(() => window.innerWidth, []);
   const [width, setWidth] = useState(getWidth());
+
+  const {SCREEN_SM, SCREEN_MD, SCREEN_LG} = devicesWidth;
+
+  const isMobile  = width <= SCREEN_MD;
+  const isTablet  = width >= SCREEN_MD && width < SCREEN_LG;
+  const isDesktop = width >= SCREEN_LG;
 
   useEffect(() => {
 
@@ -24,10 +30,10 @@ export default function useResize() {
       }
     };
 
+    console.log({width, isMobile, isTablet, isDesktop});
     return () => window.removeEventListener('resize', handleResize);
 
  }, [getWidth]);
 
-  return width;
-
+  return {width, isMobile, isTablet, isDesktop};
 }

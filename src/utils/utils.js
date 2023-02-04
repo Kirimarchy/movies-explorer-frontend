@@ -1,6 +1,6 @@
 import { completeMissingField, PRE_LINK } from "./constants";
 
-const correctApiData = (data) => {
+export const correctApiData = (data) => {
     data.forEach(item => {
       if (!item.image) {
         item.image = completeMissingField.image;
@@ -18,6 +18,9 @@ const correctApiData = (data) => {
     });
     console.log('corrected:', data);
     return data;
-  }
+}
 
-  export default correctApiData;
+export const recountDuration = (minutes) => {
+  return `${(minutes-minutes%60)/60}ч ${minutes%60}м`
+}
+  
