@@ -67,7 +67,7 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
           <MoviesCard 
             movie={movie} 
             isSaved={true} 
-            onCardAction = {handleCardAction}
+            onCardAction = {onCardAction}
           />
         ))}
       </ul>

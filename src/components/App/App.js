@@ -160,7 +160,7 @@ function App() {
           <Route path = '/signup' exact element = {<Register handleSubmit = {handleRegister}/>}/>
           <Route path = '/profile' exact element ={<ProtectedRoute child={<Profile handleSubmit={handleEditProfile}/>}/>}/>      
           <Route path = '/movies' exact element = {<ProtectedRoute child={<Movies savedMovies ={savedMovies} onCardAction={onCardAction}/>}/>}/>
-          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies savedMovies ={savedMovies} onCardAction = {onCardAction}/>}/>}/>
+          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies savedMovies = {savedMovies} onCardAction = {onCardAction}/>}/>}/>
           <Route path = '*' exact element = {<NotFound/>}/>          
         </Routes>
         : <Loader/>}
