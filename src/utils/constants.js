@@ -14,6 +14,8 @@ export const completeMissingField = {
     thumbnail: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1940&q=80'
 };
 
+export const FETCH_ERROR = 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.';
+
 export const devicesWidth = {
     SCREEN_SM: 480,
     SCREEN_MD: 768, 
@@ -25,3 +27,4 @@ export const drawCardsOnDevices = {
     tablet:     { total: 8,  more: 2 },
     desktop:    { total: 12, more: 3 },    
 }
+

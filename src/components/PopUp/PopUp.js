@@ -1,8 +1,10 @@
 import './PopUp.css';
 import useEscapeButton from "../../hooks/useEscapeButton";
+import { useState } from 'react';
 
 export default function PopUp({ isOpen, successful, text }) {
-  
+  const [isOpened, setIsOpened] = useState({isOpen});
+
   function handleClickOverlay(e) {
     e.stopPropagation();
     closePopUp();
@@ -12,12 +14,12 @@ export default function PopUp({ isOpen, successful, text }) {
 
 
   function closePopUp() {
-    setPopUp({ ...isPopUp, isOpen: false });
+    setIsOpened(false);
   }
 
   return (
           <div
-            className={`pop-up ${isOpen && 'pop-up_opened'}`}
+            className={`pop-up ${isOpened && 'pop-up_opened'}`}
             onClick={closePopUp}
             >
             <div className="pop-up__container" onClick={handleClickOverlay}>

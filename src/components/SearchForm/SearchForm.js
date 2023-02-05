@@ -2,31 +2,27 @@ import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckBox/FilterCheckBox.js';
 import { useContext, useEffect, useState } from 'react';
 import CurrentUserContext from '../../utils/context/CurrentUserContext';
+import useValidatedForm from '../../hooks/useValidatedForm';
 
 
-const SearchForm = ({ handleSearch }) => {
+const SearchForm = ({ handleSubmitQuery, isShortFilter, handleShortFilter }) => {
   const {currentUser} = useContext(CurrentUserContext);
+  const { values, errors, setErrors, handleChange, isValid, setIsValid } = useValidatedForm();
   const [searchQuery, setSearchQuery] = useState(''); 
-  const [isShortMoviesFilter, setShortMoviesFilter] = useState(Boolean(localStorage.getItem(`${currentUser.email}|short_filter`)));
 
-  const handleInputChange = (e) => {
-    setSearchQuery(e.target.value);
-  }
 
-  const handleCheckBox = (e) => {
-    setShortMoviesFilter(e.target.value);
-    localStorage.setItem(`${currentUser.email}|short_filter`, e.target.value);
-    handleSearch(searchQuery, isShortMoviesFilter);
-  }
-
-  const submitSearchQuery = (e) =>{
+  const submitSearchQuery = (e) => {
     e.preventDefault();  
-    handleSearch(searchQuery, isShortMoviesFilter);
+    isValid ? handleSubmitQuery(values.search) : setErrors({search: 'Нужно ввести ключевое слово'}) ;
   }
 
-  useEffect(()=>{
-    setSearchQuery(localStorage.getItem(`${currentUser.email}|search_query`)||'');
-  }, []);
+  useEffect(() => {
+    if (location.pathname === '/movies' && localStorage.getItem(`${currentUser.email}|searchQuery`)) {
+      setSearchQuery(localStorage.getItem(`${currentUser.email}|searchQuery`));
+      values.search = searchQuery;
+      setIsValid(true);
+    }
+  }, [currentUser]);
 
   return (
     <section className="search">
@@ -37,14 +33,14 @@ const SearchForm = ({ handleSearch }) => {
           type="text"
           placeholder="Фильм"
           autoComplete="off"
-          onInput={handleInputChange}
-          value={searchQuery||''}
+          onChange={handleChange}
+          value={values.search||''}
           required
         />
-        <span className="search__error"></span>
+        <span className="search__error">{errors.search}</span>
         <button className="search__button" type="submit"></button>
       </form>
-      <FilterCheckbox handleChangeFilter={handleCheckBox} isShortFilter = {isShortMoviesFilter}/>
+      <FilterCheckbox isShortFilter = {isShortFilter} handleShortFilter = {handleShortFilter}/>
     </section>
   )
 }

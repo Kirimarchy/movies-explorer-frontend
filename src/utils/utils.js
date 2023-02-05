@@ -1,4 +1,4 @@
-import { completeMissingField, PRE_LINK } from "./constants";
+import { completeMissingField, PRE_LINK, SHORT_DURATION_LIMIT } from "./constants";
 
 export const correctApiData = (data) => {
     data.forEach(item => {
@@ -39,7 +39,6 @@ export const filterByDuration = (movies) => {
 }
 
 export const filterUnified = (movies, filter = {query: '', isShort: false}) => {
-   console.log('FILTER', filter, movies);
    return filter.isShort ? filterByDuration(filterByQuery(movies, filter.query||'')) : filterByQuery(movies, filter.query||'');
 }
 

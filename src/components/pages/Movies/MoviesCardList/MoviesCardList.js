@@ -7,22 +7,20 @@ import { drawCardsOnDevices } from "../../../../utils/constants";
 import { useLocation } from "react-router-dom";
 import CurrentUserContext from "../../../../utils/context/CurrentUserContext";
 
-const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
+const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   const location = useLocation();
   const {currentUser} = useContext(CurrentUserContext);
   const {mobile, tablet, desktop} = drawCardsOnDevices;
   const {isMobile, isTablet, isDesktop} = useResize();
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
-  const [cachedMovies, setCachedMovies ] = useState(movies)
-  const [filteredMovies, setFilteredMovies] = useState(filterUnified(movies));
   const [moviesList, setMoviesList]=useState([]);
   const isMoreButton = location.pathname==='movies' && moviesList.length >= 0 && moviesList.length < movies.length;
-  // const cachedMovies = JSON.parse(localStorage.getItem(`${currentUser.email}|all_movies`));
-  console.log('CACHED', cachedMovies);
-  const unfilteredMovies = location.pathname==='/movies' ? cachedMovies : savedMovies;
+ 
 
-  useEffect(() => {setMoviesList(filterUnified(unfilteredMovies,filter))}, []);
-  
+  useEffect(()=>{
+    location.pathname==='movies' ? setMoviesList(movies) : setMoviesList (savedMovies)
+  }, [location, savedMovies, currentUser]);
+
   useEffect(() => {
       if (isDesktop){
         setDisplayMethod(desktop)
@@ -35,15 +33,13 @@ const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
       };    
   }, [isMobile, isTablet, isDesktop]);
 
-
-
-  
   useEffect(() => {
-    if (moviesList.length) {
+    
       const res = moviesList.filter((item, i) => i < displayMethod.total);
       setMoviesList(res);
-    }
-  }, [moviesList, displayMethod]);
+      console.log("RES",res);
+    
+  }, []);
     
   const handleShowMore = () => {
     const start = moviesList.length;
@@ -56,8 +52,6 @@ const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
     }
   }
 
-
-
   return (
     <section className="movies-card-list">
       <ul className="movies-card-list__list">
@@ -65,17 +59,17 @@ const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
           <MoviesCard 
             movie={movie} 
             isSaved={checkSavedMovie( savedMovies, movie )} 
-            onCardAction = {handleCardAction}
+            onCardAction = {onCardAction}
           />
         ))}
-        {/* {location.pathname==='/saved-movies'&&
+        {location.pathname==='/saved-movies'&&
         savedMovies.map(movie => (
           <MoviesCard 
             movie={movie} 
             isSaved={true} 
             onCardAction = {handleCardAction}
           />
-        ))} */}
+        ))}
       </ul>
       {isMoreButton&&      
         <button

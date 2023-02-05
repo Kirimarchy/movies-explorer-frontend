@@ -2,39 +2,111 @@ import "./Movies.css";
 import SearchForm from "../../SearchForm/SearchForm";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import { useState, useEffect, useContext } from "react";
-import { MainApi } from "../../../utils/api/MainApi";
 import { MoviesApi } from "../../../utils/api/MoviesApi";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { correctApiData } from "../../../utils/utils";
+import { correctApiData, filterByQuery, filterByDuration } from "../../../utils/utils";
+import { FETCH_ERROR } from "../../../utils/constants";
+import Loader from "../../Loader/Loader";
+import PopUp from "../../PopUp/PopUp";
 
-const Movies = ({movies, savedMovies}) => {
+
+const Movies = ({savedMovies, onCardAction}) => {
   const {currentUser} = useContext(CurrentUserContext);
-  const [isFilter, setFilter] = useState({query:'', isShort: false});
-  
-  const handleQuery = ( query, isShort ) => {
-    setFilter({query, isShort});
+  const [isFilter, setFilter] = useState(false);
+  const [moviesFetched, setMoviesFetched] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [allMoviesList, setAllMoviesList] = useState([]);
+  const [isNotFound, setNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPopUp, setPopUp] = useState({isOpen: false});
+
+
+  function submitSearchQuery(query){
+    if (allMoviesList.length === 0) {
+      setIsLoading(true);
+      MoviesApi
+        .getAllMovies()
+        .then(movies => {
+          setAllMoviesList(correctApiData(movies));
+          localStorage.setItem(
+            `${currentUser.email}|allMovies`, 
+            JSON.stringify(correctApiData(movies)));
+          filterMoviesList(correctApiData(movies), query, isFilter);
+        })
+        .catch(() =>
+          setPopUp({
+            isOpen: true,
+            successful: false,
+            text: FETCH_ERROR,
+          })
+        )
+        .finally(() => setIsLoading(false));
+    } else {
+      filterMoviesList(allMoviesList, query, isFilter);
+    }
+    localStorage.setItem(`${currentUser.email}|searchQuery`, query);
+    localStorage.setItem(`${currentUser.email}|isFilter`, isFilter);
   }
 
-  const updateCards = () => {
+  function filterMoviesList(movies, query, filter) {
+    const moviesList = filterByQuery(movies, query);
+    if (moviesList.length === 0) {
+      setNotFound(true);
+    } else {
+      setNotFound(false);
+    }
+    setMoviesFetched(moviesList);
+    setFilteredMovies(filter? filterByDuration(moviesList) : moviesList);
+    localStorage.setItem(
+      `${currentUser.email}|movies`,
+      JSON.stringify(moviesList)
+    );
+  } 
 
+  function filterShortMovies() {
+    setFilter(!isFilter);
+
+    if (isFilter) {
+      setFilteredMovies(filterByDuration(moviesFetched));
+    } else {
+      setFilteredMovies(moviesFetched);
+    }
+    localStorage.setItem(`${currentUser.email}|isFilter`, !isFilter);
   }
 
-  useEffect(()=>{
-    localStorage.setItem(`${currentUser.email}|search_query`, isFilter.query);
-    localStorage.setItem(`${currentUser.email}|short_filter`, isFilter.isShort);
-    localStorage.setItem(`${currentUser.email}|all_movies`,   moviesFetched);
-  }, [isFilter, moviesFetched]);
+  useEffect(() => {
+    localStorage.getItem(`${currentUser.email}|isFilter`) === 'true' 
+      ?  setFilter(true) : setFilter(false);
+  }, [currentUser]);
+
+
+  useEffect(() => {
+    if (localStorage.getItem(`${currentUser.email}|movies`)) {
+      const movies = JSON.parse(localStorage.getItem(`${currentUser.email}|movies`));
+      setMoviesFetched(movies);
+
+      localStorage.getItem(`${currentUser.email}|isFilter`) === 'true' ?
+        setFilteredMovies(filterByDuration(movies)) : setFilteredMovies(movies);
+    }
+  }, [currentUser]);
 
   return (
     <main className="movies">
-      <SearchForm handleSearch={handleQuery}/>
+      <SearchForm 
+        handleSubmitQuery={submitSearchQuery} 
+        isShortFilter = {isFilter} 
+        handleShortFilter = {filterShortMovies} 
+      />
       <hr className="movies-separator"/>
-      <MoviesCardList 
-        movies = {[]} 
-        savedMovies = {savedMoviesFetched} 
-        filter = {isFilter}
-        handleCardAction = {updateCards}
+      {!isLoading?
+        <MoviesCardList 
+        movies = {filteredMovies} 
+        savedMovies = {savedMovies} 
+        onCardAction = {onCardAction}
         />
+      :<Loader/>}
+      {isNotFound&&<p>Ничего не найдено</p>}
+      <PopUp {...isPopUp}/>
     </main>
   );
 }

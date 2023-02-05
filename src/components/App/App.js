@@ -15,7 +15,6 @@ import SavedMovies from '../pages/SavedMovies/SavedMovies';
 import ProtectedRoute from '../HOCs/ProtectedRoute';
 import PopUp from '../PopUp/PopUp';
 import { MainApi } from '../../utils/api/MainApi';
-import { MoviesApi } from '../../utils/api/MoviesApi';
 
 
 
@@ -25,14 +24,19 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('jwt')));
   const [isLoading, setLoading] = useState(false);
-  const [moviesFetched, setMoviesFetched] = useState([]);
-  const [savedMoviesFetched, setSavedMoviesFetched] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
   const [isPopUp, setPopUp] = useState({isOpen: false});
 
   useEffect(() => checkAuthToken(), [location.pathname]);
   useEffect(() => getCurrentUser(), [isAuth]);
-  useEffect(()=>{ if (isAuth) return getMovies() },[isAuth]);
-  useEffect(()=>{ if (isAuth) return getSavedMovies() },[isAuth])
+  useEffect(()=>{ if (isAuth) return getSavedMovies() },[isAuth]);
+
+  function onCardAction(){
+    MainApi.getUserMovies()
+    .then(movies => {
+      setSavedMovies(movies.filter(movie => movie.owner._id === currentUser._id));
+    })
+  }
   
   //API CALLS
   function handleRegister(name, email, password) {
@@ -126,27 +130,11 @@ function App() {
     }
   }
 
-  function getMovies(){
-    setLoading(true);
-    MoviesApi.getAllMovies().
-    then((res) => {
-      setMoviesFetched(correctApiData(res))
-    })
-    .catch(err =>
-      setPopUp({
-        isOpen: true,
-        successful: false,
-        text: err,
-      })
-      )
-    .finally(() => setLoading(false));
-  }
-
   function getSavedMovies(){
     setLoading(true);
     MainApi.getUserMovies()
     .then(movies => {
-      setSavedMoviesFetched(movies.filter(movie => movie.owner._id === currentUser._id));
+      setSavedMovies(movies.filter(movie => movie.owner._id === currentUser._id));
     })
     .catch(err =>
       setPopUp({
@@ -171,13 +159,13 @@ function App() {
           <Route path = '/signin' exact element = {<Login handleSubmit = {handleLogin}/>}/>
           <Route path = '/signup' exact element = {<Register handleSubmit = {handleRegister}/>}/>
           <Route path = '/profile' exact element ={<ProtectedRoute child={<Profile handleSubmit={handleEditProfile}/>}/>}/>      
-          <Route path = '/movies' exact element = {<ProtectedRoute child={<Movies movies={moviesFetched} savedMovies ={savedMoviesFetched}/>}/>}/>
-          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies movies={moviesFetched} savedMovies ={savedMoviesFetched}/>}/>}/>
+          <Route path = '/movies' exact element = {<ProtectedRoute child={<Movies savedMovies ={savedMovies} onCardAction={onCardAction}/>}/>}/>
+          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies savedMovies ={savedMovies} onCardAction = {onCardAction}/>}/>}/>
           <Route path = '*' exact element = {<NotFound/>}/>          
         </Routes>
         : <Loader/>}
       <Footer/>
-      <PopUp isPopUp = {isPopUp}/>  
+      {/*<PopUp {...isPopUp}}/> */}
       </CurrentUserContext.Provider>
     </main>
   );
