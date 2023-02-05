@@ -28,6 +28,7 @@
   flex-direction: column;
   gap: 5px;
   border-radius: 6px;
+  position: relative;
 }
 
 .movies-card__poster {
@@ -71,13 +72,13 @@
 }
 
 .movies-card__button {
-  position:absolute;
+  position: absolute;
   align-items: center;
   border: none;
   background-color: transparent;
   background-repeat: no-repeat;
-  margin-top: 12px;
-  margin-left: 334px;
+  top: 12px;
+  right: 5px;
   width: 30px;
   height: 30px;
   transition: all .3s ease;

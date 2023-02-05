@@ -26,13 +26,14 @@ export default function useResize() {
         resizeDelay = setTimeout(() => {
           resizeDelay = null;
           handleResize();
+          
         }, 555);
       }
     };
 
-    console.log({width, isMobile, isTablet, isDesktop});
+    console.log ({width, isMobile, isTablet, isDesktop});
     return () => window.removeEventListener('resize', handleResize);
-
+    
  }, [getWidth]);
 
   return {width, isMobile, isTablet, isDesktop};

@@ -26,7 +26,7 @@ const SavedMovies = () => {
     <main className="saved-movies">
       <SearchForm handleSearch={handleQuery}/>
       <hr className="movies-separator"/>
-      <MoviesCardList movies = {savedMoviesList} filter = {isFilter}/>
+      <MoviesCardList movies = {savedMoviesList} savedMovies = {savedMoviesList} filter = {isFilter}/>
     </main>
   );
 }

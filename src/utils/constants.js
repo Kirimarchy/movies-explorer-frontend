@@ -1,8 +1,8 @@
 // export const BASE_URL = 'https://localhost:3000';
-export const BASE_URL = 'https://api.domainname.kmariasha.nomoredomains.sbs';
+export const BASE_URL   = 'https://api.domainname.kmariasha.nomoredomains.sbs';
 export const MOVIES_URL = 'https://api.nomoreparties.co/beatfilm-movies';
-export const PRE_LINK = 'https://api.nomoreparties.co';
-export const SHORTFILM_DURATION_LIMIT = 40;
+export const PRE_LINK   = 'https://api.nomoreparties.co';
+export const SHORT_DURATION_LIMIT = 40;
 
 export const endpoints = {
     header: ['/movies', '/saved-movies', '/profile', '/about', '/'],
@@ -18,4 +18,10 @@ export const devicesWidth = {
     SCREEN_SM: 480,
     SCREEN_MD: 768, 
     SCREEN_LG: 1280  
+}
+
+export const drawCardsOnDevices = {
+    mobile:     { total: 5,  more: 2 },
+    tablet:     { total: 8,  more: 2 },
+    desktop:    { total: 12, more: 3 },    
 }

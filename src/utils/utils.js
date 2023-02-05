@@ -6,7 +6,7 @@ export const correctApiData = (data) => {
         item.image = completeMissingField.image;
         item.thumbnail = completeMissingField.thumbnail;
       } else {
-        item.image = `${PRE_LINK}${item.image.url}`;
+        item.image = `${PRE_LINK}${item?.image?.url}`;
         item.thumbnail = `${PRE_LINK}${item?.image?.formats?.thumbnail.url}` || '';
       }
       if(!item.country) {
@@ -21,6 +21,26 @@ export const correctApiData = (data) => {
 }
 
 export const recountDuration = (minutes) => {
-  return `${(minutes-minutes%60)/60}ч ${minutes%60}м`
+  return minutes >= 60 ? `${(minutes-minutes%60)/60}ч ${minutes%60}м` : `${minutes}м`;
+}
+
+export const filterByQuery = (movies, query) => {
+  const moviesByQuery = movies.filter((movie) => {
+    const movieRu = String(movie.nameRU).toLowerCase().trim();
+    const movieEn = String(movie.nameEN).toLowerCase().trim();
+    const userQuery = query.toLowerCase().trim();
+    return movieRu.indexOf(userQuery) !== -1 || movieEn.indexOf(userQuery) !== -1;
+  });
+  return moviesByQuery;
+}
+
+export const filterByDuration = (movies) => {
+  return movies.filter(movie => movie.duration < SHORTFILM_DURATION_LIMIT);
+}
+
+export const checkSavedMovie = (arr, movie) => {
+  return arr.find((item) => {
+    (item.id || item.movieId) === (movie.id || movie.movieId);
+  });
 }
   

@@ -4,20 +4,22 @@ import { recountDuration } from '../../../../utils/utils';
 import { MainApi } from '../../../../utils/api/MainApi';
 
 
-const MoviesCard = ({movie}) => {
+const MoviesCard = ({movie, isSaved ,onCardAction}) => {
 
   const location = useLocation();
-  const saved = false;
-
-  function saveMovie(e) {
-    MainApi.saveMovie(movie);
-    console.log('click');
- 
+  const saved = isSaved;
+  if (isSaved){
+    console.log('SAVED', movie);
   }
 
-  function deleteMovie(e) {
-    e.stopPropagation();
+  function saveMovie() {
+    MainApi.saveMovie(movie);
+    onCardAction();
+  }
+
+  function deleteMovie() {
     MainApi.deleteMovie(movie);
+    onCardAction();
   }
 
     return (

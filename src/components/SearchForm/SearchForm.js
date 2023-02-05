@@ -9,7 +9,6 @@ const SearchForm = ({ handleSearch }) => {
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
-    handleSearch(searchQuery, isShortMoviesFilter);
   }
 
   const handleCheckBox = (e) => {
@@ -17,10 +16,14 @@ const SearchForm = ({ handleSearch }) => {
     handleSearch(searchQuery, isShortMoviesFilter);
   }
 
+  const submitSearchQuery = (e) =>{
+    e.preventDefault();  
+    handleSearch(searchQuery,  isShortMoviesFilter);
+  }
 
   return (
     <section className="search">
-      <form className="search__form" name="search">
+      <form className="search__form" name="search" onSubmit={submitSearchQuery}>
         <input
           className="search__input"
           name="search"
