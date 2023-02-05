@@ -1,10 +1,10 @@
-import { completeMissingField, PRE_LINK, SHORT_DURATION_LIMIT } from "./constants";
+import { COMPLETE_FIELDS, PRE_LINK, SHORT_DURATION_LIMIT } from "./constants";
 
 export const correctApiData = (data) => {
     data.forEach(item => {
       if (!item.image) {
-        item.image = completeMissingField.image;
-        item.thumbnail = completeMissingField.thumbnail;
+        item.image = COMPLETE_FIELDS.image;
+        item.thumbnail = COMPLETE_FIELDS.thumbnail;
       } else {
         item.image = `${PRE_LINK}${item?.image?.url}`;
         item.thumbnail = `${PRE_LINK}${item?.image?.formats?.thumbnail.url}` || '';

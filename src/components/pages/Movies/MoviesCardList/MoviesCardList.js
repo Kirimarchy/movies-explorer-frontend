@@ -3,14 +3,14 @@ import React, { useContext, useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import useResize from "../../../../hooks/useResize"
 import { checkSavedMovie, filterUnified } from "../../../../utils/utils";
-import { drawCardsOnDevices } from "../../../../utils/constants";
+import { DISPLAY_RULES } from "../../../../utils/constants";
 import { useLocation } from "react-router-dom";
 import CurrentUserContext from "../../../../utils/context/CurrentUserContext";
 
 const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   const location = useLocation();
   const {currentUser} = useContext(CurrentUserContext);
-  const {mobile, tablet, desktop} = drawCardsOnDevices;
+  const {mobile, tablet, desktop} = DISPLAY_RULES;
   const {isMobile, isTablet, isDesktop} = useResize();
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
   const [moviesList, setMoviesList]=useState([]);

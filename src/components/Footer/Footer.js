@@ -1,11 +1,11 @@
 import './Footer.css';
 import { useLocation } from 'react-router-dom';
-import { endpoints } from '../../utils/constants';
+import { ENDPOINTS } from '../../utils/constants';
 
 const Footer = () => {
 
   const location = useLocation();
-  const isFooter = endpoints.footer.includes(location.pathname);
+  const isFooter = ENDPOINTS.footer.includes(location.pathname);
 
   if (isFooter) { 
 
