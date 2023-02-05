@@ -1,8 +1,7 @@
 import './App.css';
 import {useState, useEffect} from "react";
-import {Navigate, Route, useNavigate, Routes} from "react-router-dom";
+import {Navigate, Route, useNavigate, Routes, useLocation} from "react-router-dom";
 import CurrentUserContext from '../../utils/context/CurrentUserContext';
-import {useNavigation} from "react-router-dom";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Loader from '../Loader/Loader';
@@ -14,19 +13,26 @@ import Profile from '../pages/Profile/Profile';
 import Movies from '../pages/Movies/Movies';
 import SavedMovies from '../pages/SavedMovies/SavedMovies';
 import ProtectedRoute from '../HOCs/ProtectedRoute';
+import PopUp from '../PopUp/PopUp';
 import { MainApi } from '../../utils/api/MainApi';
+import { MoviesApi } from '../../utils/api/MoviesApi';
 
 
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentUser, setCurrentUser] = useState({});
   const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('jwt')));
   const [isLoading, setLoading] = useState(false);
+  const [moviesFetched, setMoviesFetched] = useState([]);
+  const [savedMoviesFetched, setSavedMoviesFetched] = useState([]);
   const [isPopUp, setPopUp] = useState({isOpen: false});
 
-  useEffect(() => checkAuthToken(), []);
+  useEffect(() => checkAuthToken(), [location.pathname]);
   useEffect(() => getCurrentUser(), [isAuth]);
+  useEffect(()=>{ if (isAuth) return getMovies() },[isAuth]);
+  useEffect(()=>{ if (isAuth) return getSavedMovies() },[isAuth])
   
   //API CALLS
   function handleRegister(name, email, password) {
@@ -118,10 +124,40 @@ function App() {
           )
         .finally(() => setLoading(false));
     }
-
   }
 
+  function getMovies(){
+    setLoading(true);
+    MoviesApi.getAllMovies().
+    then((res) => {
+      setMoviesFetched(correctApiData(res))
+    })
+    .catch(err =>
+      setPopUp({
+        isOpen: true,
+        successful: false,
+        text: err,
+      })
+      )
+    .finally(() => setLoading(false));
+  }
 
+  function getSavedMovies(){
+    setLoading(true);
+    MainApi.getUserMovies()
+    .then(movies => {
+      setSavedMoviesFetched(movies.filter(movie => movie.owner._id === currentUser._id));
+    })
+    .catch(err =>
+      setPopUp({
+        isOpen: true,
+        successful: false,
+        text: err,
+      })
+      )
+    .finally(() => setLoading(false));
+  }
+  
   //RENDERING
 
   return (
@@ -135,12 +171,13 @@ function App() {
           <Route path = '/signin' exact element = {<Login handleSubmit = {handleLogin}/>}/>
           <Route path = '/signup' exact element = {<Register handleSubmit = {handleRegister}/>}/>
           <Route path = '/profile' exact element ={<ProtectedRoute child={<Profile handleSubmit={handleEditProfile}/>}/>}/>      
-          <Route path = '/movies' exact element = {<ProtectedRoute child={<Movies/>}/>}/>
-          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies/>}/>}/>
+          <Route path = '/movies' exact element = {<ProtectedRoute child={<Movies movies={moviesFetched} savedMovies ={savedMoviesFetched}/>}/>}/>
+          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies movies={moviesFetched} savedMovies ={savedMoviesFetched}/>}/>}/>
           <Route path = '*' exact element = {<NotFound/>}/>          
         </Routes>
         : <Loader/>}
-      <Footer/>  
+      <Footer/>
+      <PopUp isPopUp = {isPopUp}/>  
       </CurrentUserContext.Provider>
     </main>
   );

@@ -35,7 +35,12 @@ export const filterByQuery = (movies, query) => {
 }
 
 export const filterByDuration = (movies) => {
-  return movies.filter(movie => movie.duration < SHORTFILM_DURATION_LIMIT);
+  return movies.filter(movie => movie.duration < SHORT_DURATION_LIMIT);
+}
+
+export const filterUnified = (movies, filter = {query: '', isShort: false}) => {
+   console.log('FILTER', filter, movies);
+   return filter.isShort ? filterByDuration(filterByQuery(movies, filter.query||'')) : filterByQuery(movies, filter.query||'');
 }
 
 export const checkSavedMovie = (arr, movie) => {

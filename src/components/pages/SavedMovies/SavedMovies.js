@@ -5,7 +5,7 @@ import { useState, useEffect, useContext } from "react";
 import { MainApi } from "../../../utils/api/MainApi";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 
-const SavedMovies = () => {
+const SavedMovies = ( {movies, savedMovies}) => {
   const {currentUser} = useContext(CurrentUserContext);
   const [savedMoviesList, setSavedMoviesList] = useState([]);
   const [isFilter, setFilter] = useState({});

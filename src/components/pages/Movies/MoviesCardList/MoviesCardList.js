@@ -1,20 +1,27 @@
 import "./MoviesCardList.css";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import useResize from "../../../../hooks/useResize"
-import { checkSavedMovie } from "../../../../utils/utils";
+import { checkSavedMovie, filterUnified } from "../../../../utils/utils";
 import { drawCardsOnDevices } from "../../../../utils/constants";
 import { useLocation } from "react-router-dom";
+import CurrentUserContext from "../../../../utils/context/CurrentUserContext";
 
 const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
   const location = useLocation();
+  const {currentUser} = useContext(CurrentUserContext);
   const {mobile, tablet, desktop} = drawCardsOnDevices;
   const {isMobile, isTablet, isDesktop} = useResize();
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
+  const [cachedMovies, setCachedMovies ] = useState(movies)
+  const [filteredMovies, setFilteredMovies] = useState(filterUnified(movies));
   const [moviesList, setMoviesList]=useState([]);
-  const isMoreButton = moviesList.length >= 5 && moviesList.length < movies.length;
-  
-  useEffect(() => {}, [filter]);
+  const isMoreButton = location.pathname==='movies' && moviesList.length >= 0 && moviesList.length < movies.length;
+  // const cachedMovies = JSON.parse(localStorage.getItem(`${currentUser.email}|all_movies`));
+  console.log('CACHED', cachedMovies);
+  const unfilteredMovies = location.pathname==='/movies' ? cachedMovies : savedMovies;
+
+  useEffect(() => {setMoviesList(filterUnified(unfilteredMovies,filter))}, []);
   
   useEffect(() => {
       if (isDesktop){
@@ -28,6 +35,8 @@ const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
       };    
   }, [isMobile, isTablet, isDesktop]);
 
+
+
   
   useEffect(() => {
     if (moviesList.length) {
@@ -35,7 +44,7 @@ const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
       setMoviesList(res);
     }
   }, [moviesList, displayMethod]);
-  
+    
   const handleShowMore = () => {
     const start = moviesList.length;
     const end = start + displayMethod.more;
@@ -52,14 +61,21 @@ const MoviesCardList = ({movies, savedMovies, filter, handleCardAction}) => {
   return (
     <section className="movies-card-list">
       <ul className="movies-card-list__list">
-        {location.pathname==='/movies'&&
-        movies.map(movie => (
-          <MoviesCard movie={movie} isSaved={checkSavedMovie( savedMovies, movie )} onCardAction = {handleCardAction}/>
+        {moviesList.map(movie => (
+          <MoviesCard 
+            movie={movie} 
+            isSaved={checkSavedMovie( savedMovies, movie )} 
+            onCardAction = {handleCardAction}
+          />
         ))}
-        {location.pathname==='/saved-movies'&&
+        {/* {location.pathname==='/saved-movies'&&
         savedMovies.map(movie => (
-          <MoviesCard movie={movie} isSaved={true} onCardAction = {handleCardAction}/>
-        ))}
+          <MoviesCard 
+            movie={movie} 
+            isSaved={true} 
+            onCardAction = {handleCardAction}
+          />
+        ))} */}
       </ul>
       {isMoreButton&&      
         <button

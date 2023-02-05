@@ -7,37 +7,34 @@ import { MoviesApi } from "../../../utils/api/MoviesApi";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import { correctApiData } from "../../../utils/utils";
 
-const Movies = () => {
-  const currentUser = useContext(CurrentUserContext);
-  const [moviesList, setMoviesList] = useState([]);
-  const [savedMoviesList, setSavedMoviesList] = useState([]);
-  const [isFilter, setFilter] = useState({});
+const Movies = ({movies, savedMovies}) => {
+  const {currentUser} = useContext(CurrentUserContext);
+  const [isFilter, setFilter] = useState({query:'', isShort: false});
   
   const handleQuery = ( query, isShort ) => {
     setFilter({query, isShort});
   }
 
-  useEffect(()=>{
-    MoviesApi.getAllMovies().
-      then((res) => {
-        setMoviesList(correctApiData(res))
-      }).
-      catch(err => console.log('Error', err));
-  },[]);
+  const updateCards = () => {
+
+  }
 
   useEffect(()=>{
-    MainApi.getUserMovies()
-    .then(movies => {
-      setSavedMoviesList(movies.filter(movie => movie.owner._id === currentUser._id));
-    })
-    .catch(err => console.log('Error', err));
-  },[]);
+    localStorage.setItem(`${currentUser.email}|search_query`, isFilter.query);
+    localStorage.setItem(`${currentUser.email}|short_filter`, isFilter.isShort);
+    localStorage.setItem(`${currentUser.email}|all_movies`,   moviesFetched);
+  }, [isFilter, moviesFetched]);
 
   return (
     <main className="movies">
       <SearchForm handleSearch={handleQuery}/>
       <hr className="movies-separator"/>
-      <MoviesCardList movies = {moviesList} savedMovies = {savedMoviesList} filter = {isFilter}/>
+      <MoviesCardList 
+        movies = {[]} 
+        savedMovies = {savedMoviesFetched} 
+        filter = {isFilter}
+        handleCardAction = {updateCards}
+        />
     </main>
   );
 }

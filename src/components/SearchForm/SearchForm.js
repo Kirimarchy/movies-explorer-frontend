@@ -1,25 +1,32 @@
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckBox/FilterCheckBox.js';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import CurrentUserContext from '../../utils/context/CurrentUserContext';
 
 
 const SearchForm = ({ handleSearch }) => {
+  const {currentUser} = useContext(CurrentUserContext);
   const [searchQuery, setSearchQuery] = useState(''); 
-  const [isShortMoviesFilter, setShortMoviesFilter] = useState(false);
+  const [isShortMoviesFilter, setShortMoviesFilter] = useState(Boolean(localStorage.getItem(`${currentUser.email}|short_filter`)));
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
   }
 
   const handleCheckBox = (e) => {
-    setShortMoviesFilter(!isShortMoviesFilter);
+    setShortMoviesFilter(e.target.value);
+    localStorage.setItem(`${currentUser.email}|short_filter`, e.target.value);
     handleSearch(searchQuery, isShortMoviesFilter);
   }
 
   const submitSearchQuery = (e) =>{
     e.preventDefault();  
-    handleSearch(searchQuery,  isShortMoviesFilter);
+    handleSearch(searchQuery, isShortMoviesFilter);
   }
+
+  useEffect(()=>{
+    setSearchQuery(localStorage.getItem(`${currentUser.email}|search_query`)||'');
+  }, []);
 
   return (
     <section className="search">
@@ -37,7 +44,7 @@ const SearchForm = ({ handleSearch }) => {
         <span className="search__error"></span>
         <button className="search__button" type="submit"></button>
       </form>
-      <FilterCheckbox handleCheckBox={handleCheckBox}/>
+      <FilterCheckbox handleChangeFilter={handleCheckBox} isShortFilter = {isShortMoviesFilter}/>
     </section>
   )
 }
