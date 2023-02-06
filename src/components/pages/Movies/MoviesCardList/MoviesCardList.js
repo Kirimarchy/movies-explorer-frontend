@@ -11,6 +11,7 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   const location = useLocation();
   const {currentUser} = useContext(CurrentUserContext);
   const {mobile, tablet, desktop} = DISPLAY_RULES;
+  const [isRendered, setIsRendered] = useState(true);
   const {isMobile, isTablet, isDesktop} = useResize();
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
   const [moviesList, setMoviesList]=useState([]);
@@ -20,7 +21,8 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   useEffect(()=>{
     setMoviesList(movies);
     console.log('moviesCardList:', movies, savedMovies);
-  }, [location, savedMovies, currentUser]);
+    setIsRendered(false);
+  }, [location, savedMovies, currentUser, isMobile, isTablet, isDesktop]);
 
   useEffect(() => {
       if (isDesktop){
@@ -34,13 +36,6 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
       };    
   }, [isMobile, isTablet, isDesktop]);
 
-  useEffect(() => {
-    
-      const res = moviesList.filter((item, i) => i < displayMethod.total);
-      setMoviesList(res);
-      console.log("RES",res);
-    
-  }, []);
     
   const handleShowMore = () => {
     const start = moviesList.length;

@@ -38,7 +38,7 @@ function App() {
     })
   }
   
-  //API CALLS
+
   function handleRegister(name, email, password) {
     MainApi
     .registerUser(name, email, password)
@@ -62,9 +62,13 @@ function App() {
       }
     })
     .catch(err =>
-        console.log(err)
-    )
-    .finally(() => setLoading(true));
+      setPopUp({
+        isOpen: true,
+        successful: false,
+        text: err,
+      })
+      )
+    .finally(() => setLoading(false));
   }
 
   function handleEditProfile (name, email) {
@@ -103,7 +107,13 @@ function App() {
             setCurrentUser(user);
           }
         })
-        .catch(err => setPopUp({ isOpen: true, successful: false, text: err }))
+        .catch(err =>
+          setPopUp({
+            isOpen: true,
+            successful: false,
+            text: err,
+          })
+          )
         .finally(() => {
           setLoading(false);
         });
@@ -150,24 +160,52 @@ function App() {
     setPopUp({ ...isPopUp, isOpen: false });
   }
   
-  //RENDERING
-
   return (
     <main className="app">
       <CurrentUserContext.Provider value={{ currentUser, isAuth, setIsAuth }}>
       <Header/>  
         {!isLoading?
         <Routes>
-          <Route path = '/' exact element = {<Navigate to = '/about'/>}/>
-          <Route path = '/about' exact element = {<Main/>}/>
-          <Route path = '/signin' exact element = {<Login handleSubmit = {handleLogin}/>}/>
-          <Route path = '/signup' exact element = {<Register handleSubmit = {handleRegister}/>}/>
-          <Route path = '/profile' exact element ={<ProtectedRoute child={<Profile handleSubmit={handleEditProfile}/>}/>}/>      
-          <Route path = '/movies' exact element = {<ProtectedRoute child={<Movies savedMovies ={savedMovies} onCardAction={onCardAction}/>}/>}/>
-          <Route path = '/saved-movies' exact element = {<ProtectedRoute child={<SavedMovies savedMovies = {savedMovies} onCardAction = {onCardAction}/>}/>}/>
-          <Route path = '*' exact element = {<NotFound/>}/>          
-        </Routes>
-        : <Loader/>}
+          <Route 
+            path = '/'  
+            element = {<Navigate to = '/about'/>}
+            />
+          <Route 
+            path = '/about'  
+            element = {<Main/>}
+            />
+          <Route 
+            path = '/signin'  
+            element = {<Login handleSubmit = {handleLogin}/>}
+            />
+          <Route 
+            path = '/signup'  
+            element = {<Register handleSubmit = {handleRegister}/>}
+            />
+          <Route 
+            path = '/profile'  
+            element = {<ProtectedRoute 
+                        child={<Profile handleSubmit={handleEditProfile}/>}
+                        />}
+            />      
+          <Route 
+            path = '/movies'  
+            element = {<ProtectedRoute 
+                        child={<Movies savedMovies ={savedMovies} onCardAction={onCardAction}/>}
+                        />}
+            />
+          <Route 
+            path = '/saved-movies'  
+            element = {<ProtectedRoute 
+                        child={<SavedMovies savedMovies = {savedMovies} onCardAction = {onCardAction}/>}
+                        />}
+            />
+          <Route 
+            path = '*'  
+            element = {<NotFound/>}
+            />          
+        </Routes> 
+        :<Loader/>}
       <Footer/>
       <PopUp status= {isPopUp} onClose={closePopUp}/>
       </CurrentUserContext.Provider>

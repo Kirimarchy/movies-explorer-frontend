@@ -28,10 +28,8 @@ const Movies = ({savedMovies, onCardAction}) => {
         .getAllMovies()
         .then(movies => {
           setAllMoviesList(correctApiData(movies));
-          localStorage.setItem(
-            `${currentUser.email}|allMovies`, 
-            JSON.stringify(correctApiData(movies)));
-          filterMoviesList(correctApiData(movies), query, isFilter);
+          localStorage.setItem(`${currentUser.email}|allMovies`, JSON.stringify(allMoviesList));
+          filterMoviesList(movies, query, isFilter);
         })
         .catch(() =>
           setPopUp({
