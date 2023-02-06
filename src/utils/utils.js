@@ -44,7 +44,7 @@ export const filterUnified = (movies, query, filter) => {
 
 export const checkSavedMovie = (arr, movie) => {
   return arr.find((item) => {
-    (item.id || item.movieId) === (movie.id || movie.movieId);
+    return item.movieId == (movie.id || movie.movieId) ;
   });
 }
   

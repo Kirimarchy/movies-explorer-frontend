@@ -1,11 +1,10 @@
 import "./MoviesCardList.css";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import useResize from "../../../../hooks/useResize"
 import { checkSavedMovie } from "../../../../utils/utils";
 import { DISPLAY_RULES } from "../../../../utils/constants";
 import { useLocation } from "react-router-dom";
-import CurrentUserContext from "../../../../utils/context/CurrentUserContext";
 
 const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   const location = useLocation();
@@ -13,7 +12,7 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   const [isRendered, setIsRendered] = useState(true);
   const {isMobile, isTablet, isDesktop} = useResize();
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
-  const [moviesList, setMoviesList]=useState([]);
+  const [moviesList, setMoviesList]=useState(movies);
   const [isMoreButton, setIsMoreButton] = useState(true);
   
   
@@ -23,7 +22,7 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   }, [moviesList, displayMethod, isRendered])
  
   useEffect(() => {
-    if (location.pathname === '/movies') {
+    if (location.pathname==='/movies'){
       if (isDesktop){
         setDisplayMethod(desktop);
       }
@@ -33,14 +32,18 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
       if (isMobile){
         setDisplayMethod(mobile);
       }
-    return () => setIsRendered(false)}    
+    } 
+    return () => setIsRendered(false)    
   }, [isMobile, isTablet, isDesktop, isRendered, location]);
 
   useEffect(() => {
-    if (movies.length) {
-      const shown = movies.filter((item, i) => i < displayMethod.total);
-      setMoviesList(shown);
-    }
+      if (location.pathname==='/movies') {
+        if (movies.length) {
+        const shown = movies.filter((item, i) => i < displayMethod.total);
+        setMoviesList(shown);
+        }
+      } else setMoviesList(movies);
+      
   }, [movies, displayMethod]);
 
     

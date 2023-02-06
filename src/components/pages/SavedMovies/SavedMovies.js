@@ -3,62 +3,56 @@ import SearchForm from "../../SearchForm/SearchForm";
 import MoviesCardList from "../Movies/MoviesCardList/MoviesCardList";
 import { useState, useEffect, useContext } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { filterByDuration, filterByQuery } from "../../../utils/utils";
+import { filterByDuration, filterByQuery, filterUnified } from "../../../utils/utils";
 
 const SavedMovies = ({savedMovies, onCardAction}) => {
   const {currentUser} = useContext(CurrentUserContext);
-  const [isFilter, setFilter] = useState({});
+  const [isFilter, setFilter] = useState(false);
   const [isNotFound, setNotFound] = useState(false);
   const [savedMoviesDisplayed, setSavedMoviesDisplayed] = useState(savedMovies);
-  const [savedMoviesFiltered, setSavedMoviesFiltered] = useState(savedMoviesDisplayed);
+  const [savedMoviesFiltered, setSavedMoviesFiltered] = useState(savedMovies);
 
   function submitSearchQuery(query){
-    const moviesList = filterByQuery(savedMovies, query);
+    const moviesList = filterUnified(savedMovies, query, isFilter);
     if (moviesList.length === 0) {
       setNotFound(true);
     } else {
       setNotFound(false);
-      isFilter?setSavedMoviesFiltered(filterByDuration(moviesList)):setSavedMoviesFiltered(moviesList);
+      setSavedMoviesFiltered(moviesList);
+      setSavedMoviesDisplayed(moviesList);
     }
-    localStorage.setItem(`${currentUser.email}|searchQuerySaved`, query);
-    localStorage.setItem(`${currentUser.email}|isFilterSaved`, isFilter);
-    localStorage.setItem(`${currentUser.email}|savedMovies`, JSON.stringify(moviesList));
+    // localStorage.setItem(`${currentUser.email}|searchQuerySaved`, query);
+    // localStorage.setItem(`${currentUser.email}|isFilterSaved`, isFilter);
+    // localStorage.setItem(`${currentUser.email}|savedMovies`, JSON.stringify(moviesList));
   }
   
-  // function filterSavedMoviesList(movies, query, filter) {
-  //   const moviesList = filterByQuery(movies, query);  
-  //   setSavedMoviesFiltered(filter? filterByDuration(moviesList) : moviesList);
-  //   localStorage.setItem(
-  //     `${currentUser.email}|savedMovies`,
-  //     JSON.stringify(moviesList)
-  //   );
-  // }
   
   function onChangeFilter() {
     setFilter(!isFilter);
     if (isFilter) {
-      setSavedMoviesFiltered(filterByDuration(savedMoviesDisplayed));
+      setSavedMoviesDisplayed(savedMoviesFiltered);
     } else {
-      setSavedMoviesFiltered(savedMoviesDisplayed);
+      setSavedMoviesDisplayed(filterByDuration(savedMoviesFiltered));
     }
-    localStorage.setItem(`${currentUser.email}|isFilterSaved`, !isFilter);
+    setNotFound(savedMoviesDisplayed.length===0 ? true : false )
+    localStorage.getItem(`${currentUser.email}|isFilterSaved`, isFilter);
   }
 
 
-  useEffect(() => {
-    localStorage.getItem(`${currentUser.email}|isFilterSaved`) === 'true' ?
-      setFilter(true) : setFilter(false);
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if (localStorage.getItem(`${currentUser.email}|isFilterSaved`) === 'true'){
+  //     setFilter(true);
+  //     setSavedMoviesDisplayed(filterByDuration(savedMovies));
+  //   } else {
+  //     setFilter(false);
+  //     setSavedMoviesDisplayed(savedMovies);
+  //   }
+  // }, [savedMovies, currentUser]);
 
 
   useEffect(() => {
-    if (localStorage.getItem(`${currentUser.email}|savedMovies`)) {
-      const movies = JSON.parse(localStorage.getItem(`${currentUser.email}|savedMovies`));
-      setSavedMoviesDisplayed(movies);
-      localStorage.getItem(`${currentUser.email}|isFilter`) === 'true' ?
-        setSavedMoviesFiltered(filterByDuration(movies)) : setSavedMoviesFiltered(movies);
-    }
-  }, [currentUser]);
+     setSavedMoviesFiltered(savedMovies);
+  }, [savedMovies]);
 
   return (
     <main className="saved-movies">
@@ -69,7 +63,7 @@ const SavedMovies = ({savedMovies, onCardAction}) => {
       />
       <hr className="movies-separator"/>
         <MoviesCardList 
-        movies = {savedMoviesFiltered} 
+        movies = {savedMovies} 
         savedMovies = {savedMovies} 
         onCardAction = {onCardAction}
         />

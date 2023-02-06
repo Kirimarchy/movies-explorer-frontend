@@ -4,7 +4,7 @@ import { recountDuration } from '../../../../utils/utils';
 import { MainApi } from '../../../../utils/api/MainApi';
 
 
-const MoviesCard = ({movie, isSaved ,onCardAction}) => {
+const MoviesCard = ({ movie, isSaved, onCardAction}) => {
 
   const location = useLocation();
   const saved = isSaved;

@@ -12,7 +12,7 @@ import PopUp from "../../PopUp/PopUp";
 
 const Movies = ({savedMovies, onCardAction}) => {
   const {currentUser} = useContext(CurrentUserContext);
-  const [isFilter, setFilter] = useState(false);
+  const [isFilter, setFilter] = useState(localStorage.getItem(`${currentUser.email}|isFilter`));
   const [moviesFetched, setMoviesFetched] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [allMoviesList, setAllMoviesList] = useState([]);
@@ -63,13 +63,12 @@ const Movies = ({savedMovies, onCardAction}) => {
 
   function filterShortMovies() {
     setFilter(!isFilter);
-
     if (isFilter) {
       setFilteredMovies(filterByDuration(moviesFetched));
+      setNotFound(filteredMovies.length===0)
     } else {
       setFilteredMovies(moviesFetched);
     }
-    // localStorage.setItem(`${currentUser.email}|isFilter`, !isFilter);
     submitSearchQuery(localStorage.getItem(`${currentUser.email}|searchQuery`));
   }
 
