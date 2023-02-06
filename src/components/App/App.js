@@ -25,11 +25,11 @@ function App() {
   const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('jwt')));
   const [isLoading, setLoading] = useState(false);
   const [savedMovies, setSavedMovies] = useState([]);
-  const [isPopUp, setPopUp] = useState({isOpen: false});
+  const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
-  useEffect(() => checkAuthToken(), [location.pathname]);
+  useEffect(() => checkAuthToken(), [isAuth, location.pathname]);
   useEffect(() => getCurrentUser(), [isAuth]);
-  useEffect(()=>{ if (isAuth) return getSavedMovies() },[isAuth]);
+  useEffect(()=>{ if (isAuth) {getSavedMovies()} },[isAuth, location.pathname]);
 
   function onCardAction(){
     MainApi.getUserMovies()
@@ -145,6 +145,10 @@ function App() {
       )
     .finally(() => setLoading(false));
   }
+
+  function closePopUp() {
+    setPopUp({ ...isPopUp, isOpen: false });
+  }
   
   //RENDERING
 
@@ -165,7 +169,7 @@ function App() {
         </Routes>
         : <Loader/>}
       <Footer/>
-      {/*<PopUp {...isPopUp}}/> */}
+      <PopUp status= {isPopUp} onClose={closePopUp}/>
       </CurrentUserContext.Provider>
     </main>
   );

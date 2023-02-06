@@ -1,42 +1,32 @@
 import './PopUp.css';
 import useEscapeButton from "../../hooks/useEscapeButton";
-import { useState } from 'react';
 
-export default function PopUp({ isOpen, successful, text }) {
-  const [isOpened, setIsOpened] = useState({isOpen});
+export default function PopUp({ onClose, status:{ isOpen, successful, text }}) {
 
-  function handleClickOverlay(e) {
+  useEscapeButton(onClose, isOpen);
+  
+  function handleClick(e) {
     e.stopPropagation();
-    closePopUp();
-  }
-
-  useEscapeButton(closePopUp, isOpen);
-
-
-  function closePopUp() {
-    setIsOpened(false);
+    onClose();
   }
 
   return (
           <div
-            className={`pop-up ${isOpened && 'pop-up_opened'}`}
-            onClick={closePopUp}
+              className={`pop-up ${isOpen && 'pop-up_opened'}`}
+              onClick={onClose}
             >
-            <div className="pop-up__container" onClick={handleClickOverlay}>
+            <div className="pop-up__container" onClick={handleClick}>
               <div
-                className={`pop-up__status ${
-                successful
-              ? 'pop-up__status_success'
-              : 'pop-up__status_fail'
-              }`}
-                ></div>
+                className={`pop-up__status ${successful ? 'pop-up__status_success' : 'pop-up__status_fail'}`}
+                >
+              </div>
               <h2 className="pop-up__title">{text}</h2>
               <button
                 type="button"
                 className="pop-up__close-button"
-                onClick={closePopUp}
+                onClick={onClose}
                 ></button>
             </div>
           </div>
-          );
+  );
 }

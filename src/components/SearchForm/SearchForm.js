@@ -22,7 +22,14 @@ const SearchForm = ({ handleSubmitQuery, isShortFilter, handleShortFilter }) => 
       values.search = searchQuery;
       setIsValid(true);
     }
+    
   }, [currentUser]);
+
+  useEffect(() => {
+    if (location.pathname === '/saved-movies' && values.search === '') {
+      setErrors({search: ''});
+    }
+  },[values])
 
   return (
     <section className="search">

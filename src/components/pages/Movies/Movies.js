@@ -18,7 +18,7 @@ const Movies = ({savedMovies, onCardAction}) => {
   const [allMoviesList, setAllMoviesList] = useState([]);
   const [isNotFound, setNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isPopUp, setPopUp] = useState({isOpen: false});
+  const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
 
   function submitSearchQuery(query){
@@ -74,6 +74,10 @@ const Movies = ({savedMovies, onCardAction}) => {
     localStorage.setItem(`${currentUser.email}|isFilter`, !isFilter);
   }
 
+  function closePopUp() {
+    setPopUp({ ...isPopUp, isOpen: false });
+  }
+
   useEffect(() => {
     localStorage.getItem(`${currentUser.email}|isFilter`) === 'true' 
       ?  setFilter(true) : setFilter(false);
@@ -106,7 +110,7 @@ const Movies = ({savedMovies, onCardAction}) => {
         />
       :<Loader/>}
       {isNotFound&&<p>Ничего не найдено</p>}
-      <PopUp {...isPopUp}/>
+      <PopUp status={isPopUp} onClose={closePopUp}/>
     </main>
   );
 }

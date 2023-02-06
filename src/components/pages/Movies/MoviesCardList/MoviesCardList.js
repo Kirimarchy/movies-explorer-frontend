@@ -18,7 +18,8 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
  
 
   useEffect(()=>{
-    location.pathname==='movies' ? setMoviesList(movies) : setMoviesList (savedMovies)
+    setMoviesList(movies);
+    console.log('moviesCardList:', movies, savedMovies);
   }, [location, savedMovies, currentUser]);
 
   useEffect(() => {
@@ -59,14 +60,6 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
           <MoviesCard 
             movie={movie} 
             isSaved={checkSavedMovie( savedMovies, movie )} 
-            onCardAction = {onCardAction}
-          />
-        ))}
-        {location.pathname==='/saved-movies'&&
-        savedMovies.map(movie => (
-          <MoviesCard 
-            movie={movie} 
-            isSaved={true} 
             onCardAction = {onCardAction}
           />
         ))}
