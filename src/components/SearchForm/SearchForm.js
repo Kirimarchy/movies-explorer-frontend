@@ -8,8 +8,6 @@ import useValidatedForm from '../../hooks/useValidatedForm';
 const SearchForm = ({ handleSubmitQuery, isShortFilter, handleShortFilter }) => {
   const {currentUser} = useContext(CurrentUserContext);
   const { values, errors, setErrors, handleChange, isValid, setIsValid } = useValidatedForm();
-  const [searchQuery, setSearchQuery] = useState(''); 
-
 
   const submitSearchQuery = (e) => {
     e.preventDefault();  
@@ -18,8 +16,7 @@ const SearchForm = ({ handleSubmitQuery, isShortFilter, handleShortFilter }) => 
 
   useEffect(() => {
     if (location.pathname === '/movies' && localStorage.getItem(`${currentUser.email}|searchQuery`)) {
-      setSearchQuery(localStorage.getItem(`${currentUser.email}|searchQuery`));
-      values.search = searchQuery;
+      values.search = localStorage.getItem(`${currentUser.email}|searchQuery`);
       setIsValid(true);
     }
     

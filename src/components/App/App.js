@@ -29,7 +29,7 @@ function App() {
 
   useEffect(() => checkAuthToken(), [isAuth, location.pathname]);
   useEffect(() => getCurrentUser(), [isAuth]);
-  useEffect(()=>{ if (isAuth) {getSavedMovies()} },[isAuth, location.pathname]);
+  useEffect(()=>{ if (isAuth) {getSavedMovies()} },[isAuth]);
 
   function onCardAction(){
     MainApi.getUserMovies()

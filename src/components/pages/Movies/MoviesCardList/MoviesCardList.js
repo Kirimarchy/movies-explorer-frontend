@@ -2,49 +2,56 @@ import "./MoviesCardList.css";
 import React, { useContext, useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import useResize from "../../../../hooks/useResize"
-import { checkSavedMovie, filterUnified } from "../../../../utils/utils";
+import { checkSavedMovie } from "../../../../utils/utils";
 import { DISPLAY_RULES } from "../../../../utils/constants";
 import { useLocation } from "react-router-dom";
 import CurrentUserContext from "../../../../utils/context/CurrentUserContext";
 
 const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
   const location = useLocation();
-  const {currentUser} = useContext(CurrentUserContext);
   const {mobile, tablet, desktop} = DISPLAY_RULES;
   const [isRendered, setIsRendered] = useState(true);
   const {isMobile, isTablet, isDesktop} = useResize();
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
   const [moviesList, setMoviesList]=useState([]);
-  const isMoreButton = location.pathname==='movies' && moviesList.length >= 0 && moviesList.length < movies.length;
- 
-
+  const [isMoreButton, setIsMoreButton] = useState(true);
+  
+  
   useEffect(()=>{
-    setMoviesList(movies);
-    console.log('moviesCardList:', movies, savedMovies);
-    setIsRendered(false);
-  }, [location, savedMovies, currentUser, isMobile, isTablet, isDesktop]);
-
+    location.pathname==='/movies' && moviesList.length >= displayMethod.total && moviesList.length < movies.length ? 
+    setIsMoreButton(true) : setIsMoreButton(false)
+  }, [moviesList, displayMethod, isRendered])
+ 
   useEffect(() => {
+    if (location.pathname === '/movies') {
       if (isDesktop){
-        setDisplayMethod(desktop)
-      };
+        setDisplayMethod(desktop);
+      }
       if (isTablet){
-        setDisplayMethod(tablet)
+        setDisplayMethod(tablet);
       };
       if (isMobile){
-        setDisplayMethod(mobile)
-      };    
-  }, [isMobile, isTablet, isDesktop]);
+        setDisplayMethod(mobile);
+      }
+    return () => setIsRendered(false)}    
+  }, [isMobile, isTablet, isDesktop, isRendered, location]);
+
+  useEffect(() => {
+    if (movies.length) {
+      const shown = movies.filter((item, i) => i < displayMethod.total);
+      setMoviesList(shown);
+    }
+  }, [movies, displayMethod]);
 
     
   const handleShowMore = () => {
     const start = moviesList.length;
     const end = start + displayMethod.more;
-    const additional = moviesList.length - start;
+    const rest = end - start;
 
-    if (additional > 0) {
-      const newCards = moviesList.slice(start, end);
-      setShowMovieList([...moviesList, ...newCards]);
+    if (rest > 0) {
+      const newCards = movies.slice(start, end);
+      setMoviesList([...moviesList, ...newCards]);
     }
   }
 

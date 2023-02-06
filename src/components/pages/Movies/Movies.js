@@ -28,7 +28,7 @@ const Movies = ({savedMovies, onCardAction}) => {
         .getAllMovies()
         .then(movies => {
           setAllMoviesList(correctApiData(movies));
-          localStorage.setItem(`${currentUser.email}|allMovies`, JSON.stringify(allMoviesList));
+          localStorage.setItem(`${currentUser.email}|allMovies`, JSON.stringify(movies));
           filterMoviesList(movies, query, isFilter);
         })
         .catch(() =>
@@ -69,7 +69,8 @@ const Movies = ({savedMovies, onCardAction}) => {
     } else {
       setFilteredMovies(moviesFetched);
     }
-    localStorage.setItem(`${currentUser.email}|isFilter`, !isFilter);
+    // localStorage.setItem(`${currentUser.email}|isFilter`, !isFilter);
+    submitSearchQuery(localStorage.getItem(`${currentUser.email}|searchQuery`));
   }
 
   function closePopUp() {
@@ -86,11 +87,11 @@ const Movies = ({savedMovies, onCardAction}) => {
     if (localStorage.getItem(`${currentUser.email}|movies`)) {
       const movies = JSON.parse(localStorage.getItem(`${currentUser.email}|movies`));
       setMoviesFetched(movies);
-
       localStorage.getItem(`${currentUser.email}|isFilter`) === 'true' ?
         setFilteredMovies(filterByDuration(movies)) : setFilteredMovies(movies);
+      submitSearchQuery(localStorage.getItem(`${currentUser.email}|searchQuery`));  
     }
-  }, [currentUser]);
+  }, [currentUser, isFilter]);
 
   return (
     <main className="movies">
