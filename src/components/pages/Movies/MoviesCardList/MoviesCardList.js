@@ -1,13 +1,15 @@
 import "./MoviesCardList.css";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import useResize from "../../../../hooks/useResize"
 import { checkSavedMovie } from "../../../../utils/utils";
 import { DISPLAY_RULES } from "../../../../utils/constants";
 import { useLocation } from "react-router-dom";
+import CurrentUserContext from "../../../../utils/context/CurrentUserContext";
 
-const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
+const MoviesCardList = ({movies}) => {
   const location = useLocation();
+  const { userMovies } = useContext(CurrentUserContext);
   const {mobile, tablet, desktop} = DISPLAY_RULES;
   const [isRendered, setIsRendered] = useState(true);
   const {isMobile, isTablet, isDesktop} = useResize();
@@ -64,8 +66,7 @@ const MoviesCardList = ({movies, savedMovies, onCardAction}) => {
         {moviesList.map(movie => (
           <MoviesCard 
             movie={movie} 
-            isSaved={checkSavedMovie( savedMovies, movie )} 
-            onCardAction = {onCardAction}
+            isSaved={checkSavedMovie( userMovies, movie )}
           />
         ))}
       </ul>

@@ -10,8 +10,8 @@ import Loader from "../../Loader/Loader";
 import PopUp from "../../PopUp/PopUp";
 
 
-const Movies = ({savedMovies, onCardAction}) => {
-  const {currentUser} = useContext(CurrentUserContext);
+const Movies = () => {
+  const {currentUser, userMovies} = useContext(CurrentUserContext);
   const [isFilter, setFilter] = useState(localStorage.getItem(`${currentUser.email}|isFilter`));
   const [moviesFetched, setMoviesFetched] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
@@ -101,11 +101,7 @@ const Movies = ({savedMovies, onCardAction}) => {
       />
       <hr className="movies-separator"/>
       {!isLoading?
-        <MoviesCardList 
-        movies = {filteredMovies} 
-        savedMovies = {savedMovies} 
-        onCardAction = {onCardAction}
-        />
+        <MoviesCardList movies = {filteredMovies}/>
       :<Loader/>}
       {isNotFound&&<p>Ничего не найдено</p>}
       <PopUp status={isPopUp} onClose={closePopUp}/>

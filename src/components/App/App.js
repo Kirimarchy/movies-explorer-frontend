@@ -22,22 +22,14 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentUser, setCurrentUser] = useState({});
+  const [userMovies, setUserMovies] = useState([]);
   const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('jwt')));
   const [isLoading, setLoading] = useState(false);
-  const [savedMovies, setSavedMovies] = useState([]);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
   useEffect(() => checkAuthToken(), [isAuth, location.pathname]);
   useEffect(() => getCurrentUser(), [isAuth]);
   useEffect(()=>{ if (isAuth) {getSavedMovies()} },[isAuth]);
-
-  function onCardAction(){
-    MainApi.getUserMovies()
-    .then(movies => {
-      setSavedMovies(movies.filter(movie => movie.owner._id === currentUser._id));
-    })
-  }
-  
 
   function handleRegister(name, email, password) {
     setLoading(true);
@@ -157,7 +149,7 @@ function App() {
     setLoading(true);
     MainApi.getUserMovies()
     .then(movies => {
-      setSavedMovies(movies.filter(movie => movie.owner._id === currentUser._id));
+      setUserMovies(movies.filter(movie => movie.owner._id === currentUser._id));
     })
     .catch(err =>
       setPopUp({
@@ -175,7 +167,7 @@ function App() {
   
   return (
     <main className="app">
-      <CurrentUserContext.Provider value={{ currentUser, isAuth, setIsAuth }}>
+      <CurrentUserContext.Provider value={{ currentUser, isAuth, setIsAuth, userMovies, setUserMovies }}>
       <Header/>  
         {!isLoading?
         <Routes>
@@ -204,13 +196,13 @@ function App() {
           <Route 
             path = '/movies'  
             element = {<ProtectedRoute 
-                        child={<Movies savedMovies ={savedMovies} onCardAction={onCardAction}/>}
+                        child={<Movies/>}
                         />}
             />
           <Route 
             path = '/saved-movies'  
             element = {<ProtectedRoute 
-                        child={<SavedMovies savedMovies = {savedMovies} onCardAction = {onCardAction}/>}
+                        child={<SavedMovies/>}
                         />}
             />
           <Route 

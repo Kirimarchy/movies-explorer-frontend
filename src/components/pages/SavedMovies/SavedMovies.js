@@ -5,15 +5,34 @@ import { useState, useEffect, useContext } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import { filterByDuration, filterByQuery, filterUnified } from "../../../utils/utils";
 
-const SavedMovies = ({savedMovies, onCardAction}) => {
-  const {currentUser} = useContext(CurrentUserContext);
+const SavedMovies = () => {
+  const {currentUser, userMovies, setUserMovies} = useContext(CurrentUserContext);
   const [isFilter, setFilter] = useState(false);
   const [isNotFound, setNotFound] = useState(false);
-  const [savedMoviesDisplayed, setSavedMoviesDisplayed] = useState(savedMovies);
-  const [savedMoviesFiltered, setSavedMoviesFiltered] = useState(savedMovies);
+  const [userMoviesDisplayed, setSavedMoviesDisplayed] = useState(userMovies);
+  const [userMoviesFiltered, setSavedMoviesFiltered] = useState(userMovies);
+
+
+  function getSavedMovies(){
+    if(!userMovies){
+      setLoading(true);
+    MainApi.getUserMovies()
+    .then(movies => {
+      setUserMovies(movies.filter(movie => movie.owner._id === currentUser._id));
+    })
+    .catch(err =>
+      setPopUp({
+        isOpen: true,
+        successful: false,
+        text: err,
+      })
+      )
+    .finally(() => setLoading(false));}
+  }
+
 
   function submitSearchQuery(query){
-    const moviesList = filterUnified(savedMovies, query, isFilter);
+    const moviesList = filterUnified(userMovies, query, isFilter);
     if (moviesList.length === 0) {
       setNotFound(true);
     } else {
@@ -21,38 +40,23 @@ const SavedMovies = ({savedMovies, onCardAction}) => {
       setSavedMoviesFiltered(moviesList);
       setSavedMoviesDisplayed(moviesList);
     }
-    // localStorage.setItem(`${currentUser.email}|searchQuerySaved`, query);
-    // localStorage.setItem(`${currentUser.email}|isFilterSaved`, isFilter);
-    // localStorage.setItem(`${currentUser.email}|savedMovies`, JSON.stringify(moviesList));
   }
   
   
   function onChangeFilter() {
     setFilter(!isFilter);
     if (isFilter) {
-      setSavedMoviesDisplayed(savedMoviesFiltered);
+      setSavedMoviesDisplayed(filterByDuration(userMovies));
     } else {
-      setSavedMoviesDisplayed(filterByDuration(savedMoviesFiltered));
+      setSavedMoviesDisplayed(userMovies);
     }
-    setNotFound(savedMoviesDisplayed.length===0 ? true : false )
+    setNotFound(userMoviesDisplayed.length===0 ? true : false )
     localStorage.getItem(`${currentUser.email}|isFilterSaved`, isFilter);
   }
 
-
-  // useEffect(() => {
-  //   if (localStorage.getItem(`${currentUser.email}|isFilterSaved`) === 'true'){
-  //     setFilter(true);
-  //     setSavedMoviesDisplayed(filterByDuration(savedMovies));
-  //   } else {
-  //     setFilter(false);
-  //     setSavedMoviesDisplayed(savedMovies);
-  //   }
-  // }, [savedMovies, currentUser]);
-
-
   useEffect(() => {
-     setSavedMoviesFiltered(savedMovies);
-  }, [savedMovies]);
+     setSavedMoviesFiltered(userMovies);
+  }, [userMovies]);
 
   return (
     <main className="saved-movies">
@@ -62,11 +66,7 @@ const SavedMovies = ({savedMovies, onCardAction}) => {
         handleShortFilter = {onChangeFilter} 
       />
       <hr className="movies-separator"/>
-        <MoviesCardList 
-        movies = {savedMovies} 
-        savedMovies = {savedMovies} 
-        onCardAction = {onCardAction}
-        />
+        <MoviesCardList movies = {userMovies}/>
       {isNotFound&&<p>Ничего не найдено</p>}
     </main>
   );

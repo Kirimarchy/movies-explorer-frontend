@@ -1,16 +1,16 @@
 import './MoviesCard.css';
-import {useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { recountDuration } from '../../../../utils/utils';
 import { MainApi } from '../../../../utils/api/MainApi';
+import { useContext } from 'react';
+import CurrentUserContext from '../../../../utils/context/CurrentUserContext';
 
 
 const MoviesCard = ({ movie, isSaved, onCardAction}) => {
 
   const location = useLocation();
   const saved = isSaved;
-  if (isSaved){
-    console.log('SAVED', movie);
-  }
+  const {setUserMovies} = useContext(CurrentUserContext);
 
   function saveMovie() {
     MainApi.saveMovie(movie);
