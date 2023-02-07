@@ -5,10 +5,11 @@ import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
 
 const Profile = ({handleSubmit}) => {
-
   const navigate = useNavigate();
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
   const { currentUser, setIsAuth } = useContext(CurrentUserContext)||{};
+
+  const isDuplicatedInfo = (values.email===currentUser.email)&&(values.name===currentUser.name);
 
   useEffect(() => resetFields(), [resetFields]);
   
@@ -63,7 +64,7 @@ const Profile = ({handleSubmit}) => {
         <div className="profile__button-container">
           <button
             type="submit"
-            className={`profile__button-edit ${!isValid && 'profile__button-edit_disabled'}`}
+            className={`profile__button-edit ${!isValid||isDuplicatedInfo && 'profile__button-edit_disabled'}`}
             onClick = {submitForm}
             disabled = {!isValid}
           >

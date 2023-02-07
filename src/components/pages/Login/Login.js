@@ -1,13 +1,14 @@
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
-import {useEffect} from "react";
+import {useEffect, useContext} from "react";
 import useValidatedForm from '../../../hooks/useValidatedForm';
-
+import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
 const Login = ({ handleSubmit }) => {
   
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
+  const {isAuth} = useContext(CurrentUserContext);
 
   useEffect(() => resetFields(), [resetFields]);
   
@@ -16,7 +17,10 @@ const Login = ({ handleSubmit }) => {
     const {email, password} = values;
     handleSubmit(email, password);
   }
-  
+
+  if (isAuth) {
+    return <Navigate to="/movies" replace />;
+  }
 
     return (
       <main className="login">

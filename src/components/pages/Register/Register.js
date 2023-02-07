@@ -1,12 +1,14 @@
 import "./Register.css";
 import logo from '../../../images/icons/logo.svg';
-import { useEffect } from "react";
-import {Link} from 'react-router-dom';
+import { useEffect, useContext } from "react";
+import { Link, Navigate } from 'react-router-dom';
 import useValidatedForm from "../../../hooks/useValidatedForm";
+import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
 const Register = ({ handleSubmit }) => {
 
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
+  const { isAuth } = useContext(CurrentUserContext);
 
   useEffect(() => resetFields(), [resetFields]);
   
@@ -16,6 +18,9 @@ const Register = ({ handleSubmit }) => {
     handleSubmit(name, email, password);
   }
 
+  if (isAuth) {
+    return <Navigate to="/movies" replace />;
+  }
 
   return (
     <main className="register">
