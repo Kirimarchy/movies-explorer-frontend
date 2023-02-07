@@ -40,9 +40,22 @@ function App() {
   
 
   function handleRegister(name, email, password) {
+    setLoading(true);
     MainApi
     .registerUser(name, email, password)
-    .then(handleLogin(email, password));
+    .then(res => {
+      if (res._id) {
+        handleLogin(email, password);
+      }
+    })
+    .catch(err =>
+      setPopUp({
+        isOpen: true,
+        successful: false,
+        text: err,
+      })
+    )
+    .finally(() => setLoading(false));
   }
 
   function handleLogin(email, password) {
