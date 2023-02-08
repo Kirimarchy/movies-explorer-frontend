@@ -62,6 +62,7 @@ const MoviesCardList = ({movies}) => {
         {moviesList.map(movie => (
           <MoviesCard 
             movie={movie}
+            key = {`_${movie.id}_`}
           />
         ))}
       </ul>
