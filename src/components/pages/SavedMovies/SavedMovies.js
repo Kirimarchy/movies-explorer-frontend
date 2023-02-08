@@ -8,25 +8,22 @@ import { filterByDuration, filterByQuery } from "../../../utils/utils";
 const SavedMovies = () => {
   const { currentUser, userMovies } = useContext(CurrentUserContext);
   const [isFilter, setFilter] = useState(false);
-  const [isNotFound, setNotFound] = useState(false);
   const [initialMovies, setInitialMovies] = useState(userMovies);
+
+  const isNotFound = initialMovies.length === 0;
 
   useEffect(()=>{
     setInitialMovies( userMovies );
-  }, [userMovies.length, currentUser])
+  }, [userMovies.length, currentUser]);
   
   function submitSearchQuery(query){
     const moviesList = filterByQuery(userMovies, query);
-    if (moviesList.length === 0) {
-      setNotFound(true);
-    } else {
-      setNotFound(false);
-      setInitialMovies(moviesList);
-    }
-    console.log('query', userMovies, query, moviesList);
+    setInitialMovies(moviesList);
   }
   
-  function onChangeFilter(){setFilter(!isFilter)};  
+  function onChangeFilter(){
+    setFilter(!isFilter)
+  };  
 
 
   return (

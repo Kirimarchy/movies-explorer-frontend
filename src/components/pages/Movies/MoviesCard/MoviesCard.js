@@ -2,33 +2,31 @@ import './MoviesCard.css';
 import { useLocation } from "react-router-dom";
 import { recountDuration, checkSavedMovie } from '../../../../utils/utils';
 import { MainApi } from '../../../../utils/api/MainApi';
-import { useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CurrentUserContext from '../../../../utils/context/CurrentUserContext';
 
 const MoviesCard = ({movie}) => {
-  
   const location = useLocation();
   const { userMovies, setUserMovies } = useContext(CurrentUserContext);
-  const [ isSaved, setIsSaved ] = useState(checkSavedMovie( userMovies, movie ));
-  // я знаю, что это неправильно, по-другому пока не работает, ищу решение, а правильно должно быть так:
-  // const isSaved = checkSavedMovie( userMovies, movie );
+  const [isSaved, setIsSaved] = useState(checkSavedMovie(userMovies, movie));
+
 
   function saveMovie() {
     const newMoviesList = [...userMovies, movie];
     MainApi.saveMovie(movie)
     .then( res => {if (res._id) {
       movie._id = res._id;
-      setIsSaved(true);
       setUserMovies(newMoviesList);
+      setIsSaved(true);
     }})
   }
 
   function deleteMovie() {
-    const newMoviesList = userMovies.filter(item => movie.id !== item.movieId || movie.movieId !== item.movieId);
+    const newMoviesList = userMovies.filter(item => movie._id !== item._id);
     MainApi.deleteMovie(movie)
     .then( res => { if (res._id) {
-      setIsSaved(false);
       setUserMovies(newMoviesList);
+      setIsSaved(false);
     }})
   }
   

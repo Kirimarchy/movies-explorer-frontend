@@ -9,15 +9,14 @@ const MoviesCardList = ({movies}) => {
   const location = useLocation();
   const {mobile, tablet, desktop} = DISPLAY_RULES;
   const {isMobile, isTablet, isDesktop} = useResize();
-  const [isRendered, setIsRendered] = useState(true);
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
   const [moviesList, setMoviesList]=useState(movies);
   const [isMoreButton, setIsMoreButton] = useState(true);
-  
+
   useEffect(()=>{
     location.pathname==='/movies' && moviesList.length >= displayMethod.total && moviesList.length < movies.length ? 
     setIsMoreButton(true) : setIsMoreButton(false)
-  }, [moviesList, displayMethod, isRendered])
+  }, [moviesList, displayMethod])
  
   useEffect(() => {
     if (location.pathname==='/movies'){
@@ -31,8 +30,7 @@ const MoviesCardList = ({movies}) => {
         setDisplayMethod(mobile);
       }
     } 
-    return () => setIsRendered(false)    
-  }, [isMobile, isTablet, isDesktop, isRendered, location]);
+  }, [isMobile, isTablet, isDesktop, location]);
 
   useEffect(() => {
       if (location.pathname==='/movies') {
@@ -62,7 +60,7 @@ const MoviesCardList = ({movies}) => {
         {moviesList.map(movie => (
           <MoviesCard 
             movie={movie}
-            key = {`_${movie.id}_`}
+            key = {`_${movie.id||movie.movieId}_`}
           />
         ))}
       </ul>
