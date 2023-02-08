@@ -2,14 +2,14 @@ import './MoviesCard.css';
 import { useLocation } from "react-router-dom";
 import { recountDuration, checkSavedMovie } from '../../../../utils/utils';
 import { MainApi } from '../../../../utils/api/MainApi';
-import { useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CurrentUserContext from '../../../../utils/context/CurrentUserContext';
 
 const MoviesCard = ({movie}) => {
-  const { userMovies, setUserMovies } = useContext(CurrentUserContext);
   const location = useLocation();
-  const isSaved = checkSavedMovie ( userMovies, movie );
-  
+  const { userMovies, setUserMovies } = useContext(CurrentUserContext);
+  const [isSaved, setIsSaved] = useState(checkSavedMovie(userMovies, movie));
+
 
   function saveMovie() {
     const newMoviesList = [...userMovies, movie];
@@ -17,17 +17,16 @@ const MoviesCard = ({movie}) => {
     .then( res => {if (res._id) {
       movie._id = res._id;
       setUserMovies(newMoviesList);
-      console.log(userMovies.length);
+      setIsSaved(true);
     }})
   }
 
   function deleteMovie() {
     const newMoviesList = userMovies.filter(item => movie._id !== item._id);
-    console.log(userMovies.length, newMoviesList);
     MainApi.deleteMovie(movie)
     .then( res => { if (res._id) {
       setUserMovies(newMoviesList);
-      console.log(userMovies.length);
+      setIsSaved(false);
     }})
   }
   

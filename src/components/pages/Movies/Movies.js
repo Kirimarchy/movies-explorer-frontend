@@ -21,7 +21,6 @@ const Movies = () => {
   const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
-
   useEffect(() => {
     setFilter(localStorage.getItem(`${email}|filter`)==='true' ? true : false );
     submitSearchQuery(localStorage.getItem(`${email}|query`));   

@@ -14,15 +14,16 @@ const SavedMovies = () => {
 
   useEffect(()=>{
     setInitialMovies( userMovies );
-  }, [userMovies.length, currentUser])
+  }, [userMovies.length, currentUser]);
   
   function submitSearchQuery(query){
     const moviesList = filterByQuery(userMovies, query);
     setInitialMovies(moviesList);
-    console.log('query', userMovies, query, moviesList, initialMovies);
   }
   
-  function onChangeFilter(){setFilter(!isFilter)};  
+  function onChangeFilter(){
+    setFilter(!isFilter)
+  };  
 
 
   return (
