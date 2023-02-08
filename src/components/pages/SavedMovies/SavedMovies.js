@@ -24,7 +24,7 @@ const SavedMovies = () => {
       setNotFound(false);
       setInitialMovies(moviesList);
     }
-    console.log('query', userMovies, query, moviesList);
+    console.log('query', userMovies, query, moviesList, initialMovies);
   }
   
   function onChangeFilter(){setFilter(!isFilter)};  

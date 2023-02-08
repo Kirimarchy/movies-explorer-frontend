@@ -6,29 +6,28 @@ import { useState, useContext } from 'react';
 import CurrentUserContext from '../../../../utils/context/CurrentUserContext';
 
 const MoviesCard = ({movie}) => {
-  
-  const location = useLocation();
   const { userMovies, setUserMovies } = useContext(CurrentUserContext);
-  const isSaved = checkSavedMovie( userMovies, movie );
+  const location = useLocation();
+  const isSaved = checkSavedMovie ( userMovies, movie );
+  
 
   function saveMovie() {
     const newMoviesList = [...userMovies, movie];
-    console.log('!!!!!', newMoviesList)
     MainApi.saveMovie(movie)
     .then( res => {if (res._id) {
       movie._id = res._id;
       setUserMovies(newMoviesList);
-      console.log('!!!', userMovies.length);
+      console.log(userMovies.length);
     }})
   }
 
   function deleteMovie() {
-    const newMoviesList = userMovies.filter(item => movie.id !== item.movieId || movie.movieId !== item.movieId);
-    console.log('!!!!!', newMoviesList);
+    const newMoviesList = userMovies.filter(item => movie._id !== item._id);
+    console.log(userMovies.length, newMoviesList);
     MainApi.deleteMovie(movie)
     .then( res => { if (res._id) {
       setUserMovies(newMoviesList);
-      console.log('!!!', userMovies.length);
+      console.log(userMovies.length);
     }})
   }
   
