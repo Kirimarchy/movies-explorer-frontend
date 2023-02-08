@@ -23,7 +23,9 @@ const Movies = () => {
 
   useEffect(() => {
     setFilter(localStorage.getItem(`${email}|filter`)==='true' ? true : false );
-    submitSearchQuery(localStorage.getItem(`${email}|query`));   
+    if (localStorage.getItem(`${email}|query`)){
+      submitSearchQuery(localStorage.getItem(`${email}|query`))
+    }  
   }, [currentUser]);
   
   
