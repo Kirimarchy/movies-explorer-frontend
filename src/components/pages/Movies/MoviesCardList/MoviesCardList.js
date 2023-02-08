@@ -13,6 +13,8 @@ const MoviesCardList = ({movies}) => {
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
   const [moviesList, setMoviesList]=useState(movies);
   const [isMoreButton, setIsMoreButton] = useState(true);
+
+  
   
   useEffect(()=>{
     location.pathname==='/movies' && moviesList.length >= displayMethod.total && moviesList.length < movies.length ? 
@@ -62,6 +64,7 @@ const MoviesCardList = ({movies}) => {
         {moviesList.map(movie => (
           <MoviesCard 
             movie={movie}
+            key = {`_${movie.id}_`}
           />
         ))}
       </ul>

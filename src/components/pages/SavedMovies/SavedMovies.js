@@ -13,6 +13,7 @@ const SavedMovies = () => {
 
   useEffect(()=>{
     setInitialMovies( userMovies );
+    console.log('1111111111');
   }, [userMovies.length, currentUser])
   
   function submitSearchQuery(query){

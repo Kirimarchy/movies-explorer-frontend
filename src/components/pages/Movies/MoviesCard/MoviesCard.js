@@ -9,26 +9,26 @@ const MoviesCard = ({movie}) => {
   
   const location = useLocation();
   const { userMovies, setUserMovies } = useContext(CurrentUserContext);
-  const [ isSaved, setIsSaved ] = useState(checkSavedMovie( userMovies, movie ));
-  // я знаю, что это неправильно, по-другому пока не работает, ищу решение, а правильно должно быть так:
-  // const isSaved = checkSavedMovie( userMovies, movie );
+  const isSaved = checkSavedMovie( userMovies, movie );
 
   function saveMovie() {
     const newMoviesList = [...userMovies, movie];
+    console.log('!!!!!', newMoviesList)
     MainApi.saveMovie(movie)
     .then( res => {if (res._id) {
       movie._id = res._id;
-      setIsSaved(true);
       setUserMovies(newMoviesList);
+      console.log('!!!', userMovies.length);
     }})
   }
 
   function deleteMovie() {
     const newMoviesList = userMovies.filter(item => movie.id !== item.movieId || movie.movieId !== item.movieId);
+    console.log('!!!!!', newMoviesList);
     MainApi.deleteMovie(movie)
     .then( res => { if (res._id) {
-      setIsSaved(false);
       setUserMovies(newMoviesList);
+      console.log('!!!', userMovies.length);
     }})
   }
   
