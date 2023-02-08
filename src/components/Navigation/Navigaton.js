@@ -57,12 +57,12 @@ const Navigation = () => {
                   </li>
               )}
                   <li className="navigation__item">
-                    <NavLink to='/movies' className='navigation__link' activeClassName="navigation__link_active">
+                    <NavLink to='/movies' className={({ isActive }) => isActive ? "navigation__link_active" : 'navigation__link'}>
                       Фильмы
                     </NavLink>
                   </li>
                   <li className="navigation__item">
-                    <NavLink to='/saved-movies' className='navigation__link' activeClassName="navigation__link_active">
+                    <NavLink to='/saved-movies' className={({ isActive }) => isActive ? "navigation__link_active" : 'navigation__link'}>
                       Сохранённые фильмы
                     </NavLink>
                   </li>

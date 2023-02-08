@@ -7,7 +7,7 @@ export const correctApiData = (data) => {
         item.thumbnail = COMPLETE_FIELDS.thumbnail;
       } else {
         item.image = `${PRE_LINK}${item?.image?.url}`;
-        item.thumbnail = `${PRE_LINK}${item?.image?.formats?.thumbnail.url}` || '';
+        item.thumbnail = `${PRE_LINK}${item?.image?.formats?.thumbnail.url}`;
       }
       if(!item.country) {
         item.country = 'Russia';
@@ -47,4 +47,11 @@ export const checkSavedMovie = (arr, movie) => {
     return item.movieId == (movie.id || movie.movieId) ;
   });
 }
-  
+
+export const toLocalStorage = (key, item) => {
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
+export const fromLocalStorage = (key) => {
+  JSON.parse(localStorage.getItem(key));
+}

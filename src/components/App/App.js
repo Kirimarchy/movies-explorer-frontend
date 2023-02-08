@@ -1,6 +1,6 @@
 import './App.css';
 import {useState, useEffect} from "react";
-import {Navigate, Route, useNavigate, Routes, useLocation} from "react-router-dom";
+import {Navigate, Route, useNavigate, Routes} from "react-router-dom";
 import CurrentUserContext from '../../utils/context/CurrentUserContext';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -20,16 +20,19 @@ import { MainApi } from '../../utils/api/MainApi';
 
 function App() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [currentUser, setCurrentUser] = useState({});
   const [userMovies, setUserMovies] = useState([]);
   const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('jwt')));
   const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
-  useEffect(() => checkAuthToken(), [isAuth, location.pathname]);
-  useEffect(() => getCurrentUser(), [isAuth]);
-  useEffect(()=>{ if (isAuth) {getSavedMovies()} },[isAuth]);
+  useEffect(() => {
+    checkAuthToken()
+  }, [isAuth]);
+
+  useEffect(() => { if (isAuth) {
+    getSavedMovies()
+  }}, [currentUser]);
 
   function handleRegister(name, email, password) {
     setLoading(true);
@@ -127,23 +130,6 @@ function App() {
       setLoading(false);
     }
   };
-
-  function getCurrentUser () {
-    if (isAuth) {
-      setLoading(true);
-      MainApi
-        .getUser()
-        .then(user => setCurrentUser(user))
-        .catch(err =>
-          setPopUp({
-            isOpen: true,
-            successful: false,
-            text: err,
-          })
-          )
-        .finally(() => setLoading(false));
-    }
-  }
 
   function getSavedMovies(){
     setLoading(true);

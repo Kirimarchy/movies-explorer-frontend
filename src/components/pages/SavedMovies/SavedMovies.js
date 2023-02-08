@@ -3,60 +3,44 @@ import SearchForm from "../../SearchForm/SearchForm";
 import MoviesCardList from "../Movies/MoviesCardList/MoviesCardList";
 import { useState, useEffect, useContext } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { filterByDuration, filterByQuery, filterUnified } from "../../../utils/utils";
+import { filterByDuration, filterByQuery } from "../../../utils/utils";
 
 const SavedMovies = () => {
-  const {currentUser, userMovies, setUserMovies} = useContext(CurrentUserContext);
+  const { userMovies } = useContext(CurrentUserContext);
   const [isFilter, setFilter] = useState(false);
   const [isNotFound, setNotFound] = useState(false);
-  const [userMoviesDisplayed, setSavedMoviesDisplayed] = useState(userMovies);
-  const [userMoviesFiltered, setSavedMoviesFiltered] = useState(userMovies);
-
-
-  function getSavedMovies(){
-    if(!userMovies){
-      setLoading(true);
-    MainApi.getUserMovies()
-    .then(movies => {
-      setUserMovies(movies.filter(movie => movie.owner._id === currentUser._id));
-    })
-    .catch(err =>
-      setPopUp({
-        isOpen: true,
-        successful: false,
-        text: err,
-      })
-      )
-    .finally(() => setLoading(false));}
-  }
-
+  const [initialMovies, setInitialMovies] = useState(userMovies);
+  const [moviesFiltered, setMoviesFiltered] = useState(userMovies);
 
   function submitSearchQuery(query){
-    const moviesList = filterUnified(userMovies, query, isFilter);
+    const moviesList = filterByQuery(userMovies, query);
     if (moviesList.length === 0) {
       setNotFound(true);
     } else {
       setNotFound(false);
-      setSavedMoviesFiltered(moviesList);
-      setSavedMoviesDisplayed(moviesList);
+      setInitialMovies(moviesList);
+      // setMoviesFiltered(moviesList);
     }
+    console.log('query', userMovies, query, moviesList);
   }
   
-  
-  function onChangeFilter() {
-    setFilter(!isFilter);
-    if (isFilter) {
-      setSavedMoviesDisplayed(filterByDuration(userMovies));
-    } else {
-      setSavedMoviesDisplayed(userMovies);
-    }
-    setNotFound(userMoviesDisplayed.length===0 ? true : false )
-    localStorage.getItem(`${currentUser.email}|isFilterSaved`, isFilter);
-  }
+  function onChangeFilter(){setFilter(!isFilter)};  
+  //   if (isFilter) {
+  //     setMoviesFiltered(filterByDuration(initialMovies));
+  //   } else {
+  //     setMoviesFiltered(initialMovies);
+  //   }
+  //   setNotFound(moviesFiltered.length === 0 ? true : false );
+  // }
 
-  useEffect(() => {
-     setSavedMoviesFiltered(userMovies);
-  }, [userMovies]);
+  // useEffect(() => {
+  //    setInitialMovies(userMovies);
+  //    setMoviesFiltered( isFilter ? filterByDuration(userMovies) : userMovies );
+  // }, [userMovies.length, isFilter]);
+
+  // function closePopUp() {
+  //   setPopUp({ ...isPopUp, isOpen: false });
+  // }
 
   return (
     <main className="saved-movies">
@@ -66,7 +50,7 @@ const SavedMovies = () => {
         handleShortFilter = {onChangeFilter} 
       />
       <hr className="movies-separator"/>
-        <MoviesCardList movies = {userMovies}/>
+        <MoviesCardList movies = {isFilter? filterByDuration(initialMovies) : initialMovies }/>
       {isNotFound&&<p>Ничего не найдено</p>}
     </main>
   );

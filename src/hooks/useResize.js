@@ -7,7 +7,7 @@ export default function useResize() {
 
   const {SCREEN_SM, SCREEN_MD, SCREEN_LG} = DEVICES;
 
-  const isMobile  = width <= SCREEN_MD;
+  const isMobile  = width >= SCREEN_SM && width <= SCREEN_MD;
   const isTablet  = width >= SCREEN_MD && width < SCREEN_LG;
   const isDesktop = width >= SCREEN_LG;
 
@@ -27,11 +27,10 @@ export default function useResize() {
           resizeDelay = null;
           handleResize();
           
-        }, 555);
+        }, 111);
       }
     };
 
-    console.log ({width, isMobile, isTablet, isDesktop});
     return () => window.removeEventListener('resize', handleResize);
     
  }, [getWidth]);

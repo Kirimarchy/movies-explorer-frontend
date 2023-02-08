@@ -1,26 +1,37 @@
 import './MoviesCard.css';
 import { useLocation } from "react-router-dom";
-import { recountDuration } from '../../../../utils/utils';
+import { recountDuration, checkSavedMovie } from '../../../../utils/utils';
 import { MainApi } from '../../../../utils/api/MainApi';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import CurrentUserContext from '../../../../utils/context/CurrentUserContext';
 
-
-const MoviesCard = ({ movie, isSaved, onCardAction}) => {
-
+const MoviesCard = ({movie}) => {
+  
   const location = useLocation();
-  const saved = isSaved;
-  const {setUserMovies} = useContext(CurrentUserContext);
+  const { userMovies, setUserMovies } = useContext(CurrentUserContext);
+  const [ isSaved, setIsSaved ] = useState(checkSavedMovie( userMovies, movie ));
+  // я знаю, что это неправильно, по-другому пока не работает, ищу решение, а правильно должно быть так:
+  // const isSaved = checkSavedMovie( userMovies, movie );
 
   function saveMovie() {
-    MainApi.saveMovie(movie);
-    onCardAction();
+    const newMoviesList = [...userMovies, movie];
+    MainApi.saveMovie(movie)
+    .then( res => {if (res._id) {
+      movie._id = res._id;
+      setIsSaved(true);
+      setUserMovies(newMoviesList);
+    }})
   }
 
   function deleteMovie() {
-    MainApi.deleteMovie(movie);
-    onCardAction();
+    const newMoviesList = userMovies.filter(item => movie.id !== item.movieId || movie.movieId !== item.movieId);
+    MainApi.deleteMovie(movie)
+    .then( res => { if (res._id) {
+      setIsSaved(false);
+      setUserMovies(newMoviesList);
+    }})
   }
+  
 
     return (
       <li className="movies-card">
@@ -30,7 +41,7 @@ const MoviesCard = ({ movie, isSaved, onCardAction}) => {
             <img
               src={movie?.image}
               alt={movie?.nameRU}
-              title={`Описание: ${movie?.description} \n\nСнято: ${movie?.country}, ${movie?.year}г.`}
+              title={`${movie?.nameEN}\n\nОписание: ${movie?.description} \n\nСнято: ${movie?.country}, ${movie?.year}г.`}
               onClick = {e => e.stopPropagation()}
               className="movies-card__poster"
             />
@@ -38,15 +49,15 @@ const MoviesCard = ({ movie, isSaved, onCardAction}) => {
             {location.pathname === '/movies' && (
               <button
                 type="button"
-                className={`movies-card__button movies-card__button_type_${ saved ? 'saved' : 'unsaved'
+                className={`movies-card__button movies-card__button_type_${ isSaved ? 'saved' : 'unsaved'
                 }`}
                 aria-label={`${
-                  saved ? 'Удалить фильм' : 'Добавить в коллекцию'
+                  isSaved ? 'Удалить фильм' : 'Добавить в коллекцию'
                 }`}
                 title={`${
-                  saved ? 'Удалить фильм' : 'Добавить в коллекцию'
+                  isSaved ? 'Удалить фильм' : 'Добавить в коллекцию'
                 }`}
-                onClick={saved? deleteMovie : saveMovie}
+                onClick={isSaved ? deleteMovie : saveMovie}
               ></button>
             )}
 

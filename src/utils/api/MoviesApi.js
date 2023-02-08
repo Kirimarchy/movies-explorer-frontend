@@ -7,7 +7,6 @@ class Api {
 
   async _getResponse(res) {
     const response = await res.json();
-    console.log('%response',response);
     return res.ok ? response : Promise.reject(res);
   }
 

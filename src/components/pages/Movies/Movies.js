@@ -1,35 +1,45 @@
 import "./Movies.css";
-import SearchForm from "../../SearchForm/SearchForm";
-import MoviesCardList from "./MoviesCardList/MoviesCardList";
+import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import { useState, useEffect, useContext } from "react";
 import { MoviesApi } from "../../../utils/api/MoviesApi";
-import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { correctApiData, filterByQuery, filterByDuration } from "../../../utils/utils";
+import { correctApiData, filterByQuery, filterByDuration, toLocalStorage, fromLocalStorage} from "../../../utils/utils";
 import { FETCH_ERROR } from "../../../utils/constants";
+import SearchForm from "../../SearchForm/SearchForm";
+import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Loader from "../../Loader/Loader";
 import PopUp from "../../PopUp/PopUp";
+import { useLocation } from "react-router-dom";
 
 
 const Movies = () => {
-  const {currentUser, userMovies} = useContext(CurrentUserContext);
-  const [isFilter, setFilter] = useState(localStorage.getItem(`${currentUser.email}|isFilter`));
+  const {currentUser} = useContext(CurrentUserContext);
+  const {email} = currentUser;
+  const [isFilter, setFilter] = useState(false);
   const [moviesFetched, setMoviesFetched] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]);
   const [allMoviesList, setAllMoviesList] = useState([]);
   const [isNotFound, setNotFound] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
 
+  useEffect(() => {
+    setFilter(localStorage.getItem(`${email}|filter`)==='true' ? true : false );
+    submitSearchQuery(localStorage.getItem(`${email}|query`));   
+  }, [currentUser]);
+  
+  
   function submitSearchQuery(query){
-    if (allMoviesList.length === 0) {
-      setIsLoading(true);
+      setLoading(true);
       MoviesApi
         .getAllMovies()
         .then(movies => {
-          setAllMoviesList(correctApiData(movies));
-          localStorage.setItem(`${currentUser.email}|allMovies`, JSON.stringify(movies));
-          filterMoviesList(movies, query, isFilter);
+          correctApiData(movies);
+          setAllMoviesList(movies);
+          toLocalStorage(`${email}|moviesFetched`, movies);
+          const moviesFiltered = filterByQuery(movies, query);
+          setNotFound(moviesFiltered.length===0 ? true : false);
+          setMoviesFetched(moviesFiltered);
+          toLocalStorage(`${email}|movies`, moviesFetched);
         })
         .catch(() =>
           setPopUp({
@@ -38,70 +48,30 @@ const Movies = () => {
             text: FETCH_ERROR,
           })
         )
-        .finally(() => setIsLoading(false));
-    } else {
-      filterMoviesList(allMoviesList, query, isFilter);
-    }
-    localStorage.setItem(`${currentUser.email}|searchQuery`, query);
-    localStorage.setItem(`${currentUser.email}|isFilter`, isFilter);
-  }
-
-  function filterMoviesList(movies, query, filter) {
-    const moviesList = filterByQuery(movies, query);
-    if (moviesList.length === 0) {
-      setNotFound(true);
-    } else {
-      setNotFound(false);
-    }
-    setMoviesFetched(moviesList);
-    setFilteredMovies(filter? filterByDuration(moviesList) : moviesList);
-    localStorage.setItem(
-      `${currentUser.email}|movies`,
-      JSON.stringify(moviesList)
-    );
-  } 
-
-  function filterShortMovies() {
-    setFilter(!isFilter);
-    if (isFilter) {
-      setFilteredMovies(filterByDuration(moviesFetched));
-      setNotFound(filteredMovies.length===0)
-    } else {
-      setFilteredMovies(moviesFetched);
-    }
-    submitSearchQuery(localStorage.getItem(`${currentUser.email}|searchQuery`));
+        .finally(() => setLoading(false));
+        
+    localStorage.setItem(`${email}|query`, query);
   }
 
   function closePopUp() {
     setPopUp({ ...isPopUp, isOpen: false });
   }
 
-  useEffect(() => {
-    localStorage.getItem(`${currentUser.email}|isFilter`) === 'true' 
-      ?  setFilter(true) : setFilter(false);
-  }, [currentUser]);
-
-
-  useEffect(() => {
-    if (localStorage.getItem(`${currentUser.email}|movies`)) {
-      const movies = JSON.parse(localStorage.getItem(`${currentUser.email}|movies`));
-      setMoviesFetched(movies);
-      localStorage.getItem(`${currentUser.email}|isFilter`) === 'true' ?
-        setFilteredMovies(filterByDuration(movies)) : setFilteredMovies(movies);
-      submitSearchQuery(localStorage.getItem(`${currentUser.email}|searchQuery`));  
-    }
-  }, [currentUser, isFilter]);
+  function onChangeFilter(){
+    setFilter(!isFilter);
+    localStorage.setItem(`${email}|filter`, !isFilter);
+  }  
 
   return (
     <main className="movies">
       <SearchForm 
         handleSubmitQuery={submitSearchQuery} 
         isShortFilter = {isFilter} 
-        handleShortFilter = {filterShortMovies} 
+        handleShortFilter = {onChangeFilter} 
       />
       <hr className="movies-separator"/>
       {!isLoading?
-        <MoviesCardList movies = {filteredMovies}/>
+        <MoviesCardList movies = {isFilter? filterByDuration(moviesFetched) : moviesFetched}/>
       :<Loader/>}
       {isNotFound&&<p>Ничего не найдено</p>}
       <PopUp status={isPopUp} onClose={closePopUp}/>

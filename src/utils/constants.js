@@ -17,14 +17,14 @@ export const COMPLETE_FIELDS = {
 export const FETCH_ERROR = 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.';
 
 export const DEVICES = {
-    SCREEN_SM: 480,
+    SCREEN_SM: 320,
     SCREEN_MD: 768, 
-    SCREEN_LG: 1280  
-}
+    SCREEN_LG: 1118  
+};
 
 export const DISPLAY_RULES = {
     mobile:     { total: 5,  more: 2 },
     tablet:     { total: 8,  more: 2 },
     desktop:    { total: 12, more: 3 },    
-}
+};
 
