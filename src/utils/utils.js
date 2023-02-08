@@ -16,7 +16,6 @@ export const correctApiData = (data) => {
         item.nameEN = item.nameRU;
       }
     });
-    console.log('corrected:', data);
     return data;
 }
 
