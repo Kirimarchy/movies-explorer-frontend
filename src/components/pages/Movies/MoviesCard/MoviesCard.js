@@ -1,6 +1,6 @@
 import './MoviesCard.css';
 import { useLocation } from "react-router-dom";
-import { recountDuration, checkSavedMovie } from '../../../../utils/utils';
+import { recountDuration, checkSavedMovie, getId } from '../../../../utils/utils';
 import { MainApi } from '../../../../utils/api/MainApi';
 import { useContext, useEffect, useState } from 'react';
 import CurrentUserContext from '../../../../utils/context/CurrentUserContext';
@@ -9,6 +9,9 @@ const MoviesCard = ({movie}) => {
   const location = useLocation();
   const { userMovies, setUserMovies } = useContext(CurrentUserContext);
   const [isSaved, setIsSaved] = useState(checkSavedMovie(userMovies, movie));
+  useEffect(()=>{if(isSaved){
+    getId(movie,userMovies)
+  }}, [isSaved, userMovies.length])
 
 
   function saveMovie() {

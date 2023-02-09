@@ -54,3 +54,11 @@ export const toLocalStorage = (key, item) => {
 export const fromLocalStorage = (key) => {
   JSON.parse(localStorage.getItem(key));
 }
+
+export const getId = (movie, movies) => {
+  movies.forEach(item => {
+    if (item.movieId == (movie.id || movie.movieId)){
+      movie._id=item._id
+    }
+  })
+}
