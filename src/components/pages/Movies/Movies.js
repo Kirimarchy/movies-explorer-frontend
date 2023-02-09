@@ -8,7 +8,7 @@ import SearchForm from "../../SearchForm/SearchForm";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Loader from "../../Loader/Loader";
 import PopUp from "../../PopUp/PopUp";
-import { useLocation } from "react-router-dom";
+
 
 
 const Movies = () => {
@@ -16,31 +16,36 @@ const Movies = () => {
   const {email} = currentUser;
   const [isFilter, setFilter] = useState(false);
   const [moviesFetched, setMoviesFetched] = useState([]);
-  const [allMoviesList, setAllMoviesList] = useState([]);
   const [isNotFound, setNotFound] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
+
   useEffect(() => {
     setFilter(localStorage.getItem(`${email}|filter`)==='true' ? true : false );
     if (localStorage.getItem(`${email}|query`)){
-      submitSearchQuery(localStorage.getItem(`${email}|query`))
+      if (fromLocalStorage(`${email}|movies`)){
+        setMoviesFetched(fromLocalStorage(`${email}|movies`))
+      } else {
+        submitSearchQuery(localStorage.getItem(`${email}|query`))
+      }  
     }  
-  }, [currentUser]);
+  }, [currentUser, isFilter]);
   
   
   function submitSearchQuery(query){
-      setLoading(true);
+   
+      if(!fromLocalStorage(`${email}|moviesAll`)){
+        setLoading(true);
       MoviesApi
         .getAllMovies()
         .then(movies => {
           correctApiData(movies);
-          setAllMoviesList(movies);
-          toLocalStorage(`${email}|moviesFetched`, movies);
+          toLocalStorage(`${email}|moviesAll`, movies);
           const moviesFiltered = filterByQuery(movies, query);
           setNotFound(moviesFiltered.length===0 ? true : false);
           setMoviesFetched(moviesFiltered);
-          toLocalStorage(`${email}|movies`, moviesFetched);
+          toLocalStorage(`${email}|movies`, moviesFiltered);
         })
         .catch(() =>
           setPopUp({
@@ -50,6 +55,9 @@ const Movies = () => {
           })
         )
         .finally(() => setLoading(false));
+      } else {
+        setMoviesFetched(filterByQuery(fromLocalStorage(`${email}|moviesAll`), query));
+      }
         
     localStorage.setItem(`${email}|query`, query);
   }
