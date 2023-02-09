@@ -30,7 +30,7 @@ const Movies = () => {
         submitSearchQuery(localStorage.getItem(`${email}|query`))
       }  
     }  
-  }, [currentUser, isFilter]);
+  }, [currentUser]);
   
   
   function submitSearchQuery(query){
