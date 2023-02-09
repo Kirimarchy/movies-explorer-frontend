@@ -4,10 +4,11 @@ import { useContext , useEffect } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
 
-const Profile = ({handleSubmit}) => {
+const Profile = ({ handleSubmit }) => {
+
   const navigate = useNavigate();
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
-  const { currentUser, setIsAuth } = useContext(CurrentUserContext)||{};
+  const { currentUser, setIsAuth, setUserMovies } = useContext(CurrentUserContext)||{};
 
   const isDuplicatedInfo = (values.email===currentUser.email)&&(values.name===currentUser.name);
 
@@ -22,7 +23,8 @@ const Profile = ({handleSubmit}) => {
   function handleLogout(e) {
     e.preventDefault()
     localStorage.clear();
-    setIsAuth(false)
+    setIsAuth(false);
+    setUserMovies([]);
     navigate('/');
   }
 

@@ -15,6 +15,9 @@ export const correctApiData = (data) => {
       if(!item.nameEN) {
         item.nameEN = item.nameRU;
       }
+      if(!item.movieId) {
+        item.movieId = item.id;
+      }
     });
     return data;
 }
@@ -58,7 +61,7 @@ export const fromLocalStorage = (key) => {
 export const getId = (movie, movies) => {
   movies.forEach(item => {
     if (item.movieId == (movie.id || movie.movieId)){
-      movie._id=item._id
+      movie._id=item._id;
     }
   })
 }
