@@ -39,7 +39,7 @@ function App() {
     MainApi
     .registerUser(name, email, password)
     .then(res => {
-      if (res._id) {
+      if (res.data) {
         handleLogin(email, password);
       }
     })
