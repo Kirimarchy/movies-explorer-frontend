@@ -48,6 +48,7 @@ const Profile = ({ handleSubmit }) => {
               minLength="2"
               maxLength="30"
               pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
+              placeholder={currentUser?.name}
             />
             <span className="profile__error-name">{errors.name}</span>
           </label>
@@ -59,6 +60,7 @@ const Profile = ({ handleSubmit }) => {
               type="email"
               onChange={handleChange}
               required
+              placeholder={currentUser?.email}
             />
             <span className="profile__error">{errors.email}</span>
           </label>
