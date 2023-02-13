@@ -55,7 +55,7 @@ export const toLocalStorage = (key, item) => {
 }
 
 export const fromLocalStorage = (key) => {
-  JSON.parse(localStorage.getItem(key));
+  return JSON.parse(localStorage.getItem(key));
 }
 
 export const getId = (movie, movies) => {

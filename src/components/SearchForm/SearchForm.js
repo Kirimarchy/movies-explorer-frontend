@@ -1,13 +1,10 @@
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckBox/FilterCheckBox.js';
-import { useContext, useEffect, useState } from 'react';
-import CurrentUserContext from '../../utils/context/CurrentUserContext';
+import { useEffect } from 'react';
 import useValidatedForm from '../../hooks/useValidatedForm';
 
 
 const SearchForm = ({ handleSubmitQuery, isShortFilter, handleShortFilter }) => {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { email } = currentUser;
   const { values, errors, setErrors, handleChange, isValid, setIsValid } = useValidatedForm();
 
   const submitSearchQuery = (e) => {
@@ -16,12 +13,12 @@ const SearchForm = ({ handleSubmitQuery, isShortFilter, handleShortFilter }) => 
   }
 
   useEffect(() => {
-    if (location.pathname === '/movies' && localStorage.getItem(`${email}|query`)) {
-      values.search = localStorage.getItem(`${email}|query`);
+    if (location.pathname === '/movies' && localStorage.getItem('query')) {
+      values.search = localStorage.getItem('query');
       setIsValid(true);
     }
     
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     if (location.pathname === '/saved-movies' && values.search === '') {

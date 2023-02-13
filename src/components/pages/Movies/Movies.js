@@ -8,58 +8,62 @@ import SearchForm from "../../SearchForm/SearchForm";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Loader from "../../Loader/Loader";
 import PopUp from "../../PopUp/PopUp";
+import { useLocation } from "react-router-dom";
 
 
 
 const Movies = () => {
   const {currentUser} = useContext(CurrentUserContext);
-  const {email} = currentUser;
+  const location = useLocation();
   const [isFilter, setFilter] = useState(false);
-  const [moviesFetched, setMoviesFetched] = useState([]);
+  const [moviesList, setMoviesList] = useState([]);
   const [isNotFound, setNotFound] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
 
   useEffect(() => {
-    setFilter(localStorage.getItem(`${email}|filter`)==='true' ? true : false );
-    if (localStorage.getItem(`${email}|query`)){
-      if (fromLocalStorage(`${email}|movies`)){
-        setMoviesFetched(fromLocalStorage(`${email}|movies`))
-      } else {
-        submitSearchQuery(localStorage.getItem(`${email}|query`))
-      }  
-    }  
-  }, [currentUser, isFilter]);
+    setFilter(localStorage.getItem('filter')==='true' ? true : false );
+    if (localStorage.getItem('query')&&fromLocalStorage('moviesBySearch')){
+            setMoviesList(fromLocalStorage('moviesBySearch'))
+        }  
+  }, [currentUser, location.pathname]);
   
   
   function submitSearchQuery(query){
-   
-      if(!fromLocalStorage(`${email}|moviesAll`)){
+
+      if(!fromLocalStorage('allMovies')){
         setLoading(true);
-      MoviesApi
-        .getAllMovies()
-        .then(movies => {
-          correctApiData(movies);
-          toLocalStorage(`${email}|moviesAll`, movies);
-          const moviesFiltered = filterByQuery(movies, query);
-          setNotFound(moviesFiltered.length===0 ? true : false);
-          setMoviesFetched(moviesFiltered);
-          toLocalStorage(`${email}|movies`, moviesFiltered);
-        })
-        .catch(() =>
-          setPopUp({
-            isOpen: true,
-            successful: false,
-            text: FETCH_ERROR,
+        MoviesApi
+          .getAllMovies()
+          .then(movies => {
+            console.log(1, moviesList);
+            correctApiData(movies);
+            toLocalStorage('allMovies', movies);
+            const moviesFounded = filterByQuery(movies, query);
+            setNotFound(moviesFounded.length===0 ? true : false);
+            setMoviesList(moviesFounded);
+            console.log(2, moviesList);
+            toLocalStorage('moviesBySearch', moviesFounded);
           })
-        )
-        .finally(() => setLoading(false));
+          .catch(() =>
+            setPopUp({
+              isOpen: true,
+              successful: false,
+              text: FETCH_ERROR,
+            })
+          )
+          .finally(() => setLoading(false));
       } else {
-        setMoviesFetched(filterByQuery(fromLocalStorage(`${email}|moviesAll`), query));
+        const moviesFoundedLocal = filterByQuery(fromLocalStorage('allMovies'), query);
+        setNotFound(moviesFoundedLocal? true : false);
+        console.log(3,moviesFoundedLocal);
+        setMoviesList(moviesFoundedLocal);
+        toLocalStorage('moviesBySearch', moviesFoundedLocal);
+        console.log(4, moviesList);
       }
         
-    localStorage.setItem(`${email}|query`, query);
+    localStorage.setItem('query', query);
   }
 
   function closePopUp() {
@@ -68,7 +72,7 @@ const Movies = () => {
 
   function onChangeFilter(){
     setFilter(!isFilter);
-    localStorage.setItem(`${email}|filter`, !isFilter);
+    localStorage.setItem('filter', !isFilter);
   }  
 
   return (
@@ -80,7 +84,7 @@ const Movies = () => {
       />
       <hr className="movies-separator"/>
       {!isLoading?
-        <MoviesCardList movies = {isFilter? filterByDuration(moviesFetched) : moviesFetched}/>
+        <MoviesCardList movies = {isFilter? filterByDuration(moviesList) : moviesList}/>
       :<Loader/>}
       {isNotFound&&<p>Ничего не найдено</p>}
       <PopUp status={isPopUp} onClose={closePopUp}/>
