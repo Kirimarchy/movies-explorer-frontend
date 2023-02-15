@@ -37,7 +37,9 @@ const MoviesCardList = ({movies}) => {
         const list = [...movies];
         const shown = list.filter((item, i) => i < displayMethod.total);
         setMoviesList(shown);
-        }   
+        } else {
+          setMoviesList(movies);
+        }  
   }, [displayMethod, movies]);
 
     

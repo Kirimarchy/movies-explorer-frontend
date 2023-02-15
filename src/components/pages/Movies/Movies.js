@@ -13,7 +13,7 @@ import PopUp from "../../PopUp/PopUp";
 const Movies = () => {
   const location = useLocation();
   const [isFilter, setFilter] = useState(false);
-  const [moviesList, setMoviesList] = useState([{}]);
+  const [moviesList, setMoviesList] = useState([]);
   const [isNotFound, setNotFound] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
