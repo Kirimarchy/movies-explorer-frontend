@@ -36,7 +36,7 @@
 
 .navigation__link_active{
   color: white;
-  box-shadow: 0px 8px 8px 0px rgba(71, 48, 120, 0.888);
+  box-shadow: 0px 16px 16px 0px rgba(71, 48, 120, 0.888);
 }
 
 
