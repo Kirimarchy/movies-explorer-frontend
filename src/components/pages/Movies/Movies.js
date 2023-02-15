@@ -1,35 +1,30 @@
 import "./Movies.css";
-import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect} from "react";
 import { MoviesApi } from "../../../utils/api/MoviesApi";
-import { correctApiData, filterByQuery, filterByDuration, toLocalStorage, fromLocalStorage} from "../../../utils/utils";
+import { correctApiData, filterByQuery, filterByDuration, toLocalStorage, fromLocalStorage } from "../../../utils/utils";
 import { FETCH_ERROR } from "../../../utils/constants";
+import { useLocation } from "react-router-dom";
 import SearchForm from "../../SearchForm/SearchForm";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Loader from "../../Loader/Loader";
 import PopUp from "../../PopUp/PopUp";
-import { useLocation } from "react-router-dom";
-
 
 
 const Movies = () => {
-  const {currentUser} = useContext(CurrentUserContext);
   const location = useLocation();
   const [isFilter, setFilter] = useState(false);
-  const [moviesList, setMoviesList] = useState([]);
+  const [moviesList, setMoviesList] = useState([{}]);
   const [isNotFound, setNotFound] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
-
 
   useEffect(() => {
     setFilter(localStorage.getItem('filter')==='true' ? true : false );
     if (localStorage.getItem('query')&&fromLocalStorage('moviesBySearch')){
             setMoviesList(fromLocalStorage('moviesBySearch'))
         }  
-  }, [currentUser, location.pathname]);
-  
-  
+  }, [location.pathname]);
+   
   function submitSearchQuery(query){
 
       if(!fromLocalStorage('allMovies')){
@@ -37,13 +32,11 @@ const Movies = () => {
         MoviesApi
           .getAllMovies()
           .then(movies => {
-            console.log(1, moviesList);
             correctApiData(movies);
             toLocalStorage('allMovies', movies);
             const moviesFounded = filterByQuery(movies, query);
             setNotFound(moviesFounded.length===0 ? true : false);
-            setMoviesList(moviesFounded);
-            console.log(2, moviesList);
+            setMoviesList([...moviesFounded]);
             toLocalStorage('moviesBySearch', moviesFounded);
           })
           .catch(() =>
@@ -56,11 +49,9 @@ const Movies = () => {
           .finally(() => setLoading(false));
       } else {
         const moviesFoundedLocal = filterByQuery(fromLocalStorage('allMovies'), query);
-        setNotFound(moviesFoundedLocal? true : false);
-        console.log(3,moviesFoundedLocal);
-        setMoviesList(moviesFoundedLocal);
+        setNotFound(moviesFoundedLocal.length===0 ? true : false);
         toLocalStorage('moviesBySearch', moviesFoundedLocal);
-        console.log(4, moviesList);
+        setMoviesList([...moviesFoundedLocal]);
       }
         
     localStorage.setItem('query', query);

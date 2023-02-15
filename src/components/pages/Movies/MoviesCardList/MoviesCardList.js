@@ -1,5 +1,5 @@
 import "./MoviesCardList.css";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import useResize from "../../../../hooks/useResize"
 import { DISPLAY_RULES } from "../../../../utils/constants";
@@ -10,12 +10,12 @@ const MoviesCardList = ({movies}) => {
   const {mobile, tablet, desktop} = DISPLAY_RULES;
   const {isMobile, isTablet, isDesktop} = useResize();
   const [displayMethod, setDisplayMethod] = useState({ total: 12, more: 3 });
-  const [moviesList, setMoviesList]=useState(movies);
+  const [moviesList, setMoviesList]=useState([]);
   const [isMoreButton, setIsMoreButton] = useState(true);
 
   useEffect(()=>{
     location.pathname==='/movies' && moviesList.length >= displayMethod.total && moviesList.length < movies.length ? 
-    setIsMoreButton(true) : setIsMoreButton(false)
+    setIsMoreButton(true) : setIsMoreButton(false);
   }, [moviesList, displayMethod])
  
   useEffect(() => {
@@ -30,17 +30,15 @@ const MoviesCardList = ({movies}) => {
         setDisplayMethod(mobile);
       }
     } 
-  }, [isMobile, isTablet, isDesktop, location]);
+  }, [isMobile, isTablet, isDesktop, location.pathname]);
 
   useEffect(() => {
       if (location.pathname==='/movies') {
-        if (movies.length) {
-        const shown = movies.filter((item, i) => i < displayMethod.total);
+        const list = [...movies];
+        const shown = list.filter((item, i) => i < displayMethod.total);
         setMoviesList(shown);
-        }
-      } else setMoviesList(movies);
-      
-  }, [movies, displayMethod]);
+        }   
+  }, [displayMethod, movies]);
 
     
   const handleShowMore = () => {
