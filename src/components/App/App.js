@@ -153,7 +153,7 @@ function App() {
   
   return (
     <main className="app">
-      <CurrentUserContext.Provider value={{ currentUser, isAuth, setIsAuth, userMovies, setUserMovies }}>
+      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser, isAuth, setIsAuth, userMovies, setUserMovies }}>
       <Header/>  
         {!isLoading?
         <Routes>

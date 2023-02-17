@@ -2,22 +2,24 @@ import "./Profile.css";
 import useValidatedForm from "../../../hooks/useValidatedForm";
 import { useContext , useEffect } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Profile = ({ handleSubmit }) => {
-
+  const location = useLocation();
   const navigate = useNavigate();
-  const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
-  const { currentUser, setIsAuth, setUserMovies } = useContext(CurrentUserContext)||{};
+  const { values, setValues, errors, handleChange, isValid } = useValidatedForm();
+  const { currentUser, setIsAuth, setUserMovies, setCurrentUser } = useContext(CurrentUserContext)||{};
+  const { name, email } = currentUser;
 
-  const isDuplicatedInfo = (values.email===currentUser.email)&&(values.name===currentUser.name);
-
-  useEffect(() => resetFields(), [resetFields]);
+  useEffect(() => {setValues({name, email})}, [currentUser, location.pathname]);
   
+  const isDuplicatedInfo = values.email===email && values.name===name;
+  const isLockedButton = !isValid||isDuplicatedInfo;
+  
+
   function submitForm(e){
     e.preventDefault();
-    const {name, email} = values;
-    handleSubmit(name, email);
+    handleSubmit(values.name, values.email);
   }
 
   function handleLogout(e) {
@@ -25,6 +27,7 @@ const Profile = ({ handleSubmit }) => {
     localStorage.clear();
     setIsAuth(false);
     setUserMovies([]);
+    setCurrentUser(null);
     navigate('/');
   }
 
@@ -44,11 +47,11 @@ const Profile = ({ handleSubmit }) => {
               className="profile__input"
               type="text"
               onChange={handleChange}
+              value = {values?.name||''}
               required
               minLength="2"
               maxLength="30"
               pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
-              placeholder={currentUser?.name}
             />
             <span className="profile__error-name">{errors.name}</span>
           </label>
@@ -59,8 +62,8 @@ const Profile = ({ handleSubmit }) => {
               className={"profile__input"}
               type="email"
               onChange={handleChange}
+              value = {values?.email||''}
               required
-              placeholder={currentUser?.email}
             />
             <span className="profile__error">{errors.email}</span>
           </label>
@@ -68,9 +71,9 @@ const Profile = ({ handleSubmit }) => {
         <div className="profile__button-container">
           <button
             type="submit"
-            className={`profile__button-edit ${!isValid||isDuplicatedInfo && 'profile__button-edit_disabled'}`}
-            onClick = {submitForm}
-            disabled = {!isValid}
+            className={`profile__button-edit ${isLockedButton && 'profile__button-edit_disabled'}`}
+            onClick={submitForm}
+            disabled={isLockedButton}
           >
             Редактировать
           </button>
