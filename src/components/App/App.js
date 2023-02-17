@@ -167,16 +167,16 @@ function App() {
             />
           <Route 
             path = '/signin'  
-            element = {<Login handleSubmit = {handleLogin}/>}
+            element = {<Login handleSubmit={handleLogin} isLocked={isLoading}/>}
             />
           <Route 
             path = '/signup'  
-            element = {<Register handleSubmit = {handleRegister}/>}
+            element = {<Register handleSubmit={handleRegister} isLocked={isLoading}/>}
             />
           <Route 
             path = '/profile'  
             element = {<ProtectedRoute 
-                        child={<Profile handleSubmit={handleEditProfile}/>}
+                        child={<Profile handleSubmit={handleEditProfile} isLocked={isLoading}/>}
                         />}
             />      
           <Route 

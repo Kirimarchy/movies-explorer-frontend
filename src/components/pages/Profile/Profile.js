@@ -4,7 +4,7 @@ import { useContext , useEffect } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const Profile = ({ handleSubmit }) => {
+const Profile = ({ handleSubmit, isLocked }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { values, setValues, errors, handleChange, isValid } = useValidatedForm();
@@ -14,7 +14,7 @@ const Profile = ({ handleSubmit }) => {
   useEffect(() => {setValues({name, email})}, [currentUser, location.pathname]);
   
   const isDuplicatedInfo = values.email===email && values.name===name;
-  const isLockedButton = !isValid||isDuplicatedInfo;
+  const isLockedButton = !isValid||isDuplicatedInfo||isLocked;
   
 
   function submitForm(e){
@@ -47,7 +47,8 @@ const Profile = ({ handleSubmit }) => {
               className="profile__input"
               type="text"
               onChange={handleChange}
-              value = {values?.name||''}
+              value={values?.name}
+              disabled={isLocked}
               required
               minLength="2"
               maxLength="30"
@@ -62,7 +63,8 @@ const Profile = ({ handleSubmit }) => {
               className={"profile__input"}
               type="email"
               onChange={handleChange}
-              value = {values?.email||''}
+              value={values?.email}
+              disabled={isLocked}
               required
             />
             <span className="profile__error">{errors.email}</span>

@@ -5,7 +5,7 @@ import { Link, Navigate } from 'react-router-dom';
 import useValidatedForm from "../../../hooks/useValidatedForm";
 import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
-const Register = ({ handleSubmit }) => {
+const Register = ({ handleSubmit, isLocked }) => {
 
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
   const { isAuth } = useContext(CurrentUserContext);
@@ -41,8 +41,9 @@ const Register = ({ handleSubmit }) => {
               name="name"
               className="register__input"
               type="text"
-              value={values.name || ''}
+              value={values?.name}
               onChange={handleChange}
+              disabled={isLocked}
               required
               minLength="2"
               maxLength="30"
@@ -56,11 +57,12 @@ const Register = ({ handleSubmit }) => {
               name="email"
               className="register__input"
               type="email"
-              value={values.email || ''}
+              value={values?.email}
               onChange={handleChange}
+              disabled={isLocked}
               required
             />
-            <span className="register__error">{errors.email}</span>
+            <span className="register__error">{errors?.email}</span>
           </label>
           <label className="register__label">
             <span className="register__label-text">Пароль</span>
@@ -68,17 +70,18 @@ const Register = ({ handleSubmit }) => {
               name="password"
               className="register__input"
               type="password"
-              value={values.password || ''}
+              value={values?.password}
               onChange={handleChange}
+              disabled={isLocked}
               required
             />
-            <span className="register__error">{errors.password}</span>
+            <span className="register__error">{errors?.password}</span>
           </label>
         </div>
         <button
           type="submit"
-          className={`register__button ${!isValid && 'register__button_disabled'}`}
-          disabled={!isValid}
+          className={`register__button ${!isValid||isLocked && 'register__button_disabled'}`}
+          disabled={!isValid||isLocked}
           onClick={submitForm}
         >
           Зарегистрироваться

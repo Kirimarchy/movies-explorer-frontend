@@ -5,10 +5,10 @@ import {useEffect, useContext} from "react";
 import useValidatedForm from '../../../hooks/useValidatedForm';
 import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
-const Login = ({ handleSubmit }) => {
+const Login = ({ handleSubmit, isLocked }) => {
   
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
-  const {isAuth} = useContext(CurrentUserContext);
+  const { isAuth } = useContext(CurrentUserContext);
 
   useEffect(() => resetFields(), [resetFields]);
   
@@ -41,8 +41,9 @@ const Login = ({ handleSubmit }) => {
                 name="email"
                 className="login__input"
                 type="email"
-                value={values.email || ''}
+                value={values?.email}
                 onChange={handleChange}
+                disabled={isLocked}
                 required
               />
               <span className="login__error">{errors.email}</span>
@@ -53,8 +54,9 @@ const Login = ({ handleSubmit }) => {
                 name="password"
                 className="login__input"
                 type="password"
-                value={values.password || ''}
+                value={values?.password}
                 onChange={handleChange}
+                disabled={isLocked}
                 minLength="2"
                 maxLength="40"
                 required
@@ -64,8 +66,8 @@ const Login = ({ handleSubmit }) => {
           </div>
           <button
             type="submit"
-            className={`login__button ${!isValid && 'login__button_disabled'}`}
-            disabled = {!isValid}      
+            className={`login__button ${!isValid||isLocked && 'login__button_disabled'}`}
+            disabled = {!isValid||isLocked}      
           >
             Войти
           </button>
