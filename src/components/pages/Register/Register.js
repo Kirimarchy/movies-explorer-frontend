@@ -10,7 +10,7 @@ const Register = ({ handleSubmit, isLocked }) => {
   const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
   const { isAuth } = useContext(CurrentUserContext);
 
-  useEffect(() => resetFields(), [resetFields]);
+  useEffect(() => {resetFields(),console.log('isValid',isValid,'isLocked',isLocked,"disabled", !isValid||isLocked)}, [resetFields]);
   
   function submitForm(e){
     e.preventDefault();
@@ -41,7 +41,7 @@ const Register = ({ handleSubmit, isLocked }) => {
               name="name"
               className="register__input"
               type="text"
-              value={values?.name}
+              value={values.name||''}
               onChange={handleChange}
               disabled={isLocked}
               required
@@ -57,7 +57,7 @@ const Register = ({ handleSubmit, isLocked }) => {
               name="email"
               className="register__input"
               type="email"
-              value={values?.email}
+              value={values.email||''}
               onChange={handleChange}
               disabled={isLocked}
               required
@@ -70,7 +70,7 @@ const Register = ({ handleSubmit, isLocked }) => {
               name="password"
               className="register__input"
               type="password"
-              value={values?.password}
+              value={values.password||''}
               onChange={handleChange}
               disabled={isLocked}
               required
@@ -80,7 +80,7 @@ const Register = ({ handleSubmit, isLocked }) => {
         </div>
         <button
           type="submit"
-          className={`register__button ${!isValid||isLocked && 'register__button_disabled'}`}
+          className={`register__button ${(!isValid||isLocked)&& 'register__button_disabled'}`}
           disabled={!isValid||isLocked}
           onClick={submitForm}
         >

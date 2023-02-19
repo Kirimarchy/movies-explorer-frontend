@@ -47,7 +47,7 @@ const Profile = ({ handleSubmit, isLocked }) => {
               className="profile__input"
               type="text"
               onChange={handleChange}
-              value={values?.name}
+              value={values?.name||''}
               disabled={isLocked}
               required
               minLength="2"
@@ -63,7 +63,7 @@ const Profile = ({ handleSubmit, isLocked }) => {
               className={"profile__input"}
               type="email"
               onChange={handleChange}
-              value={values?.email}
+              value={values?.email||''}
               disabled={isLocked}
               required
             />

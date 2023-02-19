@@ -41,7 +41,7 @@ const Login = ({ handleSubmit, isLocked }) => {
                 name="email"
                 className="login__input"
                 type="email"
-                value={values?.email}
+                value={values?.email||''}
                 onChange={handleChange}
                 disabled={isLocked}
                 required
@@ -54,7 +54,7 @@ const Login = ({ handleSubmit, isLocked }) => {
                 name="password"
                 className="login__input"
                 type="password"
-                value={values?.password}
+                value={values?.password||''}
                 onChange={handleChange}
                 disabled={isLocked}
                 minLength="2"
@@ -66,7 +66,7 @@ const Login = ({ handleSubmit, isLocked }) => {
           </div>
           <button
             type="submit"
-            className={`login__button ${!isValid||isLocked && 'login__button_disabled'}`}
+            className={`login__button ${(!isValid||isLocked)&& 'login__button_disabled'}`}
             disabled = {!isValid||isLocked}      
           >
             Войти
