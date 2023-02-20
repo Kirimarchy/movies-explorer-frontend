@@ -2,39 +2,34 @@ import "./Profile.css";
 import useValidatedForm from "../../../hooks/useValidatedForm";
 import { useContext , useEffect } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Profile = ({ handleSubmit, isLocked, lastInputs }) => {
-  const location = useLocation();
+const Profile = ({ handleSubmit, onSignOut, isLocked, lastInputs }) => {
   const navigate = useNavigate();
   const { values, errors, handleChange, isValid, setFormFields } = useValidatedForm();
-  const { currentUser, setIsAuth, setUserMovies, setCurrentUser } = useContext(CurrentUserContext)||{};
+  const { currentUser, setIsAuth, setUserMovies, setCurrentUser } = useContext(CurrentUserContext);
   const { name, email } = currentUser;
 
   const isDuplicatedInfo = values.email===email && values.name===name;
   const isLockedButton = !isValid||isDuplicatedInfo||isLocked;
 
   useEffect(() => {
-    if(lastInputs!=={})  {
+    if(lastInputs.name||lastInputs.email)  {
       setFormFields(lastInputs, {}, true)
     } else {
       setFormFields({name, email});
     };
   }, [lastInputs]);
-  
+
 
   function submitForm(e){
     e.preventDefault();
     handleSubmit(values.name, values.email);
   }
 
-  function handleLogout(e) {
+  function submitLogout(e) {
     e.preventDefault()
-    localStorage.clear();
-    setIsAuth(false);
-    setUserMovies([]);
-    setCurrentUser(null);
-    navigate('/');
+    onSignOut();
   }
 
   return (
@@ -85,7 +80,7 @@ const Profile = ({ handleSubmit, isLocked, lastInputs }) => {
           >
             Редактировать
           </button>
-          <button type="button" className="profile__button-exit" onClick={handleLogout}>
+          <button type="button" className="profile__button-exit" onClick={submitLogout}>
             Выйти из аккаунта
           </button>
         </div>

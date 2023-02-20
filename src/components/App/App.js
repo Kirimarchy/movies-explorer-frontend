@@ -35,6 +35,8 @@ function App() {
     getSavedMovies()
   }}, [currentUser]);
 
+  useEffect(()=>{setLastInputs({})}, [location.pathname]);
+
   function handleRegister(name, email, password) {
     setLoading(true);
     MainApi
@@ -63,7 +65,6 @@ function App() {
       if ({jwt}) {
         localStorage.setItem('jwt', jwt.token);
         setIsAuth(true);
-        setLastInputs({});
         navigate('/movies');
         setPopUp({
           isOpen: true,
@@ -131,10 +132,18 @@ function App() {
           setLoading(false);
         });
     } else {
-      setIsAuth(false);
+      signOut();
       setLoading(false);
     }
   };
+
+  function signOut(){
+    localStorage.clear();
+    setIsAuth(false);
+    setUserMovies([]);
+    setCurrentUser({});
+    navigate('/');
+  }
 
   function getSavedMovies(){
     setLoading(true);
@@ -181,7 +190,7 @@ function App() {
           <Route 
             path = '/profile'  
             element = {<ProtectedRoute 
-                        child={<Profile handleSubmit={handleEditProfile} isLocked={isLoading} lastInputs={lastInputs}/>}
+                        child={<Profile handleSubmit={handleEditProfile} onSignOut={signOut} isLocked={isLoading} lastInputs={lastInputs}/>}
                         />}
             />      
           <Route 
