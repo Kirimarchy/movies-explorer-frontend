@@ -1,29 +1,39 @@
-import React, {useContext} from "react";
-import {Link, useNavigate} from 'react-router-dom';
 import "./Register.css";
 import logo from '../../../images/icons/logo.svg';
-import {AuthContext} from "../../../utils/context/AuthContext";
+import { useEffect, useContext } from "react";
+import { Link, Navigate } from 'react-router-dom';
+import useValidatedForm from "../../../hooks/useValidatedForm";
+import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
-const Register = () => {
+const Register = ({ handleSubmit, isLocked, lastInputs }) => {
 
-  const { isAuth, setIsAuth } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { values, errors, handleChange, isValid, setFormFields } = useValidatedForm();
+  const { isAuth } = useContext(CurrentUserContext);
 
-  function handleRegister({ name, email, password }) {
+  useEffect(() => {
+    if(lastInputs!=={})  {
+      setFormFields(lastInputs, {}, true)
+    };
+  }, [lastInputs]);
+  
+  function submitForm(e){
+    e.preventDefault();
+    const {name, email, password} = values;
+    handleSubmit(name, email, password);
+  }
 
-    setIsAuth(true);
-    localStorage.setItem('isAuth', true);
-    navigate('/movies');
-    setIsInfoTooltip({
-      isOpen: true,
-      successful: true,
-      text: 'Добро пожаловать!',
-    });
+  if (isAuth) {
+    return <Navigate to="/movies" replace />;
   }
 
   return (
     <main className="register">
-      <form className="register__form" name="register">
+      <form 
+        className="register__form" 
+        name="register"
+        onSubmit={submitForm}
+        noValidate
+      >
         <Link to="/" className="register__link">
           <img src={logo} alt="Логотип" className="register__logo" />
         </Link>
@@ -35,12 +45,15 @@ const Register = () => {
               name="name"
               className="register__input"
               type="text"
+              value={values.name||''}
+              onChange={handleChange}
+              disabled={isLocked}
               required
               minLength="2"
               maxLength="30"
               pattern="^[A-Za-zА-Яа-яЁё /s -]+$"
             />
-            <span className="register__error"></span>
+            <span className="register__error">{errors.name}</span>
           </label>
           <label className="register__label">
             <span className="register__label-text">E-mail</span>
@@ -48,9 +61,12 @@ const Register = () => {
               name="email"
               className="register__input"
               type="email"
+              value={values.email||''}
+              onChange={handleChange}
+              disabled={isLocked}
               required
             />
-            <span className="register__error"></span>
+            <span className="register__error">{errors?.email}</span>
           </label>
           <label className="register__label">
             <span className="register__label-text">Пароль</span>
@@ -58,22 +74,25 @@ const Register = () => {
               name="password"
               className="register__input"
               type="password"
+              value={values.password||''}
+              onChange={handleChange}
+              disabled={isLocked}
               required
             />
-            <span className="register__error"></span>
+            <span className="register__error">{errors?.password}</span>
           </label>
         </div>
         <button
           type="submit"
-          className="register__button"
-          disabled={false}
-          onClick={handleRegister}
+          className={`register__button ${(!isValid||isLocked)&& 'register__button_disabled'}`}
+          disabled={!isValid||isLocked}
+          onClick={submitForm}
         >
           Зарегистрироваться
         </button>
         <span className="register__support">
           Уже зарегистрированы?&nbsp;
-          <Link to="signin" className="register__link">
+          <Link to="/signin" className="register__link">
             Войти
           </Link>
         </span>

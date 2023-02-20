@@ -3,11 +3,11 @@ import { Link, NavLink } from 'react-router-dom';
 import BurgerMenu from '../BurgerMenu/BurgerMenu.js';
 import {useMediaQuery} from "react-responsive";
 import {useContext, useEffect, useState} from "react";
-import {AuthContext} from "../../utils/context/AuthContext";
+import CurrentUserContext from '../../utils/context/CurrentUserContext';
 
 const Navigation = () => {
 
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth } = useContext(CurrentUserContext);
   const isMobile = useMediaQuery({ query: `(max-width: 800px)` });
   const [isOpen, setIsOpen] = useState(false);
 
@@ -57,12 +57,12 @@ const Navigation = () => {
                   </li>
               )}
                   <li className="navigation__item">
-                    <NavLink to='/movies' className='navigation__link' activeClassName="navigation__link_active">
+                    <NavLink to='/movies' className={({ isActive }) => isActive ? "navigation__link_active" : 'navigation__link'}>
                       Фильмы
                     </NavLink>
                   </li>
                   <li className="navigation__item">
-                    <NavLink to='/saved-movies' className='navigation__link' activeClassName="navigation__link_active">
+                    <NavLink to='/saved-movies' className={({ isActive }) => isActive ? "navigation__link_active" : 'navigation__link'}>
                       Сохранённые фильмы
                     </NavLink>
                   </li>

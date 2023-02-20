@@ -1,35 +1,29 @@
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
-import {useContext, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import InfoTooltip from "../../InfoTooltip/InfoTooltip";
-import {AuthContext} from "../../../utils/context/AuthContext";
+import {useEffect, useContext, useState} from "react";
+import useValidatedForm from '../../../hooks/useValidatedForm';
+import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
-const Login = () => {
-  const { isAuth, setIsAuth } = useContext(AuthContext);
-  const navigate = useNavigate();
+const Login = ({ handleSubmit, isLocked, lastInputs }) => {
+  
+  const { values, errors, handleChange, isValid, setFormFields } = useValidatedForm();
+  const { isAuth } = useContext(CurrentUserContext);
 
-  const [isInfoTooltip, setIsInfoTooltip] = useState({
-    isOpen: false,
-    successful: true,
-    text: '',
-  });
-
-  function closeInfoTooltip() {
-    setIsInfoTooltip({ ...isInfoTooltip, isOpen: false });
+  useEffect(() => {
+    if(lastInputs!=={})  {
+      setFormFields(lastInputs, {}, true)
+    };
+  }, [lastInputs]);
+  
+  function submitForm(e){
+    e.preventDefault();
+    const {email, password} = values;
+    handleSubmit(email, password);
   }
 
-  function handleLogin({ email, password }) {
-
-          setIsAuth(true);
-          localStorage.setItem('isAuth', true);
-          navigate('/movies');
-          setIsInfoTooltip({
-            isOpen: true,
-            successful: true,
-            text: 'Добро пожаловать!',
-          });
+  if (isAuth) {
+    return <Navigate to="/movies" replace />;
   }
 
     return (
@@ -37,7 +31,8 @@ const Login = () => {
         <form
           className="login__form"
           name="login"
-          onSubmit={handleLogin}
+          noValidate
+          onSubmit={submitForm}
         >
           <Link to='/' className='login__link'>
             <img src={logo} alt="Логотип" className="login__logo" />
@@ -50,9 +45,12 @@ const Login = () => {
                 name="email"
                 className="login__input"
                 type="email"
+                value={values?.email||''}
+                onChange={handleChange}
+                disabled={isLocked}
                 required
               />
-              <span className="login__error"></span>
+              <span className="login__error">{errors.email}</span>
             </label>
             <label className="login__label">
               <span className="login__label-text">Пароль</span>
@@ -60,25 +58,31 @@ const Login = () => {
                 name="password"
                 className="login__input"
                 type="password"
+                value={values?.password||''}
+                onChange={handleChange}
+                disabled={isLocked}
+                minLength="2"
+                maxLength="40"
                 required
               />
-              <span className="login__error"></span>
+              <span className="login__error">{errors.password}</span>
             </label>
           </div>
           <button
             type="submit"
-            className="login__button"
+            className={`login__button ${(!isValid||isLocked)&& 'login__button_disabled'}`}
+            disabled = {!isValid||isLocked}      
           >
             Войти
           </button>
           <span className="login__support">
-          Ещё не зарегистрированы?&nbsp;
+            Ещё не зарегистрированы?&nbsp;
             <Link to='/signup' className="login__link">
             Регистрация
-          </Link>
-        </span>
+            </Link>
+          </span>
         </form>
-        {/*{isInfoTooltip&&<InfoTooltip/>}*/}
+
       </main>
     );
 }
