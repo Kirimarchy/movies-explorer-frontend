@@ -2,12 +2,10 @@ import "./Profile.css";
 import useValidatedForm from "../../../hooks/useValidatedForm";
 import { useContext , useEffect } from "react";
 import CurrentUserContext from "../../../utils/context/CurrentUserContext";
-import { useNavigate } from "react-router-dom";
 
 const Profile = ({ handleSubmit, onSignOut, isLocked, lastInputs }) => {
-  const navigate = useNavigate();
   const { values, errors, handleChange, isValid, setFormFields } = useValidatedForm();
-  const { currentUser, setIsAuth, setUserMovies, setCurrentUser } = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
   const { name, email } = currentUser;
 
   const isDuplicatedInfo = values.email===email && values.name===name;
@@ -80,7 +78,12 @@ const Profile = ({ handleSubmit, onSignOut, isLocked, lastInputs }) => {
           >
             Редактировать
           </button>
-          <button type="button" className="profile__button-exit" onClick={submitLogout}>
+          <button 
+            type="button" 
+            className="profile__button-exit" 
+            onClick={submitLogout}
+            disabled={isLocked} 
+          >
             Выйти из аккаунта
           </button>
         </div>
