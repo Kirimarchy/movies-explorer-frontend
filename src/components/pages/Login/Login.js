@@ -20,8 +20,6 @@ const Login = ({ handleSubmit, isLocked, lastInputs }) => {
     e.preventDefault();
     const {email, password} = values;
     handleSubmit(email, password);
-    setLastInputs({email, password});
-    console.log("setLastInputs", {email, password});
   }
 
   if (isAuth) {
