@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import isEmail from 'validator/es/lib/isEmail';
 
 const useValidatedForm = () => {
-
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
   const [values, setValues] = useState({});
@@ -10,11 +9,9 @@ const useValidatedForm = () => {
   const handleChange = (e) => {
     const input = e.target;
     const { name, value } = input;
-
     if (name === 'email') {
       isEmail(value) ? input.setCustomValidity('Адрес электронной почты указан неверно') : input.setCustomValidity('');
     }
-
     if (name === 'name' && input.validity.patternMismatch) {
       input.setCustomValidity('Имя пользователя содержит недопустимые символы.');
     } else {
@@ -25,8 +22,8 @@ const useValidatedForm = () => {
     setIsValid(input.closest('form').checkValidity());
     setValues({ ...values, [name]: value });
   };
-
-  const resetFields = useCallback(
+  
+  const setFormFields = useCallback(
     (newValues = {}, newErrors = {}, newIsValid = false) => {
       setValues(newValues);
       setErrors(newErrors);
@@ -35,7 +32,7 @@ const useValidatedForm = () => {
     [setValues, setErrors, setIsValid]
   );
 
-  return { values, setValues, errors, setErrors, handleChange, isValid, setIsValid, resetFields };
+  return { values, setValues, errors, setErrors, handleChange, isValid, setIsValid, setFormFields };
 }
 
 export default useValidatedForm;

@@ -5,12 +5,16 @@ import { Link, Navigate } from 'react-router-dom';
 import useValidatedForm from "../../../hooks/useValidatedForm";
 import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
-const Register = ({ handleSubmit, isLocked }) => {
+const Register = ({ handleSubmit, isLocked, lastInputs }) => {
 
-  const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
+  const { values, errors, handleChange, isValid, setFormFields } = useValidatedForm();
   const { isAuth } = useContext(CurrentUserContext);
 
-  useEffect(() => {resetFields(),console.log('isValid',isValid,'isLocked',isLocked,"disabled", !isValid||isLocked)}, [resetFields]);
+  useEffect(() => {
+    if(lastInputs!=={})  {
+      setFormFields(lastInputs, {}, true)
+    };
+  }, [lastInputs]);
   
   function submitForm(e){
     e.preventDefault();

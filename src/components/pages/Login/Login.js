@@ -1,21 +1,27 @@
 import './Login.css';
 import { Link, Navigate } from 'react-router-dom';
 import logo from '../../../images/icons/logo.svg';
-import {useEffect, useContext} from "react";
+import {useEffect, useContext, useState} from "react";
 import useValidatedForm from '../../../hooks/useValidatedForm';
 import CurrentUserContext from '../../../utils/context/CurrentUserContext';
 
-const Login = ({ handleSubmit, isLocked }) => {
+const Login = ({ handleSubmit, isLocked, lastInputs }) => {
   
-  const { values, errors, handleChange, isValid, resetFields } = useValidatedForm();
+  const { values, errors, handleChange, isValid, setFormFields } = useValidatedForm();
   const { isAuth } = useContext(CurrentUserContext);
 
-  useEffect(() => resetFields(), [resetFields]);
+  useEffect(() => {
+    if(lastInputs!=={})  {
+      setFormFields(lastInputs, {}, true)
+    };
+  }, [lastInputs]);
   
   function submitForm(e){
     e.preventDefault();
     const {email, password} = values;
     handleSubmit(email, password);
+    setLastInputs({email, password});
+    console.log("setLastInputs", {email, password});
   }
 
   if (isAuth) {

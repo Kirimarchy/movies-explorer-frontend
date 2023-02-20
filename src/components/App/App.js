@@ -24,6 +24,7 @@ function App() {
   const [userMovies, setUserMovies] = useState([]);
   const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('jwt')));
   const [isLoading, setLoading] = useState(false);
+  const [lastInputs, setLastInputs] = useState({});
   const [isPopUp, setPopUp] = useState({isOpen: false, successful: true, text: ''});
 
   useEffect(() => {
@@ -43,13 +44,14 @@ function App() {
         handleLogin(email, password);
       }
     })
-    .catch(err =>
+    .catch(err => {
       setPopUp({
         isOpen: true,
         successful: false,
         text: err,
-      })
-    )
+      });
+      setLastInputs({name, email, password});
+    })
     .finally(() => setLoading(false));
   }
 
@@ -61,6 +63,7 @@ function App() {
       if ({jwt}) {
         localStorage.setItem('jwt', jwt.token);
         setIsAuth(true);
+        setLastInputs({});
         navigate('/movies');
         setPopUp({
           isOpen: true,
@@ -69,13 +72,14 @@ function App() {
         });
       }
     })
-    .catch(err =>
+    .catch(err => {
       setPopUp({
         isOpen: true,
         successful: false,
         text: err,
-      })
-      )
+      });
+      setLastInputs({email,password});
+    })
     .finally(() => setLoading(false));
   }
 
@@ -91,13 +95,14 @@ function App() {
           text: 'Ваши данные обновлены!',
         });
       })
-      .catch(err =>
+      .catch(err => {
         setPopUp({
           isOpen: true,
           successful: false,
           text: err,
-        })
-        )
+        });
+        setLastInputs({name, email});
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -167,16 +172,16 @@ function App() {
             />
           <Route 
             path = '/signin'  
-            element = {<Login handleSubmit={handleLogin} isLocked={isLoading}/>}
+            element = {<Login handleSubmit={handleLogin} isLocked={isLoading} lastInputs={lastInputs}/>}
             />
           <Route 
             path = '/signup'  
-            element = {<Register handleSubmit={handleRegister} isLocked={isLoading}/>}
+            element = {<Register handleSubmit={handleRegister} isLocked={isLoading} lastInputs={lastInputs}/>}
             />
           <Route 
             path = '/profile'  
             element = {<ProtectedRoute 
-                        child={<Profile handleSubmit={handleEditProfile} isLocked={isLoading}/>}
+                        child={<Profile handleSubmit={handleEditProfile} isLocked={isLoading} lastInputs={lastInputs}/>}
                         />}
             />      
           <Route 
